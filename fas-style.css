@@ -1,0 +1,289 @@
+/* Atualizações do Header */
+.site-header .nav-row {
+  grid-template-columns: auto 1fr auto;
+}
+.brand {
+  grid-column: 1;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+.nav-links {
+  grid-column: 2;
+  justify-self: start;
+  gap: 28px;
+  padding-left: 40px;
+}
+.btn-nav {
+  padding: 6px 12px; /* Diminui o padding */
+}
+
+/* Atualizações do Hero */
+.hero {
+  min-height: 85vh;
+  padding-top: 66px;
+}
+.hero-bg img.active {
+  opacity: 0.85; /* Diminui o filtro escuro */
+}
+.hero-scrim {
+  background: linear-gradient(90deg, rgba(7,7,9,0.85) 0%, rgba(7,7,9,0.4) 50%, rgba(7,7,9,0.1) 100%);
+}
+.hero-slide h1 {
+  font-size: clamp(2rem, 4.5vw, 3.2rem); /* Diminui a fonte */
+}
+.hero-controls {
+  flex-direction: row-reverse; /* Traz os botões pra esquerda e a barra pra direita */
+  justify-content: space-between;
+}
+.hero-dots {
+  margin-left: auto;
+}
+.hero-btns {
+  margin-left: 0;
+}
+
+/* Atualizações da Seção Promise */
+.promise-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+}
+.promise-card h3 .first {
+  color: #9d1402;
+}
+/* Remove a linha vermelha vertical e adiciona quadrados vazados */
+.promise-item:not(:last-child)::after {
+  display: none;
+}
+.promise-square {
+  background: transparent;
+  border: 2px solid #9d1402;
+  color: #9d1402;
+}
+
+/* Seção Numbers / Metrics */
+.numbers-section {
+  background: #fff;
+  padding-block: 80px;
+}
+.numbers-wrap {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.numbers-left {
+  background: #0c0c0e;
+  padding: 40px;
+  border-radius: 4px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.metric-large {
+  display: flex;
+  flex-direction: column;
+}
+.metric-large .metric-val {
+  font-family: var(--display);
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--on-dark);
+  line-height: 1;
+}
+.metric-large .metric-name {
+  font-size: 1.2rem;
+  color: #fff;
+  margin-top: 8px;
+}
+.metric-small {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  padding-top: 20px;
+}
+.metric-small .metric-val {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+.metric-small .metric-name {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+  margin-top: 4px;
+}
+.numbers-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.numbers-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.numbers-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.num-box {
+  border: 1px solid var(--line);
+  padding: 24px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.num-box .metric-val {
+  font-family: var(--display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #9d1402;
+  line-height: 1;
+}
+.num-box .metric-name {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 8px;
+}
+.nda-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* CTA Final (Let's go global) */
+.cta-section {
+  position: relative;
+  background: #0b0b0d;
+  padding-block: 120px;
+  text-align: center;
+  overflow: hidden;
+  color: #fff;
+}
+.cta-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(55% 55% at 50% 42%, rgba(216,25,25,0.28), transparent 70%);
+}
+.cta-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: linear-gradient(rgba(255,255,255,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.7) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent 78%);
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent 78%);
+}
+.cta-content {
+  position: relative;
+  z-index: 2;
+}
+.cta-title {
+  font-family: var(--display);
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+.cta-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 40px;
+}
+.btn-cta-outline {
+  display: inline-flex;
+  padding: 12px 28px;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 2px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+.btn-cta-outline:hover {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.05);
+}
+.cta-footer {
+  margin-top: 60px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+
+/* Footer Branco */
+.site-footer {
+  border-top: 2px solid var(--foreground);
+  background: #fff;
+  padding-block: 48px 24px;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+}
+.footer-logo {
+  font-family: var(--logo);
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+.footer-email {
+  display: block;
+  margin-top: 16px;
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--line-strong);
+}
+.footer-links {
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.footer-nav-col h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+.footer-nav-col ul li {
+  margin-bottom: 10px;
+}
+.footer-nav-col ul li a {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  transition: color 0.2s;
+}
+.footer-nav-col ul li a:hover {
+  color: var(--primary);
+}
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  margin-top: 48px;
+  padding-top: 24px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
