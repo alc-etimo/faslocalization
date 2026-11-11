@@ -14,15 +14,17 @@
 
 <header class="site-header">
   <div class="wrap nav-row">
+    <a href="index.html" class="brand">ARIANE LESNYAK</a>
+    
     <nav class="nav-links" aria-label="Main">
-      <a href="#person">About</a>
+      <a href="#about">About</a>
       <a href="#collaborations">Collaborations</a>
+      <a href="#promise">Promise</a>
+      <a href="#numbers">Numbers</a>
       <a href="#services">Services</a>
       <a href="#cases">Case studies</a>
       <a href="#tools">Tools</a>
     </nav>
-
-    <a href="index.html" class="brand">Ariane Lesnyak</a>
 
     <div class="nav-actions">
       <a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a>
@@ -33,9 +35,7 @@
 
 <main>
 
-  <!-- ============================================================
-       HERO — 4 slides, cada um com uma área de atuação
-       ============================================================ -->
+  <!-- HERO -->
   <section class="hero" id="top">
     <div class="hero-bg" aria-hidden="true">
       <img src="img/hero-cinema.jpg" alt="" class="active">
@@ -54,9 +54,7 @@
         <div class="hero-cta">
           <a href="service-translation.html" class="btn-hero-primary">
             Read the case study
-            <span class="sq" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
+            <span class="sq" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
           </a>
           <a href="#services" class="btn-hero-secondary">All services</a>
         </div>
@@ -70,9 +68,7 @@
         <div class="hero-cta">
           <a href="service-template.html" class="btn-hero-primary">
             Read the case study
-            <span class="sq" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
+            <span class="sq" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
           </a>
           <a href="#services" class="btn-hero-secondary">All services</a>
         </div>
@@ -86,9 +82,7 @@
         <div class="hero-cta">
           <a href="service-review-mtpe.html" class="btn-hero-primary">
             Read the case study
-            <span class="sq" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
+            <span class="sq" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
           </a>
           <a href="#services" class="btn-hero-secondary">All services</a>
         </div>
@@ -102,9 +96,7 @@
         <div class="hero-cta">
           <a href="service-qc-delivery.html" class="btn-hero-primary">
             Read the case study
-            <span class="sq" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </span>
+            <span class="sq" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
           </a>
           <a href="#services" class="btn-hero-secondary">All services</a>
         </div>
@@ -112,12 +104,6 @@
 
       <!-- Controles -->
       <div class="hero-controls">
-        <div class="hero-dots" role="tablist" aria-label="Hero slides">
-          <button class="active" aria-label="Slide 1"><span class="fill"></span></button>
-          <button aria-label="Slide 2"><span class="fill"></span></button>
-          <button aria-label="Slide 3"><span class="fill"></span></button>
-          <button aria-label="Slide 4"><span class="fill"></span></button>
-        </div>
         <div class="hero-btns">
           <button class="hero-btn" id="heroPlay" aria-label="Pause slideshow" aria-pressed="false">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
@@ -129,117 +115,105 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
         </div>
+        <div class="hero-dots" role="tablist" aria-label="Hero slides">
+          <button class="active" aria-label="Slide 1"><span class="fill"></span></button>
+          <button aria-label="Slide 2"><span class="fill"></span></button>
+          <button aria-label="Slide 3"><span class="fill"></span></button>
+          <button aria-label="Slide 4"><span class="fill"></span></button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       COLLABORATIONS — marquee com logos
-       ============================================================ -->
+  <!-- COLLABORATIONS -->
   <section class="collab-section" id="collaborations">
     <p class="collab-label">Studios and agencies I have subtitled for</p>
     <div class="collab-wrap">
       <div class="collab-track">
-        <span class="collab-item">VSI</span>
-        <span class="collab-item">VOX Mundi</span>
-        <span class="collab-item">Moshi Media</span>
-        <span class="collab-item">SAGA Translations</span>
-        <span class="collab-item">Ducere</span>
-        <span class="collab-item">Tabuleiro Filmes</span>
-        <span class="collab-item">Tropical Dystopia</span>
-        <span class="collab-item">Tem Dendê</span>
-        <span class="collab-item">Cidade Flutuante</span>
-        <span class="collab-item">REC Produtores Associados</span>
-        <span class="collab-item" aria-hidden="true">VSI</span>
-        <span class="collab-item" aria-hidden="true">VOX Mundi</span>
-        <span class="collab-item" aria-hidden="true">Moshi Media</span>
-        <span class="collab-item" aria-hidden="true">SAGA Translations</span>
-        <span class="collab-item" aria-hidden="true">Ducere</span>
-        <span class="collab-item" aria-hidden="true">Tabuleiro Filmes</span>
-        <span class="collab-item" aria-hidden="true">Tropical Dystopia</span>
-        <span class="collab-item" aria-hidden="true">Tem Dendê</span>
-        <span class="collab-item" aria-hidden="true">Cidade Flutuante</span>
-        <span class="collab-item" aria-hidden="true">REC Produtores Associados</span>
+        <span class="collab-item">VSI</span><span class="collab-item">VOX Mundi</span><span class="collab-item">Moshi Media</span><span class="collab-item">SAGA Translations</span><span class="collab-item">Ducere</span><span class="collab-item">Tabuleiro Filmes</span><span class="collab-item">Tropical Dystopia</span><span class="collab-item">Tem Dendê</span><span class="collab-item">Cidade Flutuante</span><span class="collab-item">REC Produtores Associados</span>
+        <span class="collab-item" aria-hidden="true">VSI</span><span class="collab-item" aria-hidden="true">VOX Mundi</span><span class="collab-item" aria-hidden="true">Moshi Media</span><span class="collab-item" aria-hidden="true">SAGA Translations</span><span class="collab-item" aria-hidden="true">Ducere</span><span class="collab-item" aria-hidden="true">Tabuleiro Filmes</span><span class="collab-item" aria-hidden="true">Tropical Dystopia</span><span class="collab-item" aria-hidden="true">Tem Dendê</span><span class="collab-item" aria-hidden="true">Cidade Flutuante</span><span class="collab-item" aria-hidden="true">REC Produtores Associados</span>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       "CASTELLÓ" — promise (A / L / C)
-       ============================================================ -->
-  <section class="promise-section">
+  <!-- PROMISE (Castelló) -->
+  <section class="promise-section" id="promise">
     <div class="wrap">
       <div class="promise-head">
         <h2 class="promise-title">
-          <span class="first">C</span>areful.
-          <span class="first">A</span>ccurate.
-          <span class="first">L</span>inguistic.
-          <span class="first">L</span>ocalized.
-          <span class="first">E</span>vidence-based.
-          <span class="first">D</span>elivered.
+          <span class="first">A</span>riane.
+          <span class="first">L</span>esnyak.
+          <span class="first">C</span>astelló.
         </h2>
         <p class="promise-sub">That is the whole promise.</p>
       </div>
       <hr class="promise-divider">
       <div class="promise-grid">
         <div class="promise-card">
-          <h3>Careful</h3>
+          <h3><span class="first">A</span>ccurate</h3>
           <ol class="promise-list">
-            <li class="promise-item">
-              <span class="promise-square">1</span>
-              <span class="promise-text">Every cue read against the picture</span>
-            </li>
-            <li class="promise-item">
-              <span class="promise-square">2</span>
-              <span class="promise-text">Terminology locked to the glossary</span>
-            </li>
-            <li class="promise-item">
-              <span class="promise-square">3</span>
-              <span class="promise-text">No guess when the brief is silent — I ask</span>
-            </li>
+            <li class="promise-item"><span class="promise-square">1</span><span class="promise-text">Reading speed and CPL inside the brief</span></li>
+            <li class="promise-item"><span class="promise-square">2</span><span class="promise-text">Natural line breaks, never mid-phrase</span></li>
+            <li class="promise-item"><span class="promise-square">3</span><span class="promise-text">MQM error report on request</span></li>
           </ol>
         </div>
         <div class="promise-card">
-          <h3>Accurate</h3>
+          <h3><span class="first">L</span>ocalized</h3>
           <ol class="promise-list">
-            <li class="promise-item">
-              <span class="promise-square">1</span>
-              <span class="promise-text">Reading speed and CPL inside the brief</span>
-            </li>
-            <li class="promise-item">
-              <span class="promise-square">2</span>
-              <span class="promise-text">Natural line breaks, never mid-phrase</span>
-            </li>
-            <li class="promise-item">
-              <span class="promise-square">3</span>
-              <span class="promise-text">MQM error report on request</span>
-            </li>
+            <li class="promise-item"><span class="promise-square">1</span><span class="promise-text">Native pt-BR, informal dialogue made to sound real</span></li>
+            <li class="promise-item"><span class="promise-square">2</span><span class="promise-text">Idioms, jokes and on-screen text adapted</span></li>
+            <li class="promise-item"><span class="promise-square">3</span><span class="promise-text">~60 video minutes delivered every week</span></li>
           </ol>
         </div>
         <div class="promise-card">
-          <h3>Linguistic</h3>
+          <h3><span class="first">C</span>areful</h3>
           <ol class="promise-list">
-            <li class="promise-item">
-              <span class="promise-square">1</span>
-              <span class="promise-text">Native pt-BR, informal dialogue made to sound real</span>
-            </li>
-            <li class="promise-item">
-              <span class="promise-square">2</span>
-              <span class="promise-text">Idioms, jokes and on-screen text adapted</span>
-            </li>
-            <li class="promise-item">
-              <span class="promise-square">3</span>
-              <span class="promise-text">~60 video minutes delivered every week</span>
-            </li>
+            <li class="promise-item"><span class="promise-square">1</span><span class="promise-text">Every cue read against the picture</span></li>
+            <li class="promise-item"><span class="promise-square">2</span><span class="promise-text">Terminology locked to the glossary</span></li>
+            <li class="promise-item"><span class="promise-square">3</span><span class="promise-text">No guess when the brief is silent — I ask</span></li>
           </ol>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       SERVICES — fundo preto, 2 colunas
-       ============================================================ -->
+  <!-- NUMBERS / METRICS -->
+  <section class="numbers-section" id="numbers">
+    <div class="numbers-wrap">
+      <!-- Esquerda: Retângulo Preto -->
+      <div class="numbers-left">
+        <div class="metric-large">
+          <span class="metric-val">260+</span>
+          <span class="metric-name">hours subtitled</span>
+        </div>
+        <div class="metric-small">
+          <span class="metric-val">15+</span>
+          <span class="metric-name">years in languages</span>
+        </div>
+      </div>
+      
+      <!-- Direita: Imagem e Boxes -->
+      <div class="numbers-right">
+        <img src="img/hero-editing.jpg" alt="Subtitling workstation" class="numbers-img">
+        <div class="numbers-boxes">
+          <div class="num-box">
+            <span class="metric-val red">10+</span>
+            <span class="metric-name">studios & agencies</span>
+          </div>
+          <div class="num-box">
+            <span class="metric-val red">2</span>
+            <span class="metric-name">international festivals</span>
+          </div>
+        </div>
+        <p class="nda-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9d1402" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          NDA on request. Some projects are under strict confidentiality — examples shown are prototypes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
   <section class="services-section" id="services">
     <div class="wrap services-grid-outer">
       <div class="services-copy">
@@ -248,58 +222,31 @@
         <div class="services-actions">
           <span class="services-info">Click a service to read the case study</span>
           <a href="#cases" class="services-arrow" aria-label="Go to case studies">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
         </div>
       </div>
-
       <div class="services-grid">
         <a href="service-translation.html" class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="3" width="20" height="14" rx="2"/>
-              <line x1="8" y1="21" x2="16" y2="21"/>
-              <line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
-          </div>
+          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
           <h3>Translation + spotting</h3>
           <p>Timing, translation and QC from scratch, no script required.</p>
           <div class="service-img"><img src="img/hero-editing.jpg" alt=""></div>
         </a>
-
         <a href="service-template.html" class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="8" y1="13" x2="16" y2="13"/>
-              <line x1="8" y1="17" x2="16" y2="17"/>
-            </svg>
-          </div>
+          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></div>
           <h3>Template translation</h3>
           <p>Timed English SRT into pt-BR within CPS and CPL limits.</p>
           <div class="service-img"><img src="img/hero-cinema.jpg" alt=""></div>
         </a>
-
         <a href="service-review-mtpe.html" class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 20h9"/>
-              <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z"/>
-            </svg>
-          </div>
+          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z"/></svg></div>
           <h3>Review &amp; MTPE</h3>
           <p>Post-editing and QA with MQM-style error reporting.</p>
           <div class="service-img"><img src="img/hero-documentary.jpg" alt=""></div>
         </a>
-
         <a href="service-qc-delivery.html" class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M9 11l3 3L22 4"/>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-            </svg>
-          </div>
+          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
           <h3>QC &amp; delivery</h3>
           <p>Final pass against the video: timing, spelling, shot changes.</p>
           <div class="service-img"><img src="img/hero-rio.jpg" alt=""></div>
@@ -307,6 +254,66 @@
       </div>
     </div>
   </section>
+
+  <!-- ABOUT ME -->
+  <section class="person-section" id="about">
+    <div class="wrap person-grid">
+      <div class="person-img"><img src="img/hero-editing.jpg" alt="Subtitling workstation"></div>
+      <div class="person-info">
+        <p class="eyebrow">The person behind the subtitles</p>
+        <h2 class="section-title" style="margin-top:.75rem">Ariane Lesnyak</h2>
+        <p style="margin-top:.25rem;color:var(--muted)">Subtitle translator · native pt-BR</p>
+        <p style="margin-top:1.5rem;color:var(--ink-soft);max-width:52ch">I translate timed English subtitles into Brazilian Portuguese that sounds like people actually talk, while staying inside every reading-speed and line-length limit. Around 60 video minutes a week, every week, for agencies like VSI and VOX Mundi and independent Brazilian producers.</p>
+        <dl>
+          <div><dt>Language pair</dt><dd>EN → PT-BR</dd></div>
+          <div><dt>Specialization</dt><dd>Media and entertainment</dd></div>
+          <div><dt>Experience</dt><dd>More than 10 years</dd></div>
+          <div><dt>Capacity</dt><dd>~60 video min / week</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER (CTA Final) -->
+  <section class="cta-section">
+    <div class="cta-bg" aria-hidden="true"></div>
+    <div class="cta-grid" aria-hidden="true"></div>
+    <div class="wrap cta-content">
+      <h2 class="cta-title">Let's go<br>global.</h2>
+      <div class="cta-links">
+        <a href="#" class="btn-cta-outline">LinkedIn</a>
+        <a href="#" class="btn-cta-outline">ProZ</a>
+        <a href="#" class="btn-cta-outline">CV</a>
+      </div>
+      <p class="cta-footer">Into Brazilian Portuguese · Native-PTBR QA · Available for remote contract</p>
+    </div>
+  </section>
+
+  <!-- FOOTER BRANCO -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand-col">
+        <p class="footer-logo">ARIANE LESNYAK</p>
+        <a href="mailto:ariane.etimo@gmail.com" class="footer-email">ariane.etimo@gmail.com</a>
+        <p class="footer-links">
+          <a href="#">WhatsApp</a>
+        </p>
+      </div>
+      <div class="footer-nav-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="service-translation.html">Translation + spotting</a></li>
+          <li><a href="service-template.html">Template translation</a></li>
+          <li><a href="service-review-mtpe.html">Review & MTPE</a></li>
+          <li><a href="service-qc-delivery.html">QC & delivery</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <p>© 2026 Ariane Lesnyak</p>
+      <p>Inspired by FAS Localize website for the Brazilian Portuguese translation role.</p>
+    </div>
+  </footer>
 
 </main>
 
