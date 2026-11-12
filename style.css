@@ -132,7 +132,8 @@ ul, ol { list-style: none; }
 .hero {
   position: relative; isolation: isolate; overflow: hidden;
   background: var(--dark-2); color: #fff;
-  min-height: 85vh; display: flex; align-items: center;
+  min-height: 85vh; height: 85vh; max-height: 85vh;
+  display: flex; align-items: center;
   margin-top: -66px; padding-top: 66px;
 }
 .hero-bg { position: absolute; inset: 0; z-index: -2; }
@@ -148,6 +149,8 @@ ul, ol { list-style: none; }
 .hero-inner {
   position: relative; width: 100%; max-width: var(--maxw);
   margin-inline: auto; padding: 3rem 24px;
+  min-height: 100%; display: flex;
+  flex-direction: column; justify-content: center;
 }
 .hero-slide { display: none; }
 .hero-slide.active { display: block; animation: heroRise .55s var(--ease-out) both; }
@@ -310,11 +313,11 @@ ul, ol { list-style: none; }
 .numbers-section { background: #fff; padding-block: 80px; }
 .numbers-wrap {
   max-width: 1200px; margin-inline: auto; padding-inline: 24px;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch;
 }
 .numbers-left {
   background: #0c0c0e; padding: 40px; border-radius: 4px; color: #fff;
-  display: flex; flex-direction: column; gap: 40px;
+  display: flex; flex-direction: column; gap: 40px; justify-content: space-between;
 }
 .metric-large .metric-val { font-family: var(--display); font-size: 4rem; font-weight: 800; color: var(--on-dark); line-height: 1; }
 .metric-large .metric-name { font-size: 1.2rem; color: #fff; margin-top: 8px; }
@@ -333,8 +336,8 @@ ul, ol { list-style: none; }
 .num-box .metric-name { font-size: 0.9rem; color: var(--muted); margin-top: 8px; }
 
 .nda-note {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  font-size: 0.85rem; color: var(--muted); text-align: center; margin-top: 20px;
+  grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-size: 0.85rem; color: var(--muted); text-align: center; margin-top: 0; padding-top: 1rem;
 }
 .nda-note svg { width: 16px; height: 16px; color: #9d1402; flex-shrink: 0; }
 
@@ -406,7 +409,7 @@ ul, ol { list-style: none; }
 .cta-content { position: relative; z-index: 2; }
 .cta-title {
   font-family: var(--display); font-size: clamp(4rem, 10vw, 7rem); font-weight: 800;
-  text-transform: uppercase; line-height: 0.92; letter-spacing: -0.03em;
+  text-transform: uppercase; line-height: 0.92; letter-spacing: -0.03em; color: #fff;
 }
 .cta-links { display: flex; justify-content: center; gap: 12px; margin-top: 40px; flex-wrap: wrap; }
 .btn-cta-outline {
@@ -425,7 +428,7 @@ ul, ol { list-style: none; }
    FOOTER
    ============================================================ */
 .site-footer { border-top: 2px solid var(--ink); background: #fff; padding-block: 48px 24px; }
-.footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; }
+.footer-inner { display: flex; justify-content: center; align-items: flex-start; gap: 80px; }
 .footer-logo { font-family: var(--logo); font-size: 1.5rem; letter-spacing: 0.12em; color: var(--ink); }
 .footer-email {
   display: block; margin-top: 16px; font-family: var(--display);
@@ -438,9 +441,9 @@ ul, ol { list-style: none; }
 .footer-nav-col ul li a { font-size: 0.9rem; color: var(--ink-soft); transition: color 0.2s; }
 .footer-nav-col ul li a:hover { color: var(--brand); }
 .footer-bottom {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
   border-top: 1px solid var(--line); margin-top: 48px; padding-top: 24px;
-  font-size: 0.8rem; color: var(--muted);
+  font-size: 0.8rem; color: var(--muted); text-align: center;
 }
 
 /* ============================================================
