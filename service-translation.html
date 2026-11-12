@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Translation + spotting · Ariane Lesnyak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="case.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand">ARIANE LESNYAK</a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#collaborations">Collaborations</a>
+      <a href="index.html#promise">Promise</a>
+      <a href="index.html#numbers">Numbers</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#cases">Case studies</a>
+    </nav>
+    <div class="nav-actions"><a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a></div>
+  </div>
+</header>
+
+<main>
+  <section class="service-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study 01 · Translation + spotting</span>
+      <h1>Timed subtitles from scratch, read against the picture.</h1>
+      <p class="sub">No script. No template. The brief, the source video, and a native pt-BR linguist who spots, translates, and QCs in one pass.</p>
+      <div class="service-meta">
+        <span>EN → PT-BR</span><span>Film &amp; documentary</span><span>Spotting</span><span>QC</span><span>SRT / VTT</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <div class="wrap">
+      <h2>Spotting makes or breaks a subtitle.</h2>
+      <p>The same line, moved 200ms earlier or later, stops fitting the shot. A cue that starts two frames before a hard cut flashes on screen for a moment that the editor never intended — and the viewer feels it, even if they can't name it.</p>
+      <p>This is the pass that turns a translation into a subtitle. Timing follows the picture; translation follows the timing.</p>
+
+      <div class="demo-panel">
+        <div class="demo-topbar">
+          <span>Interactive spotting sample</span>
+          <span class="demo-status">Illustrative</span>
+        </div>
+        <div class="demo-body">
+          <div class="toggle-row">
+            <button class="toggle-btn" id="spotting-toggle" aria-pressed="false">Show subtitles</button>
+          </div>
+
+          <div id="spotting-source">
+            <ul class="cue-list">
+              <li><strong>00:00:04.200 → 00:00:06.800</strong> — I thought you were leaving.</li>
+              <li><strong>00:00:07.100 → 00:00:09.500</strong> — I haven't decided yet.</li>
+            </ul>
+          </div>
+          <div id="spotting-target" style="display:none">
+            <ul class="cue-list">
+              <li><strong>00:00:04.200 → 00:00:06.800</strong> — Achei que você fosse embora.</li>
+              <li><strong>00:00:07.100 → 00:00:09.500</strong> — Ainda não decidi.</li>
+            </ul>
+          </div>
+
+          <div class="timeline" aria-hidden="true">
+            <div class="timeline-track">
+              <div class="shot" style="left:0%; width:30%"><span>Shot 1</span></div>
+              <div class="shot" style="left:30%; width:35%"><span>Shot 2</span></div>
+              <div class="shot" style="left:65%; width:35%"><span>Shot 3</span></div>
+              <div class="cue ok" style="left:10%; width:18%"></div>
+              <div class="cue ok" style="left:35%; width:22%"></div>
+            </div>
+            <div class="timeline-legend">
+              <span><i class="ok"></i> Aligned with shot</span>
+              <span><i class="err"></i> Not aligned</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <div class="wrap">
+      <h2>What the workflow looks like.</h2>
+      <p><strong>1. Read the brief.</strong> Glossary, style guide, CPS, CPL, line count. If the brief is silent, ask — never guess a number onto a broadcast job.</p>
+      <p><strong>2. Spot.</strong> A first pass against the picture, not the script. Shot changes and reading speed define the frame.</p>
+      <p><strong>3. Translate.</strong> Into spoken pt-BR, inside the frame the spotting pass gave us. Idioms, jokes, on-screen text adapted.</p>
+      <p><strong>4. Watch it.</strong> The file goes back on the picture. Timing, spelling, shot changes, forced narratives. Nothing leaves unread.</p>
+    </div>
+  </section>
+
+  <nav class="case-nav">
+    <a href="index.html#cases">← All case studies</a>
+    <a href="service-template.html">Next: Template translation →</a>
+  </nav>
+</main>
+
+<script src="case.js"></script>
+</body>
+</html>

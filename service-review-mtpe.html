@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review &amp; MTPE · Ariane Lesnyak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="case.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand">ARIANE LESNYAK</a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#collaborations">Collaborations</a>
+      <a href="index.html#promise">Promise</a>
+      <a href="index.html#numbers">Numbers</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#cases">Case studies</a>
+    </nav>
+    <div class="nav-actions"><a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a></div>
+  </div>
+</header>
+
+<main>
+  <section class="service-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study 03 · Review &amp; MTPE</span>
+      <h1>Post-editing with MQM-style error reporting.</h1>
+      <p class="sub">For AI-generated subtitles and legacy files that need a second, native pass — with an error report that a project manager can actually read.</p>
+      <div class="service-meta">
+        <span>EN → PT-BR</span><span>AI output review</span><span>MQM scoring</span><span>Error report</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <div class="wrap">
+      <h2>Raw MT vs post-edited.</h2>
+      <p>Machine output is fluent, often wrong, and always confident. The post-edit is not a rewrite — it is a targeted correction, logged by category so the next model can learn from it.</p>
+      <p>Toggle the highlights below to see what changes.</p>
+
+      <div class="demo-panel">
+        <div class="demo-topbar">
+          <span>Raw MT vs post-edited</span>
+          <span class="demo-status">Illustrative</span>
+        </div>
+        <div class="demo-body">
+          <div class="toggle-row">
+            <button class="toggle-btn" id="mtpe-toggle" aria-pressed="true">Hide edits</button>
+          </div>
+
+          <div class="proof-card">
+            <div class="proof-head">
+              <span class="proof-src"><b>Source · EN</b> — I think we're on the same page.</span>
+              <span class="proof-tag">Illustrative</span>
+            </div>
+            <div class="proof-body hl" id="mtpe-body">
+              <p><strong>Raw MT:</strong> Eu acho que estamos na <span class="err">mesma página</span>.</p>
+              <p style="margin-top:.75rem"><strong>Post-edited:</strong> Acho que estamos <span class="fix">alinhados</span>.</p>
+            </div>
+            <div class="proof-foot">
+              <span id="mtpe-mqm" class="mqm-badge">MQM 100 · 0 errors · native reviewer</span>
+            </div>
+            <div class="edit-log">
+              <div class="edit-log-head"><span>Edits</span><span>3 · post-edit distance 29%</span></div>
+              <div class="edit-row">
+                <span class="edit-from">na mesma página</span><span class="edit-arr">→</span><span class="edit-to">alinhados</span><span class="edit-cat">Fluency</span>
+              </div>
+              <div class="edit-row">
+                <span class="edit-from">Eu acho que</span><span class="edit-arr">→</span><span class="edit-to">Acho que</span><span class="edit-cat">Concision</span>
+              </div>
+              <div class="edit-row">
+                <span class="edit-from">estamos</span><span class="edit-arr">→</span><span class="edit-to">estamos alinhados</span><span class="edit-cat">Locale</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <div class="wrap">
+      <h2>What the report looks like.</h2>
+      <p>Every defect is logged with a category and a severity — Accuracy, Fluency, Terminology, Style, Locale. The report ships with the file. A project manager can read the report without reading the subtitles.</p>
+      <p>This is what makes MTPE auditable: the same file, checked the same way, every time.</p>
+    </div>
+  </section>
+
+  <nav class="case-nav">
+    <a href="service-template.html">← Previous: Template translation</a>
+    <a href="service-qc-delivery.html">Next: QC & delivery →</a>
+  </nav>
+</main>
+
+<script src="case.js"></script>
+</body>
+</html>

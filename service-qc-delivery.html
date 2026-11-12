@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QC &amp; delivery · Ariane Lesnyak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="case.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand">ARIANE LESNYAK</a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#collaborations">Collaborations</a>
+      <a href="index.html#promise">Promise</a>
+      <a href="index.html#numbers">Numbers</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#cases">Case studies</a>
+    </nav>
+    <div class="nav-actions"><a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a></div>
+  </div>
+</header>
+
+<main>
+  <section class="service-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study 04 · QC &amp; delivery</span>
+      <h1>The final pass against the video before the file leaves.</h1>
+      <p class="sub">Timing, spelling, shot changes and on-screen text — checked, not assumed. A subtitle that was not seen on the picture is not finished.</p>
+      <div class="service-meta">
+        <span>QC pass</span><span>Timing</span><span>Spelling</span><span>Shot changes</span><span>SRT / VTT</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <div class="wrap">
+      <h2>Three cues. Three problems.</h2>
+      <p>Every file has them. The QC pass is the one that catches them before the client does. Click each cue below to fix it.</p>
+
+      <div class="demo-panel">
+        <div class="demo-topbar">
+          <span>QC pass · interactive</span>
+          <span class="demo-status" id="qc-status">Click each cue to fix</span>
+        </div>
+        <div class="demo-body">
+          <div class="timeline">
+            <div class="timeline-track">
+              <div class="shot" style="left:0%; width:25%"><span>Shot 1</span></div>
+              <div class="shot" style="left:25%; width:30%"><span>Shot 2</span></div>
+              <div class="shot" style="left:55%; width:25%"><span>Shot 3</span></div>
+              <div class="shot" style="left:80%; width:20%"><span>Shot 4</span></div>
+
+              <div class="cue err" data-fix="left" style="left:20%; width:8%" title="Starts before shot change"></div>
+              <div class="cue err" data-fix="shrink" style="left:40%; width:30%" title="Reading speed too low"></div>
+              <div class="cue err" data-fix="right" style="left:72%; width:6%" title="Starts after shot change"></div>
+            </div>
+            <div class="timeline-legend">
+              <span><i class="ok"></i> Fixed</span>
+              <span><i class="err"></i> Needs fix</span>
+            </div>
+          </div>
+
+          <p id="qc-counter" style="margin-top:1.5rem;font-family:var(--mono);font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">3 issues · 0 fixed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <div class="wrap">
+      <h2>What the pass checks.</h2>
+      <p><strong>Timing.</strong> Cue starts and ends against shot changes, not just against each other.</p>
+      <p><strong>Reading speed.</strong> CPS within the brief, not the same as the previous episode.</p>
+      <p><strong>Spelling.</strong> Names, places, terminology — the things the spellchecker will not catch.</p>
+      <p><strong>On-screen text.</strong> Forced narratives, hard-coded titles, anything a viewer reads and the subtitles miss.</p>
+      <p>The file only ships after the pass. Not before.</p>
+    </div>
+  </section>
+
+  <nav class="case-nav">
+    <a href="service-review-mtpe.html">← Previous: Review &amp; MTPE</a>
+    <a href="index.html#cases">All case studies →</a>
+  </nav>
+</main>
+
+<script src="case.js"></script>
+</body>
+</html>

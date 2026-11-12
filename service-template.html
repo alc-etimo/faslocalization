@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Template translation · Ariane Lesnyak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="case.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand">ARIANE LESNYAK</a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#collaborations">Collaborations</a>
+      <a href="index.html#promise">Promise</a>
+      <a href="index.html#numbers">Numbers</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#cases">Case studies</a>
+    </nav>
+    <div class="nav-actions"><a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a></div>
+  </div>
+</header>
+
+<main>
+  <section class="service-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study 02 · Template translation</span>
+      <h1>Timed English SRT into pt-BR, inside every CPS and CPL limit.</h1>
+      <p class="sub">Netflix SPT, Amazon, and generic formats — kept consistent across seasons and episodes, with the reading speed the brief actually sets.</p>
+      <div class="service-meta">
+        <span>EN → PT-BR</span><span>Netflix SPT</span><span>Amazon</span><span>SRT / VTT</span><span>CPS / CPL</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <div class="wrap">
+      <h2>A template is a promise to the next episode.</h2>
+      <p>Every platform has its own template: line count, reading speed, character limit per line, on-screen text handling. The same episode translated into two different templates reads like two different shows.</p>
+      <p>This case is the same cue, rendered in three templates — Netflix SPT, Amazon, and a generic SRT — to show what changes and what doesn't.</p>
+
+      <div class="demo-panel">
+        <div class="demo-topbar">
+          <span>Same cue · three templates</span>
+          <span class="demo-status">Illustrative</span>
+        </div>
+        <div class="demo-body">
+          <div class="template-tabs" role="tablist">
+            <button class="template-tab" data-tab="tab-netflix" role="tab" aria-selected="true">Netflix SPT</button>
+            <button class="template-tab" data-tab="tab-amazon" role="tab" aria-selected="false">Amazon</button>
+            <button class="template-tab" data-tab="tab-generic" role="tab" aria-selected="false">Generic SRT</button>
+          </div>
+
+          <div class="template-content active" id="tab-netflix">
+            <div class="cps-box" id="cps-box">
+              <div class="line valid">Achei que você fosse</div>
+              <div class="line valid">embora.</div>
+            </div>
+            <div class="cps-metrics">
+              <div><b>CPS</b><span id="cps-value">17.0</span></div>
+              <div><b>CPL</b><span id="cpl-value">19</span></div>
+              <div><b>Lines</b><span id="lines-value">2</span></div>
+            </div>
+            <p style="margin-top:1rem;font-size:.85rem;color:var(--muted)">Netflix SPT: 42 chars/line max, 2 lines max, 17 CPS.</p>
+          </div>
+
+          <div class="template-content" id="tab-amazon">
+            <div class="cps-box">
+              <div class="line valid">Achei que você fosse embora.</div>
+            </div>
+            <div class="cps-metrics">
+              <div><b>CPS</b><span>17.0</span></div>
+              <div><b>CPL</b><span>27</span></div>
+              <div><b>Lines</b><span>1</span></div>
+            </div>
+            <p style="margin-top:1rem;font-size:.85rem;color:var(--muted)">Amazon: 1 line max on dialogue, up to 37 chars, 17 CPS.</p>
+          </div>
+
+          <div class="template-content" id="tab-generic">
+            <div class="cps-box">
+              <div class="line invalid">Achei que você fosse embora, mas ainda não decidi.</div>
+            </div>
+            <div class="cps-metrics">
+              <div class="bad"><b>CPS</b><span>23.5</span></div>
+              <div class="bad"><b>CPL</b><span>46</span></div>
+              <div><b>Lines</b><span>1</span></div>
+            </div>
+            <p style="margin-top:1rem;font-size:.85rem;color:var(--muted)">Generic SRT: 42 chars/line, 2 lines, 17 CPS. Over the limit — the cue needs a split or a cut.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="service-section">
+    <div class="wrap">
+      <h2>What changes between templates.</h2>
+      <p><strong>Line count</strong> changes what can be said on one line. A line that fits Amazon breaks on Netflix.</p>
+      <p><strong>Reading speed</strong> is the same in most streaming templates — but legacy broadcast templates often allow 20 CPS, and older DVD templates 22.</p>
+      <p><strong>On-screen text</strong> is handled differently: hard-coded, forced narrative, or translated only when it carries meaning the dialogue doesn't.</p>
+      <p>The translation stays the same. The way it is shown on screen does not.</p>
+    </div>
+  </section>
+
+  <nav class="case-nav">
+    <a href="service-translation.html">← Previous: Translation + spotting</a>
+    <a href="service-review-mtpe.html">Next: Review & MTPE →</a>
+  </nav>
+</main>
+
+<script src="case.js"></script>
+</body>
+</html>
