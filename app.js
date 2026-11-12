@@ -1,25 +1,35 @@
+/* ============================================================
+   FAS Localization Portfolio — app.js
+   Mantém: header scroll, hero carousel, marquee.
+   Adiciona: strike & type LOOP INFINITO na seção Promise.
+   ============================================================ */
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ============================================================
      HEADER SCROLL
      ============================================================ */
   const header = document.querySelector('.site-header');
-  window.addEventListener('scroll', () => {
+  if (header) {
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 24);
+    }, { passive: true });
+    // Estado inicial correto (caso a página carregue já com scroll)
     header.classList.toggle('scrolled', window.scrollY > 24);
-  }, { passive: true });
-
+  }
 
   /* ============================================================
      HERO CAROUSEL
      ============================================================ */
-  const slides = document.querySelectorAll('.hero-slide');
-  const imgs = document.querySelectorAll('.hero-bg img');
-  const dots = document.querySelectorAll('.hero-dots button');
-  const prevBtn = document.getElementById('heroPrev');
-  const nextBtn = document.getElementById('heroNext');
-  const playBtn = document.getElementById('heroPlay');
+  (function initHero() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const imgs   = document.querySelectorAll('.hero-bg img');
+    const dots   = document.querySelectorAll('.hero-dots button');
+    const prevBtn = document.getElementById('heroPrev');
+    const nextBtn = document.getElementById('heroNext');
+    const playBtn = document.getElementById('heroPlay');
+    if (!slides.length || !imgs.length) return;
 
-  if (slides.length) {
     let current = 0;
     let timer = null;
     let paused = false;
@@ -38,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (timer) clearInterval(timer);
       timer = null;
       if (paused) return;
-      
-      // Reinicia animação do dot
+
       dots.forEach(d => {
         const fill = d.querySelector('.fill');
         if (fill) {
@@ -48,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
           fill.style.animation = '';
         }
       });
-      
+
       timer = setInterval(() => {
         current = (current + 1) % slides.length;
         render();
@@ -72,95 +81,107 @@ document.addEventListener('DOMContentLoaded', () => {
       dots.forEach(d => d.classList.toggle('paused', paused));
       restart();
     });
-
     dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
 
     render();
     restart();
-  }
-
+  })();
 
   /* ============================================================
-     PROMISE — STRIKE & TYPE ANIMATION
+     PROMISE — STRIKE & TYPE ANIMATION (LOOP INFINITO)
      ============================================================ */
-  const promiseCards = document.querySelectorAll('.promise-card h3');
+  (function initPromiseAnimation() {
+    const promiseCards = document.querySelectorAll('.promise-card h3');
+    if (!promiseCards.length) return;
 
-if (promiseCards.length) {
-  // Mapeamento: chave = valor do data-word no HTML
-  // valor = o que substitui o "resto" da palavra após o tachado
-  const replacements = {
-    'Ariane': 'uthentic',     
-    'Lesnyak': 'ocalized',   
-    'Castelló': 'ontent'    
-  };
+    // Mapeamento: valor do data-word → o que substitui o "resto" da palavra
+    const replacements = {
+      'Ariane':   'uthentic',   // A + riane  →  A + uthentic  = Authentic
+      'Lesnyak':  'ocalized',   // L + esnyak →  L + ocalized = Localized
+      'Castelló': 'ontent'      // C + astelló → C + ontent   = Content
+    };
 
-  // Executa o ciclo em loop infinito para um único h3
-  function runLoop(h3) {
-    const originalWord = h3.dataset.word;
-    if (!originalWord || !replacements[originalWord]) return;
+    function runLoop(h3) {
+      const originalWord = h3.dataset.word;
+      if (!originalWord || !replacements[originalWord]) return;
 
-    const firstSpan = h3.querySelector('.first');
-    const restSpan = h3.querySelector('.rest');
-    if (!firstSpan || !restSpan) return;
+      const firstSpan = h3.querySelector('.first');
+      const restSpan  = h3.querySelector('.rest');
+      if (!firstSpan || !restSpan) return;
 
-    const originalRest = originalWord.slice(1); // "riane"
-    const newRest = replacements[originalWord]; // "uthentic"
+      const originalRest = originalWord.slice(1);   // "riane" / "esnyak" / "astelló"
+      const newRest      = replacements[originalWord]; // "uthentic" / "ocalized" / "ontent"
 
-    function cycle() {
-      // 1. Reset: palavra original visível
-      restSpan.textContent = originalRest;
-      restSpan.classList.remove('strike', 'hide');
-      restSpan.style.color = '';
+      let typeTimer = null;
 
-      // 2. Tacha o resto (strike)
-      setTimeout(() => {
-        restSpan.classList.add('strike');
-      }, 600);
-
-      // 3. Esconde o resto
-      setTimeout(() => {
-        restSpan.classList.add('hide');
-      }, 1400);
-
-      // 4. Digita a nova palavra (typewriter)
-      setTimeout(() => {
+      function cycle() {
+        // 1. Reset
+        if (typeTimer) { clearInterval(typeTimer); typeTimer = null; }
+        restSpan.textContent = originalRest;
         restSpan.classList.remove('strike', 'hide');
-        restSpan.textContent = '';
-        let i = 0;
-        const typeInterval = setInterval(() => {
-          if (i < newRest.length) {
-            restSpan.textContent += newRest.charAt(i);
-            i++;
-          } else {
-            clearInterval(typeInterval);
-          }
-        }, 100);
-      }, 2000);
+        restSpan.style.opacity = '';
+        restSpan.style.color = '';
 
-      // 5. Aguarda e reinicia o ciclo
-      setTimeout(cycle, 5000);
+        // 2. Strike
+        setTimeout(() => {
+          restSpan.classList.add('strike');
+        }, 600);
+
+        // 3. Hide
+        setTimeout(() => {
+          restSpan.classList.add('hide');
+        }, 1400);
+
+        // 4. Typewriter
+        setTimeout(() => {
+          restSpan.classList.remove('strike', 'hide');
+          restSpan.textContent = '';
+          let i = 0;
+          typeTimer = setInterval(() => {
+            if (i < newRest.length) {
+              restSpan.textContent += newRest.charAt(i);
+              i++;
+            } else {
+              clearInterval(typeTimer);
+              typeTimer = null;
+            }
+          }, 100);
+        }, 2000);
+
+        // 5. Reinicia o ciclo
+        setTimeout(cycle, 5500);
+      }
+
+      cycle();
     }
 
-    // Inicia uma vez
-    cycle();
-  }
+    // Dispara o loop quando o card entra na tela (uma vez por card)
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const h3 = entry.target;
+          if (h3.dataset.started) return;
+          h3.dataset.started = 'true';
+          runLoop(h3);
+          obs.unobserve(h3);
+        });
+      }, { threshold: 0.4 });
 
-  // Dispara o loop quando o card entra na tela (só uma vez por card)
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const h3 = entry.target;
-        if (h3.dataset.started) return;
-        h3.dataset.started = 'true';
-        runLoop(h3);
-        obs.unobserve(h3); // já iniciou o loop, pode parar de observar
-      });
-    }, { threshold: 0.4 });
+      promiseCards.forEach(card => observer.observe(card));
+    } else {
+      promiseCards.forEach(runLoop);
+    }
+  })();
 
-    promiseCards.forEach(card => observer.observe(card));
-  } else {
-    // Fallback: dispara tudo direto se o navegador não suportar
-    promiseCards.forEach(runLoop);
-  }
-}
+  /* ============================================================
+     MARQUEE — hover pause (redundância segura com o CSS)
+     ============================================================ */
+  (function initMarquee() {
+    const track = document.querySelector('.collab-track');
+    if (!track) return;
+    track.addEventListener('mouseenter', () => track.classList.add('paused'));
+    track.addEventListener('mouseleave', () => track.classList.remove('paused'));
+  })();
+
+});
