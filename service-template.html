@@ -3,19 +3,602 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Timed subtitle translation · Ariane Lesnyak</title>
-  <meta name="description" content="Translate an already timed English subtitle file into natural Brazilian Portuguese while respecting the delivery brief's reading speed and line length.">
+  <title>Case 01 · Translation + spotting · Ariane Lesnyak</title>
+  <meta name="description" content="Interactive spotting demo: drag cues on a waveform, watch CPS and CPL recalculate in real time, and read each cue against a video preview.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="case.css">
+
+<style>
+/* ============================================================
+   TOKENS — mesma paleta e tipografia do FAS /mtpe
+   ============================================================ */
+:root {
+  --red-500: #C21212;
+  --red-600: #9D0303;
+  --red-700: #7A0202;
+  --n-100: #F1EDEB;
+  --n-200: #E4DEDB;
+  --n-300: #CCC4C0;
+  --n-400: #A69C97;
+  --n-500: #7B716C;
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-2: #F6F6F7;
+  --ink: #18140F;
+  --ink-soft: #403A34;
+  --muted: #6E6862;
+  --line: #EAE7E4;
+  --line-strong: #D8D4D0;
+  --brand: #9D0303;
+  --brand-ink: #7A0202;
+  --brand-tint: #FBEBEB;
+  --signal: #C21212;
+  --on-dark: #D81919;
+  --dark: #0c0c0e;
+  --dark-2: #0b0b0d;
+  --on-dark-text: #FF6B66;
+
+  --display: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --logo: "Bebas Neue", "Montserrat", sans-serif;
+
+  --maxw: 1120px;
+  --ease: cubic-bezier(.4,0,.2,1);
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --shadow-md: 0 6px 18px rgba(61,0,0,.08);
+  --shadow-lg: 0 18px 44px rgba(61,0,0,.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  background: var(--bg); color: var(--ink-soft);
+  font-family: var(--body); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; line-height: 1.05; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+ul, ol { list-style: none; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 24px; }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.site-header.scrolled {
+  background: rgba(255,255,255,0.92);
+  border-bottom-color: var(--line);
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .site-header.scrolled {
+    background: rgba(255,255,255,0.82);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
+.site-header .nav-row {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 66px; gap: 24px;
+  max-width: var(--maxw); margin-inline: auto; padding-inline: 24px;
+}
+.brand {
+  font-family: var(--logo); font-size: 1.6rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,0.45);
+  transition: color .25s ease, text-shadow .25s ease;
+}
+.site-header.scrolled .brand { color: #9d1402; text-shadow: none; }
+.nav-links {
+  display: flex; align-items: center; gap: 24px;
+  font-size: 0.85rem; font-weight: 500;
+  margin-left: auto; margin-right: 32px;
+}
+.nav-links a {
+  color: rgba(255,255,255,0.88);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+  padding: 6px 4px; position: relative;
+  transition: color .15s ease;
+}
+.nav-links a::after {
+  content: ''; position: absolute; left: 4px; right: 4px; bottom: 0;
+  height: 1.5px; background: currentColor;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .25s ease;
+}
+.nav-links a:hover::after { transform: scaleX(1); }
+.site-header.scrolled .nav-links a { color: var(--muted); text-shadow: none; }
+.site-header.scrolled .nav-links a:hover { color: var(--ink); }
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+.btn-nav {
+  display: inline-flex; align-items: center;
+  padding: 6px 13px; border-radius: 2px;
+  background: var(--brand); color: #fff;
+  font-family: var(--display); font-weight: 700; font-size: 0.78rem;
+  transition: background .15s ease;
+}
+.btn-nav:hover { background: var(--signal); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero-dark {
+  position: relative;
+  overflow: hidden;
+  background: var(--dark-2);
+  color: #fff;
+  padding-block: 8rem 5rem;
+  margin-top: 0;
+}
+.hero-dark::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 0%, rgba(216,25,25,0.18), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(157,3,3,0.12), transparent 60%);
+  pointer-events: none;
+}
+.hero-dark::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent 80%);
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent 80%);
+  pointer-events: none;
+}
+.hero-dark .wrap { position: relative; z-index: 2; }
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--on-dark-text);
+  margin-bottom: 1.25rem; font-weight: 500;
+}
+.hero-dark h1 {
+  color: #fff; font-weight: 800;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  letter-spacing: -0.03em; line-height: 1.05;
+  max-width: 22ch;
+}
+.hero-dark h1 .accent { color: var(--on-dark-text); }
+.hero-dark .sub {
+  margin-top: 1.5rem;
+  font-size: 1.12rem;
+  color: rgba(255,255,255,0.78);
+  max-width: 58ch;
+  line-height: 1.65;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap;
+  gap: 8px; margin-top: 2rem;
+}
+.hero-meta span {
+  padding: 6px 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  font-size: 0.78rem; font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.04);
+}
+.hero-actions { display: flex; gap: 12px; margin-top: 2.5rem; flex-wrap: wrap; }
+.btn-hero {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: 2px;
+  background: var(--signal); color: #fff;
+  font-family: var(--display); font-weight: 700; font-size: 0.9rem;
+  transition: background .2s ease;
+}
+.btn-hero:hover { background: var(--on-dark); }
+.btn-hero-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: 2px;
+  border: 1px solid rgba(255,255,255,0.24);
+  color: #fff;
+  font-family: var(--display); font-weight: 700; font-size: 0.9rem;
+  transition: border-color .2s ease, background .2s ease;
+}
+.btn-hero-ghost:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
+
+/* ============================================================
+   SEÇÕES
+   ============================================================ */
+.section { padding-block: 4.5rem; }
+.section.alt { background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.section .wrap { position: relative; }
+.section h2 {
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 1.25rem;
+}
+.section h3 {
+  font-size: 1.15rem; font-weight: 700; margin-top: 2rem; margin-bottom: .75rem;
+}
+.section p { color: var(--ink-soft); max-width: 68ch; margin-bottom: 1rem; line-height: 1.65; }
+
+/* ============================================================
+   WORKSPACE
+   ============================================================ */
+.workspace {
+  margin-top: 2.5rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.ws-titlebar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  background: #1b1b1f; color: rgba(255,255,255,.75);
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.05em;
+}
+.ws-dots { display: flex; gap: 6px; }
+.ws-dots span { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,.22); }
+.ws-dots span:nth-child(1) { background: #ff5f57; }
+.ws-dots span:nth-child(2) { background: #ffbd2e; }
+.ws-dots span:nth-child(3) { background: #27c93f; }
+.ws-filename { color: #fff; font-weight: 600; margin-left: 4px; }
+.ws-badge {
+  margin-left: auto;
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 9px; border: 1px dashed rgba(255,255,255,.35);
+  border-radius: 2px; color: #f0c078;
+}
+
+.ws-toolbar {
+  display: flex; flex-wrap: wrap;
+  align-items: center; gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #faf9fa;
+}
+.ws-toolbar label {
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.ws-toolbar select {
+  font-family: var(--body); font-size: 0.82rem;
+  padding: 6px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px; background: #fff; color: var(--ink);
+}
+.ws-toolbar .toggle-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--ink-soft);
+  background: #fff;
+  transition: all .15s ease;
+}
+.ws-toolbar .toggle-btn[aria-pressed="true"] {
+  background: var(--ink); color: #fff; border-color: var(--ink);
+}
+
+/* Layout principal: preview + editor */
+.ws-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 380px;
+}
+.ws-preview {
+  background: #0d0d10;
+  padding: 16px;
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--line);
+}
+.ws-video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #2a2a30 0%, #1a1a20 60%, #0d0d10 100%);
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.ws-video-label {
+  position: absolute; top: 10px; left: 10px;
+  font-family: var(--mono); font-size: 0.58rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  background: rgba(0,0,0,.4); padding: 3px 8px; border-radius: 2px;
+}
+.ws-video-frame {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 40% 30% at 30% 30%, rgba(227,44,109,0.18), transparent 60%),
+    radial-gradient(ellipse 30% 25% at 70% 70%, rgba(59,130,246,0.14), transparent 60%);
+  transition: opacity .4s ease;
+}
+.ws-subtitle {
+  position: relative; z-index: 2;
+  margin-bottom: 22px;
+  max-width: 88%;
+  padding: 8px 14px;
+  background: rgba(0,0,0,.78);
+  color: #fff; font-size: 0.92rem; line-height: 1.35;
+  border-radius: 3px; text-align: center;
+  min-height: 1.4em;
+  transition: opacity .3s ease;
+  white-space: pre-wrap;
+}
+.ws-subtitle.empty { opacity: 0; }
+.ws-video-meta {
+  display: flex; justify-content: space-between;
+  margin-top: 10px;
+  font-family: var(--mono); font-size: 0.7rem;
+  color: rgba(255,255,255,.6);
+}
+.ws-video-meta span strong { color: #fff; font-weight: 500; }
+
+/* Editor */
+.ws-editor {
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.ws-field { display: flex; flex-direction: column; gap: 5px; }
+.ws-field label {
+  font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.ws-source {
+  padding: 9px 12px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 3px;
+  background: #fbf9f8;
+  font-size: 0.9rem; color: var(--ink-soft);
+}
+.ws-textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  font-family: var(--body); font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--ink);
+  resize: vertical;
+  min-height: 64px;
+}
+.ws-textarea:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+.ws-duration-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.ws-duration-row input[type="range"] { flex: 1; accent-color: var(--brand); }
+.ws-duration-row input[type="number"] {
+  width: 80px;
+  padding: 6px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  font-family: var(--mono); font-size: 0.82rem;
+}
+.ws-unit { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+.ws-timecodes { display: flex; gap: 10px; flex-wrap: wrap; }
+.ws-tc { display: flex; flex-direction: column; gap: 2px; }
+.ws-tc span {
+  font-family: var(--mono); font-size: 0.58rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.ws-tc input {
+  width: 116px;
+  padding: 5px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  font-family: var(--mono); font-size: 0.78rem;
+}
+
+/* Timeline */
+.ws-timeline-wrap {
+  padding: 16px;
+  border-top: 1px solid var(--line);
+  background: #faf9fa;
+}
+.ws-timeline-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.ws-timeline-head .label {
+  font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.ws-timeline-head .hint {
+  font-size: 0.72rem; color: var(--muted); font-style: italic;
+}
+.ws-timeline {
+  position: relative;
+  height: 92px;
+  background: #0d0d10;
+  border-radius: 4px;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+}
+.ws-waveform { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ws-shot {
+  position: absolute; top: 0; bottom: 0;
+  background: rgba(255,255,255,0.03);
+  border-right: 1px solid rgba(46, 125, 79, 0.4);
+}
+.ws-shot span {
+  position: absolute; top: 6px; left: 8px;
+  font-family: var(--mono); font-size: 0.55rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+}
+.ws-playhead {
+  position: absolute; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--signal);
+  box-shadow: 0 0 8px rgba(216,25,25,.6);
+  pointer-events: none;
+  transform: translateX(-1px);
+  z-index: 5;
+}
+.ws-cue {
+  position: absolute;
+  top: 38px;
+  height: 36px;
+  border-radius: 3px;
+  background: rgba(157,3,3,0.7);
+  border: 1px solid rgba(255,107,102,0.5);
+  cursor: grab;
+  transition: background .15s ease, border-color .15s ease;
+  display: flex; align-items: center; padding: 0 8px;
+  overflow: hidden;
+  z-index: 4;
+}
+.ws-cue:active { cursor: grabbing; }
+.ws-cue.selected {
+  background: rgba(216,25,25,0.9);
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+}
+.ws-cue.dragging {
+  background: rgba(255,107,102,0.9);
+  cursor: grabbing;
+}
+.ws-cue.active {
+  background: rgba(255,107,102,0.95);
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
+}
+.ws-cue-text {
+  font-family: var(--mono); font-size: 0.62rem;
+  color: #fff; white-space: nowrap;
+  text-overflow: ellipsis; overflow: hidden;
+}
+.ws-cue.violation {
+  background: rgba(239,68,68,0.9);
+  border-color: #fca5a5;
+}
+
+/* Validation panel */
+.ws-validation {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) 1.4fr;
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+}
+.ws-metric {
+  background: #fff;
+  padding: 12px 16px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.ws-metric-label {
+  font-family: var(--mono); font-size: 0.6rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.ws-metric-value {
+  font-family: var(--display); font-weight: 800;
+  font-size: 1.3rem; color: var(--ink); line-height: 1.1;
+}
+.ws-metric-state { font-size: 0.68rem; color: var(--muted); }
+.ws-metric[data-state="ok"] .ws-metric-state { color: #1f7a4a; }
+.ws-metric[data-state="bad"] .ws-metric-state { color: var(--signal); }
+
+.ws-summary {
+  background: #fbfbf8;
+  padding: 12px 16px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  display: flex; align-items: center;
+  border-left: 3px solid var(--brand);
+}
+.ws-summary[data-state="bad"] { border-left-color: var(--signal); color: var(--signal); }
+
+/* Status bar */
+.ws-statusbar {
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 8px 16px;
+  border-top: 1px solid var(--line);
+  background: #faf9fa;
+  font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.04em; color: var(--muted);
+}
+
+/* ============================================================
+   WORKFLOW STEPS
+   ============================================================ */
+.steps { margin-top: 2rem; display: flex; flex-direction: column; gap: 0; }
+.step { display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line); }
+.step:first-child { border-top: 0; }
+.step-num {
+  flex-shrink: 0; width: 32px; height: 32px;
+  border: 2px solid var(--brand); border-radius: 2px;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand);
+}
+.step-body h3 { margin-top: 0; margin-bottom: 6px; font-size: 1.05rem; }
+.step-body p { margin: 0; font-size: 0.94rem; }
+
+/* ============================================================
+   CASE NAV
+   ============================================================ */
+.case-nav {
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: 2.5rem 24px;
+  max-width: 1100px; margin-inline: auto;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.case-nav a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.9rem; font-weight: 600;
+  color: var(--brand); transition: color .2s ease;
+}
+.case-nav a:hover { color: var(--brand-ink); }
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .brand { font-size: 1.3rem; }
+  .ws-main { grid-template-columns: 1fr; }
+  .ws-preview { border-right: 0; border-bottom: 1px solid var(--line); }
+  .ws-validation { grid-template-columns: repeat(2, 1fr); }
+  .ws-summary { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .hero-dark h1 { font-size: 2rem; }
+  .ws-toolbar { flex-direction: column; align-items: stretch; }
+  .ws-toolbar select { width: 100%; }
+  .ws-validation { grid-template-columns: 1fr 1fr; }
+  .ws-timecodes { flex-direction: column; }
+  .ws-tc input { width: 100%; }
+  .step { flex-direction: column; gap: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+</style>
 </head>
 <body>
+
+<!-- ============ HEADER ============ -->
 <header class="site-header">
-  <div class="wrap nav-row">
+  <div class="nav-row">
     <a href="index.html" class="brand">ARIANE LESNYAK</a>
-    <nav class="nav-links">
+    <nav class="nav-links" aria-label="Main">
       <a href="index.html#about">About</a>
       <a href="index.html#collaborations">Collaborations</a>
       <a href="index.html#promise">Promise</a>
@@ -23,166 +606,762 @@
       <a href="index.html#services">Services</a>
       <a href="index.html#cases">Case studies</a>
     </nav>
-    <div class="nav-actions"><a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a></div>
+    <div class="nav-actions">
+      <a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a>
+    </div>
   </div>
 </header>
 
 <main>
-  <!-- Hero -->
-  <section class="service-hero">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero-dark">
     <div class="wrap">
-      <span class="eyebrow">Case study 02 · Timed subtitle translation</span>
-      <h1>Translate the timed file. Keep the dialogue alive — and the subtitles readable.</h1>
-      <p class="sub">The English file already arrives with cue timing. The work is translating each cue into Brazilian Portuguese that sounds like a person, inside the brief's reading speed and line length.</p>
-      <div class="service-meta">
+      <div class="hero-eyebrow">Case study 01 · Translation + spotting</div>
+      <h1>Timed subtitles <span class="accent">from scratch,</span> read against the picture.</h1>
+      <p class="sub">No script. No template. The brief, the source video, and a native pt-BR linguist who spots, translates, and QCs in one pass — inside the reading speed and line length the delivery actually allows.</p>
+      <div class="hero-meta">
         <span>EN → PT-BR</span>
-        <span>Timed SRT input</span>
-        <span>Brief-driven CPS / CPL</span>
+        <span>Film &amp; documentary</span>
+        <span>Spotting</span>
+        <span>CPS / CPL</span>
+        <span>SRT / VTT</span>
         <span>Illustrative data</span>
       </div>
+      <div class="hero-actions">
+        <a href="#workspace" class="btn-hero">
+          Try the workspace
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="index.html#cases" class="btn-hero-ghost">All case studies</a>
+      </div>
     </div>
   </section>
 
-  <!-- Intro -->
-  <section class="service-section">
+  <!-- ============ SEÇÃO 01 — INTRO ============ -->
+  <section class="section">
     <div class="wrap">
-      <h2>The timing is already there. The dialogue is not.</h2>
-      <p>A timed subtitle file carries cue in/out values, line breaks and reading speed on the source side. Translation is not the same as spotting — it is fitting the target language into a frame that was decided by someone else, without breaking it.</p>
-      <p>This case demonstrates the translation step in a subtitle editor mock: source cues, editable target cues, live CPS and CPL, and a delivery profile that decides whether the cue is ready or not.</p>
+      <h2>Spotting is where translation becomes a subtitle.</h2>
+      <p>The same line, moved 200 ms earlier or later, stops fitting the shot. A cue that starts two frames before a hard cut flashes on screen for a moment the editor never intended — and the viewer feels it, even if they can't name it.</p>
+      <p>This demo shows the spotting step in a subtitle editor mock. The source audio and video are illustrative; the waveform and the cues are generated in the browser, so you can drag, retime, and see CPS and CPL update live.</p>
     </div>
   </section>
 
-  <!-- Interactive workspace -->
-  <section class="service-section">
+  <!-- ============ SEÇÃO 02 — WORKSPACE INTERATIVO ============ -->
+  <section class="section alt" id="workspace">
     <div class="wrap">
       <h2>Try the workspace.</h2>
-      <p>The interface below is an original mock inspired by subtitle editors. The dialogue, profile values and metrics are illustrative — they do not describe any client, platform or production standard.</p>
+      <p>Drag a cue along the timeline. The in/out values and metrics update as you move it.<br> Press "Watch it" to preview the selected cue against the video.</p>
 
-      <div class="demo-panel sub-editor">
-        <!-- Title bar -->
-        <div class="sub-titlebar">
-          <div class="sub-titlebar-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-          <span class="sub-titlebar-name">timed_srt_editor</span>
-          <span class="sub-titlebar-file">Episode_03_EN.srt</span>
-          <span class="sub-titlebar-badge">Illustrative</span>
+      <div class="workspace" id="ws">
+
+        <!-- TITLE BAR -->
+        <div class="ws-titlebar">
+          <div class="ws-dots"><span></span><span></span><span></span></div>
+          <span class="ws-filename">Episode_03 · EN.srt</span>
+          <span class="ws-badge">Demo · illustrative data</span>
         </div>
 
-        <!-- Toolbar -->
-        <div class="sub-toolbar" role="toolbar" aria-label="Workspace controls">
-          <label class="sub-tool-label" for="profile-select">Delivery brief</label>
-          <select id="profile-select" class="sub-select">
-            <option value="A" selected>Demo profile A — 17 CPS · 42 CPL · 2 lines</option>
-            <option value="B">Demo profile B — 20 CPS · 42 CPL · 2 lines</option>
-            <option value="custom">Custom — edit values</option>
+        <!-- TOOLBAR -->
+        <div class="ws-toolbar">
+          <label for="ws-rate">Reading limit</label>
+          <select id="ws-rate">
+            <option value="15">15 CPS</option>
+            <option value="17" selected>17 CPS</option>
+            <option value="20">20 CPS</option>
+            <option value="22">22 CPS</option>
           </select>
-          <div class="sub-custom" id="custom-profile" hidden>
-            <label>Max CPS <input type="number" id="custom-cps" value="17" min="5" max="40" step="1"></label>
-            <label>Max CPL <input type="number" id="custom-cpl" value="42" min="20" max="80" step="1"></label>
-            <label>Max lines <input type="number" id="custom-lines" value="2" min="1" max="3" step="1"></label>
-          </div>
+
+          <label for="ws-cpl">Line length</label>
+          <select id="ws-cpl">
+            <option value="32">32 CPL</option>
+            <option value="37" selected>37 CPL</option>
+            <option value="42">42 CPL</option>
+          </select>
+
+          <button class="toggle-btn" id="ws-watch" aria-pressed="false">▶ Watch it</button>
+          <button class="toggle-btn" id="ws-add" aria-pressed="false">+ Add cue</button>
+          <button class="toggle-btn" id="ws-reset" aria-pressed="false">Reset</button>
         </div>
 
-        <!-- Main grid -->
-        <div class="sub-grid">
-          <!-- Video preview -->
-          <div class="sub-preview" aria-hidden="true">
-            <div class="sub-video">
-              <div class="sub-video-label">Preview · illustrative</div>
-              <div class="sub-video-overlay" id="video-overlay">Achei que você fosse embora.</div>
+        <!-- MAIN: PREVIEW + EDITOR -->
+        <div class="ws-main">
+          <div class="ws-preview">
+            <div class="ws-video">
+              <div class="ws-video-frame" id="ws-frame"></div>
+              <span class="ws-video-label">Preview · 16:9</span>
+              <div class="ws-subtitle empty" id="ws-subtitle">—</div>
             </div>
-            <div class="sub-video-meta">
-              <span id="cue-range">00:00:04.200 → 00:00:06.800</span>
-              <span id="cue-duration">2.60s</span>
+            <div class="ws-video-meta">
+              <span>IN <strong id="ws-in">00:00:00.000</strong></span>
+              <span>OUT <strong id="ws-out">00:00:00.000</strong></span>
+              <span>DUR <strong id="ws-dur">0.00s</strong></span>
             </div>
           </div>
 
-          <!-- Editor -->
-          <div class="sub-editor-pane">
-            <div class="sub-field">
-              <label class="sub-label" for="source-text">Source · EN (locked)</label>
-              <div id="source-text" class="sub-source" aria-readonly="true">I thought you were leaving.</div>
+          <div class="ws-editor">
+            <div class="ws-field">
+              <label for="ws-source">Source (EN)</label>
+              <div class="ws-source" id="ws-source">—</div>
             </div>
 
-            <div class="sub-field">
-              <label class="sub-label" for="target-text">Target · PT-BR (editable)</label>
-              <textarea id="target-text" class="sub-textarea" rows="2" spellcheck="false">Achei que você fosse embora.</textarea>
-              <div class="sub-inline-actions">
-                <button type="button" class="sub-inline-btn" data-break="insert">Insert line break</button>
-                <button type="button" class="sub-inline-btn" data-break="remove">Remove line breaks</button>
+            <div class="ws-field">
+              <label for="ws-target">Target (PT-BR)</label>
+              <textarea class="ws-textarea" id="ws-target" spellcheck="false">—</textarea>
+            </div>
+
+            <div class="ws-field">
+              <label for="ws-dur-range">Duration</label>
+              <div class="ws-duration-row">
+                <input type="range" id="ws-dur-range" min="0.5" max="8" step="0.01" value="2">
+                <input type="number" id="ws-dur-num" min="0.5" max="8" step="0.01" value="2">
+                <span class="ws-unit">s</span>
               </div>
             </div>
 
-            <div class="sub-field">
-              <label class="sub-label" for="duration-input">Cue duration</label>
-              <div class="sub-duration-row">
-                <input id="duration-input" type="range" min="0.5" max="8" step="0.1" value="2.6">
-                <input id="duration-number" type="number" min="0.5" max="8" step="0.1" value="2.6" aria-label="Cue duration in seconds">
-                <span class="sub-unit">s</span>
+            <div class="ws-timecodes">
+              <div class="ws-tc">
+                <span>In</span>
+                <input type="text" id="ws-tc-in" value="00:00:00.000" inputmode="numeric">
               </div>
-            </div>
-
-            <div class="sub-field">
-              <label class="sub-label">Timecodes</label>
-              <div class="sub-timecodes">
-                <label class="sub-tc"><span>In</span><input id="tc-in" type="text" value="00:00:04.200" aria-label="Cue in timecode"></label>
-                <label class="sub-tc"><span>Out</span><input id="tc-out" type="text" value="00:00:06.800" aria-label="Cue out timecode"></label>
+              <div class="ws-tc">
+                <span>Out</span>
+                <input type="text" id="ws-tc-out" value="00:00:02.000" inputmode="numeric">
               </div>
-              <p class="sub-note">Timecodes follow the source file. Editing them here does not affect the demo metrics — only duration does.</p>
             </div>
           </div>
         </div>
 
-        <!-- Validation panel -->
-        <div class="sub-validation" id="validation-panel">
-          <div class="sub-metric" data-metric="cps">
-            <span class="sub-metric-label">CPS</span>
-            <span class="sub-metric-value" id="metric-cps">—</span>
-            <span class="sub-metric-state" id="state-cps">—</span>
+        <!-- TIMELINE -->
+        <div class="ws-timeline-wrap">
+          <div class="ws-timeline-head">
+            <span class="label">Timeline · drag a cue to retime it</span>
+            <span class="hint">Cues snap to 10 ms · shots are visual guides</span>
           </div>
-          <div class="sub-metric" data-metric="cpl">
-            <span class="sub-metric-label">CPL</span>
-            <span class="sub-metric-value" id="metric-cpl">—</span>
-            <span class="sub-metric-state" id="state-cpl">—</span>
+          <div class="ws-timeline" id="ws-timeline">
+            <svg class="ws-waveform" id="ws-waveform" preserveAspectRatio="none"></svg>
+            <div id="ws-shots"></div>
+            <div id="ws-cues"></div>
+            <div class="ws-playhead" id="ws-playhead" style="left:0%"></div>
           </div>
-          <div class="sub-metric" data-metric="lines">
-            <span class="sub-metric-label">Lines</span>
-            <span class="sub-metric-value" id="metric-lines">—</span>
-            <span class="sub-metric-state" id="state-lines">—</span>
-          </div>
-          <div class="sub-metric" data-metric="chars">
-            <span class="sub-metric-label">Chars</span>
-            <span class="sub-metric-value" id="metric-chars">—</span>
-            <span class="sub-metric-state" id="state-chars">counted</span>
-          </div>
-          <div class="sub-summary" id="validation-summary">Ready for demo brief A.</div>
         </div>
 
-        <!-- Status bar -->
-        <div class="sub-statusbar">
-          <span id="status-message">Profile A · 17 CPS · 42 CPL · 2 lines</span>
-          <span>Illustrative demo — not a real production standard</span>
+        <!-- VALIDATION -->
+        <div class="ws-validation">
+          <div class="ws-metric" id="m-cps">
+            <span class="ws-metric-label">CPS</span>
+            <span class="ws-metric-value" id="m-cps-val">0.0</span>
+            <span class="ws-metric-state" id="m-cps-state">—</span>
+          </div>
+          <div class="ws-metric" id="m-cpl">
+            <span class="ws-metric-label">CPL</span>
+            <span class="ws-metric-value" id="m-cpl-val">0</span>
+            <span class="ws-metric-state" id="m-cpl-state">—</span>
+          </div>
+          <div class="ws-metric" id="m-dur">
+            <span class="ws-metric-label">Duration</span>
+            <span class="ws-metric-value" id="m-dur-val">0.00</span>
+            <span class="ws-metric-state" id="m-dur-state">—</span>
+          </div>
+          <div class="ws-metric" id="m-gap">
+            <span class="ws-metric-label">Min gap</span>
+            <span class="ws-metric-value" id="m-gap-val">—</span>
+            <span class="ws-metric-state" id="m-gap-state">—</span>
+          </div>
+          <div class="ws-summary" id="ws-summary" data-state="ok">
+            Select a cue to read its metrics.
+          </div>
+        </div>
+
+        <!-- STATUS BAR -->
+        <div class="ws-statusbar">
+          <span id="ws-status-left">Ready · 0 cues</span>
+          <span id="ws-status-right">EN → PT-BR · illustrative</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- What this case demonstrates -->
-  <section class="service-section">
+  <!-- ============ SEÇÃO 03 — WORKFLOW ============ -->
+  <section class="section">
     <div class="wrap">
-      <h2>What the translation step shows.</h2>
-      <p><strong>Natural Brazilian Portuguese.</strong> “I thought you were leaving” is not “Eu pensei que você estava indo.” The demo target uses a real pt-BR phrasing that fits the tone and the frame.</p>
-      <p><strong>Line breaks chosen, not inherited.</strong> Insert or remove a break and the CPS, CPL and line-count values update live.</p>
-      <p><strong>Reading speed that follows the cue.</strong> Change the duration and the metrics change — a shorter cue demands a tighter line, not the same text squeezed.</p>
-      <p><strong>A brief, not a guess.</strong> Switching the profile changes what “valid” means. Nothing in this demo is presented as a universal subtitling standard.</p>
+      <h2>How the pass works.</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h3>Read the picture first</h3>
+            <p>Shots, cuts, on-screen text. The timing has to respect what the frame is doing before a single word is placed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h3>Spot the cue</h3>
+            <p>In and out points land on the breath, not on the syllable. A cue that crosses a cut gets split or nudged.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h3>Translate to the timing</h3>
+            <p>The pt-BR line is written to fit the slot — not trimmed afterwards. CPS and CPL are constraints, not cleanup.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h3>QC against playback</h3>
+            <p>Watch the cue in context, check the gap to the next one, and export SRT or VTT.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <nav class="case-nav">
-    <a href="service-translation.html">← Previous: Translation + spotting</a>
-    <a href="service-review-mtpe.html">Next: Review &amp; MTPE →</a>
+  <!-- ============ CASE NAV ============ -->
+  <nav class="case-nav" aria-label="Case navigation">
+    <a href="index.html#cases">← All case studies</a>
+    <a href="index.html#cases">Next case →</a>
   </nav>
+
 </main>
 
-<script src="case.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- helpers ---------- */
+  const $ = (id) => document.getElementById(id);
+
+  function pad(n, w) { return String(n).padStart(w, "0"); }
+
+  function fmt(t) {
+    if (t < 0) t = 0;
+    const h = Math.floor(t / 3600);
+    const m = Math.floor((t % 3600) / 60);
+    const s = Math.floor(t % 60);
+    const ms = Math.round((t - Math.floor(t)) * 1000);
+    return pad(h, 2) + ":" + pad(m, 2) + ":" + pad(s, 2) + "." + pad(ms, 3);
+  }
+
+  function parse(tc) {
+    const m = /^(\d{2}):(\d{2}):(\d{2})\.(\d{3})$/.exec(tc.trim());
+    if (!m) return null;
+    return (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]) + (+m[4]) / 1000;
+  }
+
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+  /* ---------- state ---------- */
+  const DURATION = 60; // seconds of timeline
+
+  const state = {
+    rate: 17,
+    cpl: 37,
+    cues: [],
+    selected: null,
+    activeId: null,
+    watching: false,
+    playhead: 0,
+    raf: null
+  };
+
+  /* Seed cues (illustrative). Times in seconds. */
+  const seed = [
+    { in: 2.4,  out: 5.1,  src: "We started with nothing but a camera and a map.",
+      tgt: "Começamos com nada além de uma câmera e um mapa." },
+    { in: 6.2,  out: 9.4,  src: "Every route we drew was a guess.",
+      tgt: "Cada rota que traçamos era um palpite." },
+    { in: 11.0, out: 14.8, src: "But the guess was the point.",
+      tgt: "Mas o palpite era o ponto." },
+    { in: 16.5, out: 20.2, src: "You learn the land by getting it wrong.",
+      tgt: "A gente aprende a terra errando." },
+    { in: 22.0, out: 25.6, src: "Then you correct, and keep walking.",
+      tgt: "Depois corrige, e segue andando." },
+    { in: 28.4, out: 32.1, src: "The map was never the destination.",
+      tgt: "O mapa nunca foi o destino." },
+    { in: 34.0, out: 37.5, src: "It was the excuse to move.",
+      tgt: "Era a desculpa para se mover." }
+  ];
+
+  const shots = [
+    { start: 0,  end: 8,  name: "Shot 01" },
+    { start: 8,  end: 15, name: "Shot 02" },
+    { start: 15, end: 24, name: "Shot 03" },
+    { start: 24, end: 33, name: "Shot 04" },
+    { start: 33, end: 44, name: "Shot 05" },
+    { start: 44, end: 60, name: "Shot 06" }
+  ];
+
+  /* ---------- refs ---------- */
+  const el = {
+    timeline: $("ws-timeline"),
+    cues: $("ws-cues"),
+    shots: $("ws-shots"),
+    waveform: $("ws-waveform"),
+    playhead: $("ws-playhead"),
+    subtitle: $("ws-subtitle"),
+    frame: $("ws-frame"),
+    in: $("ws-in"),
+    out: $("ws-out"),
+    dur: $("ws-dur"),
+    source: $("ws-source"),
+    target: $("ws-target"),
+    durRange: $("ws-dur-range"),
+    durNum: $("ws-dur-num"),
+    tcIn: $("ws-tc-in"),
+    tcOut: $("ws-tc-out"),
+    rate: $("ws-rate"),
+    cpl: $("ws-cpl"),
+    watch: $("ws-watch"),
+    add: $("ws-add"),
+    reset: $("ws-reset"),
+    mCps: $("m-cps"), mCpsVal: $("m-cps-val"), mCpsState: $("m-cps-state"),
+    mCpl: $("m-cpl"), mCplVal: $("m-cpl-val"), mCplState: $("m-cpl-state"),
+    mDur: $("m-dur"), mDurVal: $("m-dur-val"), mDurState: $("m-dur-state"),
+    mGap: $("m-gap"), mGapVal: $("m-gap-val"), mGapState: $("m-gap-state"),
+    summary: $("ws-summary"),
+    statusLeft: $("ws-status-left"),
+    statusRight: $("ws-status-right")
+  };
+
+  /* ---------- build waveform ---------- */
+  function buildWaveform() {
+    const W = 1000, H = 100;
+    const N = 500;
+    let d = "";
+    for (let i = 0; i <= N; i++) {
+      const x = (i / N) * W;
+      const t = (i / N) * DURATION;
+      const env =
+        0.45 +
+        0.35 * Math.abs(Math.sin(t * 1.7)) +
+        0.15 * Math.sin(t * 11.3) +
+        0.08 * Math.sin(t * 37.1);
+      const a = clamp(env, 0.05, 0.95) * (H / 2 - 4);
+      const mid = H / 2;
+      d += (i === 0 ? "M" : "L") + x.toFixed(2) + " " + (mid - a).toFixed(2) + " ";
+      d += "L" + x.toFixed(2) + " " + (mid + a).toFixed(2) + " ";
+    }
+    el.waveform.setAttribute("viewBox", "0 0 " + W + " " + H);
+    el.waveform.innerHTML =
+      '<path d="' + d + '" fill="none" stroke="rgba(216,25,25,0.55)" stroke-width="0.8"/>';
+  }
+
+  /* ---------- build shots ---------- */
+  function buildShots() {
+    el.shots.innerHTML = "";
+    shots.forEach((s) => {
+      const div = document.createElement("div");
+      div.className = "ws-shot";
+      div.style.left = (s.start / DURATION) * 100 + "%";
+      div.style.width = ((s.end - s.start) / DURATION) * 100 + "%";
+      const label = document.createElement("span");
+      label.textContent = s.name;
+      div.appendChild(label);
+      el.shots.appendChild(div);
+    });
+  }
+
+  /* ---------- cues ---------- */
+  function loadCues() {
+    state.cues = seed.map((c, i) => ({
+      id: "c" + i,
+      in: c.in,
+      out: c.out,
+      src: c.src,
+      tgt: c.tgt
+    }));
+    state.selected = state.cues.length ? state.cues[0].id : null;
+  }
+
+  function selectedCue() {
+    return state.cues.find((c) => c.id === state.selected) || null;
+  }
+
+  function renderCues() {
+    el.cues.innerHTML = "";
+    state.cues.forEach((c) => {
+      const div = document.createElement("div");
+      div.className = "ws-cue";
+      div.dataset.id = c.id;
+      if (c.id === state.selected) div.classList.add("selected");
+      if (c.id === state.activeId) div.classList.add("active");
+      div.style.left = (c.in / DURATION) * 100 + "%";
+      div.style.width = Math.max(0.6, ((c.out - c.in) / DURATION) * 100) + "%";
+
+      const text = document.createElement("span");
+      text.className = "ws-cue-text";
+      text.textContent = c.tgt;
+      div.appendChild(text);
+
+      div.addEventListener("pointerdown", (ev) => startDrag(ev, c));
+      el.cues.appendChild(div);
+    });
+    updateViolations();
+  }
+
+  /* ---------- drag ---------- */
+  let drag = null;
+
+  function startDrag(ev, cue) {
+    ev.preventDefault();
+    state.selected = cue.id;
+    renderCues();
+    syncEditor();
+    computeMetrics();
+
+    const rect = el.timeline.getBoundingClientRect();
+    drag = {
+      id: cue.id,
+      startX: ev.clientX,
+      origIn: cue.in,
+      origOut: cue.out,
+      rect,
+      moved: false
+    };
+    const node = el.cues.querySelector('[data-id="' + cue.id + '"]');
+    if (node) node.classList.add("dragging");
+    window.addEventListener("pointermove", onDrag);
+    window.addEventListener("pointerup", endDrag, { once: true });
+  }
+
+  function onDrag(ev) {
+    if (!drag) return;
+    const cue = state.cues.find((c) => c.id === drag.id);
+    if (!cue) return;
+
+    const dx = ev.clientX - drag.startX;
+    if (Math.abs(dx) > 2) drag.moved = true;
+    const dt = (dx / drag.rect.width) * DURATION;
+    const len = drag.origOut - drag.origIn;
+    let nextIn = drag.origIn + dt;
+    nextIn = Math.round(nextIn * 100) / 100; // snap 10 ms
+    nextIn = clamp(nextIn, 0, DURATION - len);
+    cue.in = nextIn;
+    cue.out = Math.round((nextIn + len) * 100) / 100;
+
+    const node = el.cues.querySelector('[data-id="' + cue.id + '"]');
+    if (node) {
+      node.style.left = (cue.in / DURATION) * 100 + "%";
+      node.style.width = Math.max(0.6, ((cue.out - cue.in) / DURATION) * 100) + "%";
+    }
+    syncEditor();
+    computeMetrics();
+  }
+
+  function endDrag() {
+    if (!drag) return;
+    const node = el.cues.querySelector('[data-id="' + drag.id + '"]');
+    if (node) node.classList.remove("dragging");
+    window.removeEventListener("pointermove", onDrag);
+    drag = null;
+    updateViolations();
+  }
+
+  /* ---------- editor sync ---------- */
+  function syncEditor() {
+    const c = selectedCue();
+    if (!c) {
+      el.source.textContent = "—";
+      el.target.value = "—";
+      el.in.textContent = fmt(0);
+      el.out.textContent = fmt(0);
+      el.dur.textContent = "0.00s";
+      el.tcIn.value = fmt(0);
+      el.tcOut.value = fmt(0);
+      el.durRange.value = 0.5;
+      el.durNum.value = 0.5;
+      el.subtitle.textContent = "—";
+      el.subtitle.classList.add("empty");
+      return;
+    }
+    const len = c.out - c.in;
+    el.source.textContent = c.src;
+    el.target.value = c.tgt;
+    el.in.textContent = fmt(c.in);
+    el.out.textContent = fmt(c.out);
+    el.dur.textContent = len.toFixed(2) + "s";
+    el.tcIn.value = fmt(c.in);
+    el.tcOut.value = fmt(c.out);
+    el.durRange.value = len.toFixed(2);
+    el.durNum.value = len.toFixed(2);
+    el.subtitle.textContent = c.tgt;
+    el.subtitle.classList.remove("empty");
+  }
+
+  /* ---------- metrics ---------- */
+  function visibleChars(text) {
+    return text.replace(/\s+/g, " ").trim().length;
+  }
+
+  function maxLineLen(text) {
+    return text.split("\n").reduce((max, line) => Math.max(max, line.trim().length), 0);
+  }
+
+  function computeMetrics() {
+    const c = selectedCue();
+    if (!c) {
+      el.mCpsVal.textContent = "0.0";
+      el.mCplVal.textContent = "0";
+      el.mDurVal.textContent = "0.00";
+      el.mGapVal.textContent = "—";
+      setState(el.mCps, "ok"); setState(el.mCpl, "ok"); setState(el.mDur, "ok"); setState(el.mGap, "ok");
+      el.mCpsState.textContent = "—";
+      el.mCplState.textContent = "—";
+      el.mDurState.textContent = "—";
+      el.mGapState.textContent = "—";
+      el.summary.textContent = "Select a cue to read its metrics.";
+      el.summary.dataset.state = "ok";
+      el.statusLeft.textContent = "Ready · " + state.cues.length + " cues";
+      return;
+    }
+
+    const len = Math.max(0.001, c.out - c.in);
+    const chars = visibleChars(c.tgt);
+    const cps = chars / len;
+    const cpl = maxLineLen(c.tgt);
+
+    el.mCpsVal.textContent = cps.toFixed(1);
+    el.mCplVal.textContent = String(cpl);
+    el.mDurVal.textContent = len.toFixed(2);
+
+    const cpsOk = cps <= state.rate;
+    const cplOk = cpl <= state.cpl;
+    setState(el.mCps, cpsOk ? "ok" : "bad");
+    setState(el.mCpl, cplOk ? "ok" : "bad");
+    el.mCpsState.textContent = cpsOk ? "within " + state.rate + " CPS" : "over " + state.rate + " CPS";
+    el.mCplState.textContent = cplOk ? "within " + state.cpl + " CPL" : "over " + state.cpl + " CPL";
+
+    // duration sanity: below 1.0s usually too short
+    const durOk = len >= 1.0;
+    setState(el.mDur, durOk ? "ok" : "bad");
+    el.mDurState.textContent = durOk ? "ok" : "under 1.0 s";
+
+    // gap to next cue
+    const sorted = [...state.cues].sort((a, b) => a.in - b.in);
+    const idx = sorted.findIndex((x) => x.id === c.id);
+    let gap = null;
+    if (idx >= 0 && idx < sorted.length - 1) {
+      gap = sorted[idx + 1].in - c.out;
+    }
+    if (gap === null) {
+      el.mGapVal.textContent = "—";
+      el.mGapState.textContent = "last cue";
+      setState(el.mGap, "ok");
+    } else {
+      el.mGapVal.textContent = gap.toFixed(2) + "s";
+      const gapOk = gap >= 0.08;
+      setState(el.mGap, gapOk ? "ok" : "bad");
+      el.mGapState.textContent = gapOk ? "ok" : "overlaps next";
+    }
+
+    // summary
+    const problems = [];
+    if (!cpsOk) problems.push("CPS over limit");
+    if (!cplOk) problems.push("line too long");
+    if (!durOk) problems.push("duration short");
+    if (gap !== null && gap < 0.08) problems.push("gap under 80 ms");
+
+    if (problems.length === 0) {
+      el.summary.textContent = "Cue " + (idx + 1) + " reads clean against the current limits.";
+      el.summary.dataset.state = "ok";
+    } else {
+      el.summary.textContent = "Cue " + (idx + 1) + ": " + problems.join(" · ");
+      el.summary.dataset.state = "bad";
+    }
+
+    el.statusLeft.textContent = state.cues.length + " cues · cue " + (idx + 1) + " selected";
+  }
+
+  function setState(node, s) { node.dataset.state = s; }
+
+  function updateViolations() {
+    state.cues.forEach((c) => {
+      const len = Math.max(0.001, c.out - c.in);
+      const chars = visibleChars(c.tgt);
+      const cps = chars / len;
+      const cpl = maxLineLen(c.tgt);
+      const bad = cps > state.rate || cpl > state.cpl || len < 1.0;
+      const node = el.cues.querySelector('[data-id="' + c.id + '"]');
+      if (node) node.classList.toggle("violation", bad);
+    });
+  }
+
+  /* ---------- editor inputs ---------- */
+  el.target.addEventListener("input", () => {
+    const c = selectedCue();
+    if (!c) return;
+    c.tgt = el.target.value;
+    el.subtitle.textContent = c.tgt;
+    renderCues();
+    computeMetrics();
+  });
+
+  function setDuration(len) {
+    const c = selectedCue();
+    if (!c) return;
+    len = clamp(parseFloat(len) || 0.5, 0.5, Math.min(8, DURATION - c.in));
+    c.out = Math.round((c.in + len) * 100) / 100;
+    renderCues();
+    syncEditor();
+    computeMetrics();
+  }
+
+  el.durRange.addEventListener("input", () => setDuration(el.durRange.value));
+  el.durNum.addEventListener("input", () => setDuration(el.durNum.value));
+
+  el.tcIn.addEventListener("change", () => {
+    const c = selectedCue();
+    if (!c) return;
+    const v = parse(el.tcIn.value);
+    if (v === null) { syncEditor(); return; }
+    const len = c.out - c.in;
+    c.in = clamp(v, 0, DURATION - len);
+    c.out = Math.round((c.in + len) * 100) / 100;
+    renderCues();
+    syncEditor();
+    computeMetrics();
+  });
+
+  el.tcOut.addEventListener("change", () => {
+    const c = selectedCue();
+    if (!c) return;
+    const v = parse(el.tcOut.value);
+    if (v === null) { syncEditor(); return; }
+    c.out = clamp(v, c.in + 0.1, DURATION);
+    renderCues();
+    syncEditor();
+    computeMetrics();
+  });
+
+  /* ---------- toolbar ---------- */
+  el.rate.addEventListener("change", () => {
+    state.rate = parseFloat(el.rate.value);
+    updateViolations();
+    computeMetrics();
+  });
+
+  el.cpl.addEventListener("change", () => {
+    state.cpl = parseInt(el.cpl.value, 10);
+    updateViolations();
+    computeMetrics();
+  });
+
+  el.add.addEventListener("click", () => {
+    const last = state.cues.reduce((m, c) => Math.max(m, c.out), 0);
+    const inT = clamp(last + 0.4, 0, DURATION - 2);
+    const id = "c" + Date.now();
+    state.cues.push({
+      id,
+      in: inT,
+      out: clamp(inT + 2, 0, DURATION),
+      src: "New source line (EN).",
+      tgt: "Nova linha de legenda."
+    });
+    state.selected = id;
+    renderCues();
+    syncEditor();
+    computeMetrics();
+  });
+
+  el.reset.addEventListener("click", () => {
+    stopWatch();
+    loadCues();
+    renderCues();
+    syncEditor();
+    computeMetrics();
+    state.playhead = 0;
+    movePlayhead(0);
+  });
+
+  /* ---------- watch ---------- */
+  function movePlayhead(t) {
+    state.playhead = clamp(t, 0, DURATION);
+    el.playhead.style.left = (state.playhead / DURATION) * 100 + "%";
+  }
+
+  // A MÁGICA ACONTECE AQUI: Sincroniza a cue ativa com base no tempo do playhead
+  function syncActiveCue(t) {
+    const active = state.cues.find((c) => t >= c.in && t <= c.out) || null;
+    const nextId = active ? active.id : null;
+    
+    if (nextId === state.activeId) return;  // Nada mudou, não faz nada
+    state.activeId = nextId;
+
+    if (active) {
+      state.selected = active.id;
+      el.subtitle.classList.remove("empty");
+      el.subtitle.textContent = active.tgt;
+      renderCues();
+      syncEditor();
+      computeMetrics();
+    } else {
+      el.subtitle.classList.add("empty");
+      el.subtitle.textContent = "—";
+    }
+  }
+
+  function tick() {
+    if (!state.watching) return;
+    state.playhead += 1 / 60;
+    if (state.playhead >= DURATION) {
+      stopWatch();
+      return;
+    }
+    movePlayhead(state.playhead);
+    syncActiveCue(state.playhead); // <-- Chama a sincronização a cada frame
+    state.raf = requestAnimationFrame(tick);
+  }
+
+  function startWatch() {
+    const c = selectedCue();
+    if (!c) return;
+    state.watching = true;
+    el.watch.setAttribute("aria-pressed", "true");
+    el.watch.textContent = "■ Stop";
+    state.playhead = c.in;
+    state.activeId = null; // Força a primeira sincronização
+    movePlayhead(c.in);
+    syncActiveCue(c.in);   // Sincroniza o primeiro cue imediatamente
+    if (state.raf) cancelAnimationFrame(state.raf);
+    state.raf = requestAnimationFrame(tick);
+  }
+
+  function stopWatch() {
+    state.watching = false;
+    el.watch.setAttribute("aria-pressed", "false");
+    el.watch.textContent = "▶ Watch it";
+    if (state.raf) {
+      cancelAnimationFrame(state.raf);
+      state.raf = null;
+    }
+  }
+
+  el.watch.addEventListener("click", () => {
+    if (state.watching) stopWatch();
+    else startWatch();
+  });
+
+  /* ---------- header scrolled ---------- */
+  const header = document.querySelector(".site-header");
+  function onScroll() {
+    if (window.scrollY > 8) header.classList.add("scrolled");
+    else header.classList.remove("scrolled");
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- boot ---------- */
+  buildWaveform();
+  buildShots();
+  loadCues();
+  renderCues();
+  syncEditor();
+  computeMetrics();
+  movePlayhead(0);
+})();
+</script>
 </body>
 </html>
