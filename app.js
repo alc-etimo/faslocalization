@@ -84,60 +84,83 @@ document.addEventListener('DOMContentLoaded', () => {
      PROMISE — STRIKE & TYPE ANIMATION
      ============================================================ */
   const promiseCards = document.querySelectorAll('.promise-card h3');
-  
-  if (promiseCards.length) {
-    const replacements = {
-      'Accurate': 'uthentic',
-      'Localized': 'inguistic',
-      'Careful': 'onsistent'
-    };
 
+if (promiseCards.length) {
+  // Mapeamento: chave = valor do data-word no HTML
+  // valor = o que substitui o "resto" da palavra após o tachado
+  const replacements = {
+    'Ariane': 'uthentic',     
+    'Lesnyak': 'ocalized',   
+    'Castelló': 'ontent'    
+  };
+
+  // Executa o ciclo em loop infinito para um único h3
+  function runLoop(h3) {
+    const originalWord = h3.dataset.word;
+    if (!originalWord || !replacements[originalWord]) return;
+
+    const firstSpan = h3.querySelector('.first');
+    const restSpan = h3.querySelector('.rest');
+    if (!firstSpan || !restSpan) return;
+
+    const originalRest = originalWord.slice(1); // "riane"
+    const newRest = replacements[originalWord]; // "uthentic"
+
+    function cycle() {
+      // 1. Reset: palavra original visível
+      restSpan.textContent = originalRest;
+      restSpan.classList.remove('strike', 'hide');
+      restSpan.style.color = '';
+
+      // 2. Tacha o resto (strike)
+      setTimeout(() => {
+        restSpan.classList.add('strike');
+      }, 600);
+
+      // 3. Esconde o resto
+      setTimeout(() => {
+        restSpan.classList.add('hide');
+      }, 1400);
+
+      // 4. Digita a nova palavra (typewriter)
+      setTimeout(() => {
+        restSpan.classList.remove('strike', 'hide');
+        restSpan.textContent = '';
+        let i = 0;
+        const typeInterval = setInterval(() => {
+          if (i < newRest.length) {
+            restSpan.textContent += newRest.charAt(i);
+            i++;
+          } else {
+            clearInterval(typeInterval);
+          }
+        }, 100);
+      }, 2000);
+
+      // 5. Aguarda e reinicia o ciclo
+      setTimeout(cycle, 5000);
+    }
+
+    // Inicia uma vez
+    cycle();
+  }
+
+  // Dispara o loop quando o card entra na tela (só uma vez por card)
+  if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
-        
         const h3 = entry.target;
-        if (h3.dataset.animated) return;
-        h3.dataset.animated = 'true';
-
-        const originalWord = h3.dataset.word; // "Accurate"
-        const firstLetter = originalWord[0];   // "A"
-        const newRest = replacements[originalWord] || 'xpert'; // "uthentic"
-
-        const firstSpan = h3.querySelector('.first');
-        const restSpan = h3.querySelector('.rest');
-
-        if (!firstSpan || !restSpan) return;
-
-        // 1. Aplica o strike no resto da palavra
-        restSpan.classList.add('strike');
-        
-        // 2. Após 800ms, esconde o resto
-        setTimeout(() => {
-          restSpan.classList.add('hide');
-          
-          // 3. Após 400ms, começa a digitar a nova palavra
-          setTimeout(() => {
-            restSpan.classList.remove('strike', 'hide');
-            restSpan.textContent = '';
-            
-            let i = 0;
-            const typeInterval = setInterval(() => {
-              if (i < newRest.length) {
-                restSpan.textContent += newRest.charAt(i);
-                i++;
-              } else {
-                clearInterval(typeInterval);
-              }
-            }, 80);
-          }, 400);
-        }, 800);
-
-        obs.unobserve(h3);
+        if (h3.dataset.started) return;
+        h3.dataset.started = 'true';
+        runLoop(h3);
+        obs.unobserve(h3); // já iniciou o loop, pode parar de observar
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.4 });
 
     promiseCards.forEach(card => observer.observe(card));
+  } else {
+    // Fallback: dispara tudo direto se o navegador não suportar
+    promiseCards.forEach(runLoop);
   }
-
-});
+}
