@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timed subtitle translation · Ariane Lesnyak</title>
+  <meta name="description" content="Translate an already timed English subtitle file into natural Brazilian Portuguese while respecting the delivery brief's reading speed and line length.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="case.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand">ARIANE LESNYAK</a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#collaborations">Collaborations</a>
+      <a href="index.html#promise">Promise</a>
+      <a href="index.html#numbers">Numbers</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#cases">Case studies</a>
+    </nav>
+    <div class="nav-actions"><a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a></div>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="service-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study 02 · Timed subtitle translation</span>
+      <h1>Translate the timed file. Keep the dialogue alive — and the subtitles readable.</h1>
+      <p class="sub">The English file already arrives with cue timing. The work is translating each cue into Brazilian Portuguese that sounds like a person, inside the brief's reading speed and line length.</p>
+      <div class="service-meta">
+        <span>EN → PT-BR</span>
+        <span>Timed SRT input</span>
+        <span>Brief-driven CPS / CPL</span>
+        <span>Illustrative data</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="service-section">
+    <div class="wrap">
+      <h2>The timing is already there. The dialogue is not.</h2>
+      <p>A timed subtitle file carries cue in/out values, line breaks and reading speed on the source side. Translation is not the same as spotting — it is fitting the target language into a frame that was decided by someone else, without breaking it.</p>
+      <p>This case demonstrates the translation step in a subtitle editor mock: source cues, editable target cues, live CPS and CPL, and a delivery profile that decides whether the cue is ready or not.</p>
+    </div>
+  </section>
+
+  <!-- Interactive workspace -->
+  <section class="service-section">
+    <div class="wrap">
+      <h2>Try the workspace.</h2>
+      <p>The interface below is an original mock inspired by subtitle editors. The dialogue, profile values and metrics are illustrative — they do not describe any client, platform or production standard.</p>
+
+      <div class="demo-panel sub-editor">
+        <!-- Title bar -->
+        <div class="sub-titlebar">
+          <div class="sub-titlebar-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="sub-titlebar-name">timed_srt_editor</span>
+          <span class="sub-titlebar-file">Episode_03_EN.srt</span>
+          <span class="sub-titlebar-badge">Illustrative</span>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="sub-toolbar" role="toolbar" aria-label="Workspace controls">
+          <label class="sub-tool-label" for="profile-select">Delivery brief</label>
+          <select id="profile-select" class="sub-select">
+            <option value="A" selected>Demo profile A — 17 CPS · 42 CPL · 2 lines</option>
+            <option value="B">Demo profile B — 20 CPS · 42 CPL · 2 lines</option>
+            <option value="custom">Custom — edit values</option>
+          </select>
+          <div class="sub-custom" id="custom-profile" hidden>
+            <label>Max CPS <input type="number" id="custom-cps" value="17" min="5" max="40" step="1"></label>
+            <label>Max CPL <input type="number" id="custom-cpl" value="42" min="20" max="80" step="1"></label>
+            <label>Max lines <input type="number" id="custom-lines" value="2" min="1" max="3" step="1"></label>
+          </div>
+        </div>
+
+        <!-- Main grid -->
+        <div class="sub-grid">
+          <!-- Video preview -->
+          <div class="sub-preview" aria-hidden="true">
+            <div class="sub-video">
+              <div class="sub-video-label">Preview · illustrative</div>
+              <div class="sub-video-overlay" id="video-overlay">Achei que você fosse embora.</div>
+            </div>
+            <div class="sub-video-meta">
+              <span id="cue-range">00:00:04.200 → 00:00:06.800</span>
+              <span id="cue-duration">2.60s</span>
+            </div>
+          </div>
+
+          <!-- Editor -->
+          <div class="sub-editor-pane">
+            <div class="sub-field">
+              <label class="sub-label" for="source-text">Source · EN (locked)</label>
+              <div id="source-text" class="sub-source" aria-readonly="true">I thought you were leaving.</div>
+            </div>
+
+            <div class="sub-field">
+              <label class="sub-label" for="target-text">Target · PT-BR (editable)</label>
+              <textarea id="target-text" class="sub-textarea" rows="2" spellcheck="false">Achei que você fosse embora.</textarea>
+              <div class="sub-inline-actions">
+                <button type="button" class="sub-inline-btn" data-break="insert">Insert line break</button>
+                <button type="button" class="sub-inline-btn" data-break="remove">Remove line breaks</button>
+              </div>
+            </div>
+
+            <div class="sub-field">
+              <label class="sub-label" for="duration-input">Cue duration</label>
+              <div class="sub-duration-row">
+                <input id="duration-input" type="range" min="0.5" max="8" step="0.1" value="2.6">
+                <input id="duration-number" type="number" min="0.5" max="8" step="0.1" value="2.6" aria-label="Cue duration in seconds">
+                <span class="sub-unit">s</span>
+              </div>
+            </div>
+
+            <div class="sub-field">
+              <label class="sub-label">Timecodes</label>
+              <div class="sub-timecodes">
+                <label class="sub-tc"><span>In</span><input id="tc-in" type="text" value="00:00:04.200" aria-label="Cue in timecode"></label>
+                <label class="sub-tc"><span>Out</span><input id="tc-out" type="text" value="00:00:06.800" aria-label="Cue out timecode"></label>
+              </div>
+              <p class="sub-note">Timecodes follow the source file. Editing them here does not affect the demo metrics — only duration does.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validation panel -->
+        <div class="sub-validation" id="validation-panel">
+          <div class="sub-metric" data-metric="cps">
+            <span class="sub-metric-label">CPS</span>
+            <span class="sub-metric-value" id="metric-cps">—</span>
+            <span class="sub-metric-state" id="state-cps">—</span>
+          </div>
+          <div class="sub-metric" data-metric="cpl">
+            <span class="sub-metric-label">CPL</span>
+            <span class="sub-metric-value" id="metric-cpl">—</span>
+            <span class="sub-metric-state" id="state-cpl">—</span>
+          </div>
+          <div class="sub-metric" data-metric="lines">
+            <span class="sub-metric-label">Lines</span>
+            <span class="sub-metric-value" id="metric-lines">—</span>
+            <span class="sub-metric-state" id="state-lines">—</span>
+          </div>
+          <div class="sub-metric" data-metric="chars">
+            <span class="sub-metric-label">Chars</span>
+            <span class="sub-metric-value" id="metric-chars">—</span>
+            <span class="sub-metric-state" id="state-chars">counted</span>
+          </div>
+          <div class="sub-summary" id="validation-summary">Ready for demo brief A.</div>
+        </div>
+
+        <!-- Status bar -->
+        <div class="sub-statusbar">
+          <span id="status-message">Profile A · 17 CPS · 42 CPL · 2 lines</span>
+          <span>Illustrative demo — not a real production standard</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What this case demonstrates -->
+  <section class="service-section">
+    <div class="wrap">
+      <h2>What the translation step shows.</h2>
+      <p><strong>Natural Brazilian Portuguese.</strong> “I thought you were leaving” is not “Eu pensei que você estava indo.” The demo target uses a real pt-BR phrasing that fits the tone and the frame.</p>
+      <p><strong>Line breaks chosen, not inherited.</strong> Insert or remove a break and the CPS, CPL and line-count values update live.</p>
+      <p><strong>Reading speed that follows the cue.</strong> Change the duration and the metrics change — a shorter cue demands a tighter line, not the same text squeezed.</p>
+      <p><strong>A brief, not a guess.</strong> Switching the profile changes what “valid” means. Nothing in this demo is presented as a universal subtitling standard.</p>
+    </div>
+  </section>
+
+  <nav class="case-nav">
+    <a href="service-translation.html">← Previous: Translation + spotting</a>
+    <a href="service-review-mtpe.html">Next: Review &amp; MTPE →</a>
+  </nav>
+</main>
+
+<script src="case.js"></script>
+</body>
+</html>

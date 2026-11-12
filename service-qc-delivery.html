@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subtitle QC &amp; delivery · Ariane Lesnyak</title>
+  <meta name="description" content="Final linguistic and technical review of a subtitle file before delivery — shot changes, reading speed, terminology and on-screen text.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="case.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand">ARIANE LESNYAK</a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#collaborations">Collaborations</a>
+      <a href="index.html#promise">Promise</a>
+      <a href="index.html#numbers">Numbers</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#cases">Case studies</a>
+    </nav>
+    <div class="nav-actions"><a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a></div>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="service-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study 04 · Subtitle QC &amp; delivery</span>
+      <h1>A subtitle file is not finished until it has been checked against the picture.</h1>
+      <p class="sub">Final linguistic and technical review before delivery: shot changes, reading speed, terminology and on-screen text — logged, resolved and reported.</p>
+      <div class="service-meta">
+        <span>QC pass</span>
+        <span>Shot-change check</span>
+        <span>Reading-speed check</span>
+        <span>On-screen text</span>
+        <span>Illustrative data</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive workspace -->
+  <section class="service-section">
+    <div class="wrap">
+      <h2>Try the review workspace.</h2>
+      <p>An original cloud-style review interface. The four issues, timecodes, cue text and findings below are illustrative — they do not describe any client, platform or production standard.</p>
+
+      <div class="demo-panel qc-app">
+        <!-- Title bar -->
+        <div class="qc-titlebar">
+          <div class="qc-titlebar-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="qc-titlebar-name">review_workspace</span>
+          <span class="qc-titlebar-file">Episode_03_PTBR.srt · 04 issues</span>
+          <span class="qc-titlebar-badge">Illustrative</span>
+        </div>
+
+        <!-- App grid -->
+        <div class="qc-grid">
+          <!-- Sidebar -->
+          <aside class="qc-sidebar" aria-label="Issue list">
+            <div class="qc-sidebar-head">
+              <span>Reviewer</span>
+              <strong>AL</strong>
+            </div>
+            <ul class="qc-issues" role="list">
+              <li>
+                <button type="button" class="qc-issue" data-issue="1" aria-pressed="true">
+                  <span class="qc-issue-num">01</span>
+                  <span class="qc-issue-title">Shot-change timing</span>
+                  <span class="qc-issue-state" data-state="open">Open</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="qc-issue" data-issue="2" aria-pressed="false">
+                  <span class="qc-issue-num">02</span>
+                  <span class="qc-issue-title">Reading speed</span>
+                  <span class="qc-issue-state" data-state="open">Open</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="qc-issue" data-issue="3" aria-pressed="false">
+                  <span class="qc-issue-num">03</span>
+                  <span class="qc-issue-title">Spelling &amp; terminology</span>
+                  <span class="qc-issue-state" data-state="open">Open</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="qc-issue" data-issue="4" aria-pressed="false">
+                  <span class="qc-issue-num">04</span>
+                  <span class="qc-issue-title">On-screen text</span>
+                  <span class="qc-issue-state" data-state="open">Open</span>
+                </button>
+              </li>
+            </ul>
+
+            <div class="qc-progress">
+              <div class="qc-progress-head"><span>Progress</span><span id="qc-progress-count">0 / 4</span></div>
+              <div class="qc-progress-track"><div class="qc-progress-fill" id="qc-progress-fill" style="width:0%"></div></div>
+            </div>
+          </aside>
+
+          <!-- Viewer + finding -->
+          <div class="qc-main">
+            <!-- Viewer -->
+            <div class="qc-viewer">
+              <div class="qc-video" aria-hidden="true">
+                <div class="qc-video-overlay" id="qc-cue-text">Achei que você fosse embora.</div>
+                <div class="qc-video-timecodes">
+                  <span id="qc-tc-in">00:00:04.200</span>
+                  <span id="qc-tc-out">00:00:06.800</span>
+                </div>
+              </div>
+              <div class="qc-timeline" aria-hidden="true">
+                <div class="qc-tl-track">
+                  <div class="qc-tl-shot" style="left:0%; width:25%"><span>Shot 1</span></div>
+                  <div class="qc-tl-shot" style="left:25%; width:30%"><span>Shot 2</span></div>
+                  <div class="qc-tl-shot" style="left:55%; width:25%"><span>Shot 3</span></div>
+                  <div class="qc-tl-shot" style="left:80%; width:20%"><span>Shot 4</span></div>
+                  <div class="qc-tl-cue" id="qc-tl-cue" style="left:18%; width:10%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Finding panel -->
+            <div class="qc-finding" id="qc-finding">
+              <div class="qc-finding-head">
+                <span class="qc-finding-kicker">Issue 01 · Finding</span>
+                <span class="qc-severity" id="qc-severity">Major</span>
+              </div>
+              <h3 class="qc-finding-title" id="qc-finding-title">Cue overlaps a shot change</h3>
+              <p class="qc-finding-text" id="qc-finding-text">The cue starts before Shot 2 and ends after the cut into Shot 3. Part of the line lands on a shot the source cue does not cover, so the viewer sees text on the wrong picture.</p>
+              <dl class="qc-finding-meta">
+                <div><dt>Category</dt><dd id="qc-category">Timing</dd></div>
+                <div><dt>Cue</dt><dd id="qc-cue">#014</dd></div>
+                <div><dt>Recommended action</dt><dd id="qc-action">Trim the out-point to end on the shot change.</dd></div>
+              </dl>
+              <div class="qc-finding-actions">
+                <button type="button" class="qc-resolve" id="qc-resolve">Record illustrative correction</button>
+                <span class="qc-recorded" id="qc-recorded" hidden>Illustrative correction recorded.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Report -->
+        <div class="qc-report-wrap">
+          <button type="button" class="qc-report-toggle" id="qc-report-toggle" aria-expanded="false" aria-controls="qc-report">Show QC report</button>
+          <div class="qc-report" id="qc-report" hidden>
+            <h3>QC report · illustrative</h3>
+            <p class="qc-report-note">This report reflects the demo issues and your recorded corrections. It does not describe a real delivery.</p>
+            <table class="qc-report-table">
+              <thead>
+                <tr><th>#</th><th>Issue</th><th>Category</th><th>Status</th></tr>
+              </thead>
+              <tbody id="qc-report-body">
+                <tr><td>01</td><td>Shot-change timing</td><td>Timing</td><td>Open</td></tr>
+                <tr><td>02</td><td>Reading speed</td><td>Reading speed</td><td>Open</td></tr>
+                <tr><td>03</td><td>Spelling &amp; terminology</td><td>Terminology</td><td>Open</td></tr>
+                <tr><td>04</td><td>On-screen text</td><td>On-screen text</td><td>Open</td></tr>
+              </tbody>
+            </table>
+            <p class="qc-report-summary" id="qc-report-summary">4 issues identified · 0 resolved · 4 still open.</p>
+          </div>
+        </div>
+
+        <div class="qc-statusbar">
+          <span id="qc-status-message">4 issues · 0 fixed</span>
+          <span>Illustrative demo — not a real production standard</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What this case demonstrates -->
+  <section class="service-section">
+    <div class="wrap">
+      <h2>What the QC pass shows.</h2>
+      <p><strong>Timing against the picture.</strong> A cue that starts before or ends after a shot change is caught on the timeline, not just in the text.</p>
+      <p><strong>Reading speed inside the brief.</strong> The CPS limit is the one the delivery asks for — never a universal number.</p>
+      <p><strong>Terminology checked, not guessed.</strong> If a term cannot be confirmed against a brief or glossary, the reviewer marks it for follow-up rather than inventing a “fix”.</p>
+      <p><strong>On-screen text accounted for.</strong> Hard-coded text is either translated or represented as a forced narrative, depending on what the brief allows.</p>
+    </div>
+  </section>
+
+  <nav class="case-nav">
+    <a href="service-review-mtpe.html">← Previous: Review &amp; MTPE</a>
+    <a href="index.html#cases">All case studies →</a>
+  </nav>
+</main>
+
+<script src="case.js"></script>
+</body>
+</html>
