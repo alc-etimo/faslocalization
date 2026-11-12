@@ -3,19 +3,251 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Subtitle QC &amp; delivery · Ariane Lesnyak</title>
-  <meta name="description" content="Final linguistic and technical review of a subtitle file before delivery — shot changes, reading speed, terminology and on-screen text.">
+  <title>Case 04 · QC & delivery · Ariane Lesnyak</title>
+  <meta name="description" content="Interactive QC workflow: run technical checks, drag a cue to respect shot changes, resolve issues, and generate a delivery report.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="case.css">
+
+<style>
+/* ============================================================
+   TOKENS (FAS /mtpe style)
+   ============================================================ */
+:root {
+  --red-500: #C21212;
+  --red-600: #9D0303;
+  --red-700: #7A0202;
+  --n-100: #F1EDEB;
+  --n-200: #E4DEDB;
+  --n-300: #CCC4C0;
+  --n-400: #A69C97;
+  --n-500: #7B716C;
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-2: #F6F6F7;
+  --ink: #18140F;
+  --ink-soft: #403A34;
+  --muted: #6E6862;
+  --line: #EAE7E4;
+  --line-strong: #D8D4D0;
+  --brand: #9D0303;
+  --brand-ink: #7A0202;
+  --brand-tint: #FBEBEB;
+  --signal: #C21212;
+  --on-dark: #D81919;
+  --dark: #0c0c0e;
+  --dark-2: #0b0b0d;
+  --on-dark-text: #FF6B66;
+  --ok: #1f7a4a;
+  --ok-bg: #f0fdf4;
+  --bad: #C21212;
+  --bad-bg: #fef2f2;
+  --warn: #b45309;
+  --warn-bg: #fffbeb;
+
+  --display: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --logo: "Bebas Neue", "Montserrat", sans-serif;
+
+  --maxw: 1120px;
+  --ease: cubic-bezier(.4,0,.2,1);
+  --shadow-md: 0 6px 18px rgba(61,0,0,.08);
+  --shadow-lg: 0 18px 44px rgba(61,0,0,.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  background: var(--bg); color: var(--ink-soft);
+  font-family: var(--body); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; line-height: 1.05; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+ul, ol { list-style: none; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 24px; }
+
+/* ============================================================
+   HEADER & HERO
+   ============================================================ */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: transparent; border-bottom: 1px solid transparent;
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.site-header.scrolled {
+  background: rgba(255,255,255,0.92); border-bottom-color: var(--line);
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .site-header.scrolled { background: rgba(255,255,255,0.82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+}
+.site-header .nav-row {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 66px; gap: 24px; max-width: var(--maxw); margin-inline: auto; padding-inline: 24px;
+}
+.brand {
+  font-family: var(--logo); font-size: 1.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,0.45); transition: color .25s ease, text-shadow .25s ease;
+}
+.site-header.scrolled .brand { color: #9d1402; text-shadow: none; }
+.nav-links { display: flex; align-items: center; gap: 24px; font-size: 0.85rem; font-weight: 500; margin-left: auto; margin-right: 32px; }
+.nav-links a { color: rgba(255,255,255,0.88); text-shadow: 0 1px 8px rgba(0,0,0,0.4); padding: 6px 4px; position: relative; transition: color .15s ease; }
+.nav-links a::after { content: ''; position: absolute; left: 4px; right: 4px; bottom: 0; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+.nav-links a:hover::after { transform: scaleX(1); }
+.site-header.scrolled .nav-links a { color: var(--muted); text-shadow: none; }
+.site-header.scrolled .nav-links a:hover { color: var(--ink); }
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+.btn-nav { display: inline-flex; align-items: center; padding: 6px 13px; border-radius: 2px; background: var(--brand); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.78rem; transition: background .15s ease; }
+.btn-nav:hover { background: var(--signal); }
+
+.hero-dark { position: relative; overflow: hidden; background: var(--dark-2); color: #fff; padding-block: 8rem 5rem; }
+.hero-dark::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 20% 0%, rgba(216,25,25,0.18), transparent 60%), radial-gradient(ellipse 50% 40% at 80% 100%, rgba(157,3,3,0.12), transparent 60%); pointer-events: none; }
+.hero-dark::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent 80%); -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent 80%); pointer-events: none; }
+.hero-dark .wrap { position: relative; z-index: 2; }
+.hero-eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-dark-text); margin-bottom: 1.25rem; font-weight: 500; }
+.hero-dark h1 { color: #fff; font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -0.03em; line-height: 1.05; max-width: 22ch; }
+.hero-dark h1 .accent { color: var(--on-dark-text); }
+.hero-dark .sub { margin-top: 1.5rem; font-size: 1.12rem; color: rgba(255,255,255,0.78); max-width: 58ch; line-height: 1.65; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2rem; }
+.hero-meta span { padding: 6px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; font-size: 0.78rem; font-weight: 500; color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
+.hero-actions { display: flex; gap: 12px; margin-top: 2.5rem; flex-wrap: wrap; }
+.btn-hero { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 2px; background: var(--signal); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.9rem; transition: background .2s ease; }
+.btn-hero:hover { background: var(--on-dark); }
+.btn-hero-ghost { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.24); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.9rem; transition: border-color .2s ease, background .2s ease; }
+.btn-hero-ghost:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
+
+/* ============================================================
+   SEÇÕES
+   ============================================================ */
+.section { padding-block: 4.5rem; }
+.section.alt { background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.section h2 { font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+.section p { color: var(--ink-soft); max-width: 68ch; margin-bottom: 1rem; line-height: 1.65; }
+
+/* ============================================================
+   WORKSPACE (CASE 4 SPECIFIC)
+   ============================================================ */
+.workspace { margin-top: 2.5rem; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-lg); }
+.ws-titlebar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #1b1b1f; color: rgba(255,255,255,.75); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.05em; }
+.ws-dots { display: flex; gap: 6px; }
+.ws-dots span { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,.22); }
+.ws-dots span:nth-child(1) { background: #ff5f57; }
+.ws-dots span:nth-child(2) { background: #ffbd2e; }
+.ws-dots span:nth-child(3) { background: #27c93f; }
+.ws-filename { color: #fff; font-weight: 600; margin-left: 4px; }
+.ws-badge { margin-left: auto; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 9px; border: 1px dashed rgba(255,255,255,.35); border-radius: 2px; color: #f0c078; }
+
+/* Toolbar */
+.ws-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: #faf9fa; }
+.btn-tool { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 3px; font-size: 0.82rem; font-weight: 700; color: #fff; background: var(--brand); border: 1px solid var(--brand); transition: all .15s ease; }
+.btn-tool:hover { background: var(--brand-ink); }
+.btn-tool.secondary { background: #fff; color: var(--ink); border-color: var(--line-strong); }
+.btn-tool.secondary:hover { border-color: var(--brand); color: var(--brand); }
+.btn-tool:disabled { opacity: 0.5; cursor: not-allowed; }
+.ws-run-status { margin-left: auto; font-family: var(--mono); font-size: 0.75rem; font-weight: 500; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.spinner { width: 12px; height: 12px; border: 2px solid var(--line-strong); border-top-color: var(--brand); border-radius: 50%; animation: spin 1s linear infinite; display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Main Layout: Sidebar + Main */
+.ws-main { display: flex; min-height: 500px; }
+.ws-sidebar { width: 320px; border-right: 1px solid var(--line); background: #fff; display: flex; flex-direction: column; }
+.ws-tabs { display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
+.ws-tab { text-align: left; padding: 12px 16px; font-family: var(--display); font-weight: 600; font-size: 0.85rem; color: var(--ink-soft); border-left: 3px solid transparent; border-bottom: 1px solid var(--line); transition: all .2s ease; display: flex; justify-content: space-between; align-items: center; }
+.ws-tab:last-child { border-bottom: 0; }
+.ws-tab:hover { background: #faf9fa; }
+.ws-tab.active { background: var(--brand-tint); border-left-color: var(--brand); color: var(--brand); }
+.ws-tab-status { width: 8px; height: 8px; border-radius: 50%; background: var(--n-300); }
+.ws-tab.active .ws-tab-status { background: var(--brand); }
+.ws-tab.resolved .ws-tab-status { background: var(--ok); }
+
+.ws-issues-list { flex: 1; overflow-y: auto; }
+.ws-issue-card { padding: 16px; border-bottom: 1px solid var(--line); border-left: 3px solid transparent; transition: all .2s ease; }
+.ws-issue-card:hover { background: #faf9fa; }
+.ws-issue-card.active { border-left-color: var(--bad); background: var(--bad-bg); }
+.ws-issue-card.resolved { border-left-color: var(--ok); background: var(--ok-bg); opacity: 0.8; }
+.ws-issue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.ws-issue-title { font-weight: 600; font-size: 0.85rem; color: var(--ink); }
+.ws-issue-tc { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); }
+.ws-issue-desc { font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 8px; }
+.ws-issue-text { font-family: var(--mono); font-size: 0.75rem; color: var(--ink); background: #fff; padding: 4px 8px; border: 1px dashed var(--line-strong); border-radius: 3px; margin-bottom: 12px; }
+.ws-issue-actions { display: flex; gap: 8px; }
+.btn-resolve { padding: 4px 10px; font-size: 0.7rem; font-weight: 600; color: var(--ok); border: 1px solid var(--ok); border-radius: 3px; background: #fff; transition: all .15s ease; }
+.btn-resolve:hover { background: var(--ok); color: #fff; }
+.btn-resolve:disabled { opacity: 0.5; cursor: default; background: var(--n-200); border-color: var(--n-300); color: var(--muted); }
+
+/* Main Area: Video Preview + Timeline */
+.ws-content { flex: 1; display: flex; flex-direction: column; background: #0d0d10; }
+.ws-video-container { flex: 1; padding: 16px; display: flex; align-items: center; justify-content: center; position: relative; }
+.ws-video { width: 100%; max-width: 640px; aspect-ratio: 16/9; background: #000; border-radius: 4px; position: relative; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; }
+.ws-video-content { position: absolute; inset: 0; background: linear-gradient(45deg, #1a1a20, #2a2a30); }
+.ws-video-content::after { content: 'Shot 2'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: var(--mono); font-size: 2rem; color: rgba(255,255,255,0.1); font-weight: bold; }
+.ws-subtitle { position: relative; z-index: 2; color: #fff; font-family: var(--body); font-size: 1.2rem; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.8); background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 2px; }
+.ws-video-overlay { position: absolute; top: 10px; left: 10px; font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.5); background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 2px; z-index: 3; }
+
+/* Timeline */
+.ws-timeline-wrapper { padding: 16px; background: #1b1b1f; border-top: 1px solid #333; }
+.ws-timeline-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-family: var(--mono); font-size: 0.65rem; color: #888; }
+.ws-timeline { position: relative; height: 60px; background: #0d0d10; border-radius: 4px; overflow: hidden; user-select: none; touch-action: none; }
+.ws-shot { position: absolute; top: 0; bottom: 0; border-right: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.2); }
+.ws-cue { position: absolute; top: 10px; height: 40px; background: rgba(157,3,3,0.8); border: 1px solid rgba(255,107,102,0.5); border-radius: 3px; cursor: grab; display: flex; align-items: center; padding: 0 8px; z-index: 4; transition: background .15s ease; }
+.ws-cue:active { cursor: grabbing; }
+.ws-cue.dragging { background: rgba(255,107,102,0.9); }
+.ws-cue.error { background: rgba(194,18,18,0.9); border-color: #fca5a5; animation: pulse 2s infinite; }
+.ws-cue.resolved { background: rgba(31,122,74,0.9); border-color: #86efac; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(194,18,18,0.7); } 70% { box-shadow: 0 0 0 6px rgba(194,18,18,0); } 100% { box-shadow: 0 0 0 0 rgba(194,18,18,0); } }
+.ws-cue-text { font-family: var(--mono); font-size: 0.65rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--signal); box-shadow: 0 0 8px rgba(216,25,25,.6); pointer-events: none; transform: translateX(-1px); z-index: 5; }
+
+/* Report Panel */
+.ws-report-panel { padding: 24px; background: #fff; border-top: 1px solid var(--line); display: none; }
+.ws-report-panel.visible { display: block; animation: slideDown .3s ease; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.ws-report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.ws-report-title { font-family: var(--display); font-weight: 800; font-size: 1.2rem; color: var(--ink); }
+.ws-report-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.ws-stat-box { background: var(--surface-2); padding: 16px; border-radius: 4px; border: 1px solid var(--line); text-align: center; }
+.ws-stat-val { font-family: var(--display); font-size: 2rem; font-weight: 800; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+.ws-stat-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; }
+.ws-report-list { display: flex; flex-direction: column; gap: 8px; }
+.ws-report-item { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px 12px; background: var(--surface-2); border-radius: 3px; border-left: 3px solid var(--n-300); }
+.ws-report-item.resolved { border-left-color: var(--ok); color: var(--ok); }
+.ws-report-item.open { border-left-color: var(--bad); color: var(--bad); }
+
+/* Status Bar */
+.ws-statusbar { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 8px 16px; border-top: 1px solid var(--line); background: #faf9fa; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.04em; color: var(--muted); }
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 900px) {
+  .ws-main { flex-direction: column; }
+  .ws-sidebar { width: 100%; border-right: 0; border-bottom: 1px solid var(--line); }
+  .ws-tabs { flex-direction: row; overflow-x: auto; }
+  .ws-tab { border-bottom: 0; border-left: 0; border-bottom: 3px solid transparent; white-space: nowrap; }
+  .ws-tab.active { border-left-color: transparent; border-bottom-color: var(--brand); }
+  .ws-content { min-height: 400px; }
+}
+@media (max-width: 640px) {
+  .hero-dark h1 { font-size: 2rem; }
+  .ws-report-stats { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
 </head>
 <body>
+
+<!-- ============ HEADER ============ -->
 <header class="site-header">
-  <div class="wrap nav-row">
+  <div class="nav-row">
     <a href="index.html" class="brand">ARIANE LESNYAK</a>
-    <nav class="nav-links">
+    <nav class="nav-links" aria-label="Main">
       <a href="index.html#about">About</a>
       <a href="index.html#collaborations">Collaborations</a>
       <a href="index.html#promise">Promise</a>
@@ -23,176 +255,496 @@
       <a href="index.html#services">Services</a>
       <a href="index.html#cases">Case studies</a>
     </nav>
-    <div class="nav-actions"><a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a></div>
+    <div class="nav-actions">
+      <a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a>
+    </div>
   </div>
 </header>
 
 <main>
-  <!-- Hero -->
-  <section class="service-hero">
+  <!-- ============ HERO ============ -->
+  <section class="hero-dark">
     <div class="wrap">
-      <span class="eyebrow">Case study 04 · Subtitle QC &amp; delivery</span>
-      <h1>A subtitle file is not finished until it has been checked against the picture.</h1>
-      <p class="sub">Final linguistic and technical review before delivery: shot changes, reading speed, terminology and on-screen text — logged, resolved and reported.</p>
-      <div class="service-meta">
-        <span>QC pass</span>
-        <span>Shot-change check</span>
-        <span>Reading-speed check</span>
-        <span>On-screen text</span>
+      <div class="hero-eyebrow">Case study 04 · QC & delivery</div>
+      <h1>The last mile is technical. <span class="accent">Catch it before the client does.</span></h1>
+      <p class="sub">A subtitle file can be perfectly translated and still fail delivery. Timing that crosses a shot change. Reading speed that ignores the brief. Spelling that slips past the eye. QC is the checklist that turns a draft into a deliverable.</p>
+      <div class="hero-meta">
+        <span>Technical QC</span>
+        <span>EZTitles-style workflow</span>
+        <span>Shot changes</span>
+        <span>Delivery report</span>
         <span>Illustrative data</span>
       </div>
+      <div class="hero-actions">
+        <a href="#workspace" class="btn-hero">
+          Run the QC
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="index.html#cases" class="btn-hero-ghost">All case studies</a>
+      </div>
     </div>
   </section>
 
-  <!-- Interactive workspace -->
-  <section class="service-section">
+  <!-- ============ INTRO ============ -->
+  <section class="section">
     <div class="wrap">
-      <h2>Try the review workspace.</h2>
-      <p>An original cloud-style review interface. The four issues, timecodes, cue text and findings below are illustrative — they do not describe any client, platform or production standard.</p>
+      <h2>QC is a checklist, not a gut feeling.</h2>
+      <p>Most subtitle rejections are not translation errors. They are technical: a cue that starts 2 frames before a cut, a CPS that goes over the Netflix limit, a double space. A good QC pass runs the checks systematically, resolves them, and generates a report the PM can attach to the delivery.</p>
+      <p>The mock below simulates that workflow. Run the QC to see the issues populate. Switch tabs to see the category. Fix the timing issue by dragging the cue. Generate the report when everything is resolved.</p>
+    </div>
+  </section>
 
-      <div class="demo-panel qc-app">
-        <!-- Title bar -->
-        <div class="qc-titlebar">
-          <div class="qc-titlebar-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-          <span class="qc-titlebar-name">review_workspace</span>
-          <span class="qc-titlebar-file">Episode_03_PTBR.srt · 04 issues</span>
-          <span class="qc-titlebar-badge">Illustrative</span>
+  <!-- ============ WORKSPACE INTERATIVO ============ -->
+  <section class="section alt" id="workspace">
+    <div class="wrap">
+      <h2>Try the QC.</h2>
+      <p>Click <strong>Run QC</strong> to start the check. The tool will animate the scan, then list the issues in the sidebar. Resolve them one by one.</p>
+
+      <div class="workspace">
+        <!-- TITLE BAR -->
+        <div class="ws-titlebar">
+          <div class="ws-dots"><span></span><span></span><span></span></div>
+          <span class="ws-filename">Episode_03 · QC_Check.eztitles</span>
+          <span class="ws-badge">Demo · interactive</span>
         </div>
 
-        <!-- App grid -->
-        <div class="qc-grid">
-          <!-- Sidebar -->
-          <aside class="qc-sidebar" aria-label="Issue list">
-            <div class="qc-sidebar-head">
-              <span>Reviewer</span>
-              <strong>AL</strong>
-            </div>
-            <ul class="qc-issues" role="list">
-              <li>
-                <button type="button" class="qc-issue" data-issue="1" aria-pressed="true">
-                  <span class="qc-issue-num">01</span>
-                  <span class="qc-issue-title">Shot-change timing</span>
-                  <span class="qc-issue-state" data-state="open">Open</span>
-                </button>
-              </li>
-              <li>
-                <button type="button" class="qc-issue" data-issue="2" aria-pressed="false">
-                  <span class="qc-issue-num">02</span>
-                  <span class="qc-issue-title">Reading speed</span>
-                  <span class="qc-issue-state" data-state="open">Open</span>
-                </button>
-              </li>
-              <li>
-                <button type="button" class="qc-issue" data-issue="3" aria-pressed="false">
-                  <span class="qc-issue-num">03</span>
-                  <span class="qc-issue-title">Spelling &amp; terminology</span>
-                  <span class="qc-issue-state" data-state="open">Open</span>
-                </button>
-              </li>
-              <li>
-                <button type="button" class="qc-issue" data-issue="4" aria-pressed="false">
-                  <span class="qc-issue-num">04</span>
-                  <span class="qc-issue-title">On-screen text</span>
-                  <span class="qc-issue-state" data-state="open">Open</span>
-                </button>
-              </li>
-            </ul>
+        <!-- TOOLBAR -->
+        <div class="ws-toolbar">
+          <button class="btn-tool" id="btn-run-qc">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Run QC
+          </button>
+          <button class="btn-tool secondary" id="btn-report" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Generate report
+          </button>
+          <div class="ws-run-status">
+            <div class="spinner" id="spinner"></div>
+            <span id="run-status-text">Ready to check</span>
+          </div>
+        </div>
 
-            <div class="qc-progress">
-              <div class="qc-progress-head"><span>Progress</span><span id="qc-progress-count">0 / 4</span></div>
-              <div class="qc-progress-track"><div class="qc-progress-fill" id="qc-progress-fill" style="width:0%"></div></div>
+        <!-- MAIN CONTENT -->
+        <div class="ws-main">
+          
+          <!-- SIDEBAR: TABS & ISSUES -->
+          <div class="ws-sidebar">
+            <div class="ws-tabs" id="ws-tabs">
+              <button class="ws-tab active" data-tab="timing">Timing <span class="ws-tab-status"></span></button>
+              <button class="ws-tab" data-tab="speed">Reading speed <span class="ws-tab-status"></span></button>
+              <button class="ws-tab" data-tab="spelling">Spelling <span class="ws-tab-status"></span></button>
+              <button class="ws-tab" data-tab="text">On-screen text <span class="ws-tab-status"></span></button>
             </div>
-          </aside>
+            <div class="ws-issues-list" id="ws-issues-list">
+              <!-- Issues injected via JS -->
+              <div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;" id="ws-empty-state">
+                No issues found yet.<br>Click "Run QC" to start.
+              </div>
+            </div>
+          </div>
 
-          <!-- Viewer + finding -->
-          <div class="qc-main">
-            <!-- Viewer -->
-            <div class="qc-viewer">
-              <div class="qc-video" aria-hidden="true">
-                <div class="qc-video-overlay" id="qc-cue-text">Achei que você fosse embora.</div>
-                <div class="qc-video-timecodes">
-                  <span id="qc-tc-in">00:00:04.200</span>
-                  <span id="qc-tc-out">00:00:06.800</span>
+          <!-- MAIN AREA: VIDEO & TIMELINE -->
+          <div class="ws-content">
+            <div class="ws-video-container">
+              <div class="ws-video">
+                <div class="ws-video-content"></div>
+                <span class="ws-video-overlay">Preview</span>
+                <div class="ws-subtitle">I thought you were leaving.</div>
+              </div>
+            </div>
+            
+            <div class="ws-timeline-wrapper">
+              <div class="ws-timeline-header">
+                <span>Timeline</span>
+                <span>00:01:10.000 - 00:01:20.000</span>
+              </div>
+              <div class="ws-timeline" id="ws-timeline">
+                <!-- Shots -->
+                <div class="ws-shot" style="left: 0%; width: 30%;">Shot 1</div>
+                <div class="ws-shot" style="left: 30%; width: 40%;">Shot 2</div>
+                <div class="ws-shot" style="left: 70%; width: 30%;">Shot 3</div>
+                
+                <!-- Cue (starts at 25%, ends at 55%) -->
+                <div class="ws-cue" id="ws-cue" style="left: 25%; width: 30%;">
+                  <span class="ws-cue-text">I thought you were leaving.</span>
                 </div>
-              </div>
-              <div class="qc-timeline" aria-hidden="true">
-                <div class="qc-tl-track">
-                  <div class="qc-tl-shot" style="left:0%; width:25%"><span>Shot 1</span></div>
-                  <div class="qc-tl-shot" style="left:25%; width:30%"><span>Shot 2</span></div>
-                  <div class="qc-tl-shot" style="left:55%; width:25%"><span>Shot 3</span></div>
-                  <div class="qc-tl-shot" style="left:80%; width:20%"><span>Shot 4</span></div>
-                  <div class="qc-tl-cue" id="qc-tl-cue" style="left:18%; width:10%"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Finding panel -->
-            <div class="qc-finding" id="qc-finding">
-              <div class="qc-finding-head">
-                <span class="qc-finding-kicker">Issue 01 · Finding</span>
-                <span class="qc-severity" id="qc-severity">Major</span>
-              </div>
-              <h3 class="qc-finding-title" id="qc-finding-title">Cue overlaps a shot change</h3>
-              <p class="qc-finding-text" id="qc-finding-text">The cue starts before Shot 2 and ends after the cut into Shot 3. Part of the line lands on a shot the source cue does not cover, so the viewer sees text on the wrong picture.</p>
-              <dl class="qc-finding-meta">
-                <div><dt>Category</dt><dd id="qc-category">Timing</dd></div>
-                <div><dt>Cue</dt><dd id="qc-cue">#014</dd></div>
-                <div><dt>Recommended action</dt><dd id="qc-action">Trim the out-point to end on the shot change.</dd></div>
-              </dl>
-              <div class="qc-finding-actions">
-                <button type="button" class="qc-resolve" id="qc-resolve">Record illustrative correction</button>
-                <span class="qc-recorded" id="qc-recorded" hidden>Illustrative correction recorded.</span>
+                
+                <div class="ws-playhead" style="left: 40%;"></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Report -->
-        <div class="qc-report-wrap">
-          <button type="button" class="qc-report-toggle" id="qc-report-toggle" aria-expanded="false" aria-controls="qc-report">Show QC report</button>
-          <div class="qc-report" id="qc-report" hidden>
-            <h3>QC report · illustrative</h3>
-            <p class="qc-report-note">This report reflects the demo issues and your recorded corrections. It does not describe a real delivery.</p>
-            <table class="qc-report-table">
-              <thead>
-                <tr><th>#</th><th>Issue</th><th>Category</th><th>Status</th></tr>
-              </thead>
-              <tbody id="qc-report-body">
-                <tr><td>01</td><td>Shot-change timing</td><td>Timing</td><td>Open</td></tr>
-                <tr><td>02</td><td>Reading speed</td><td>Reading speed</td><td>Open</td></tr>
-                <tr><td>03</td><td>Spelling &amp; terminology</td><td>Terminology</td><td>Open</td></tr>
-                <tr><td>04</td><td>On-screen text</td><td>On-screen text</td><td>Open</td></tr>
-              </tbody>
-            </table>
-            <p class="qc-report-summary" id="qc-report-summary">4 issues identified · 0 resolved · 4 still open.</p>
+        <!-- REPORT PANEL -->
+        <div class="ws-report-panel" id="ws-report-panel">
+          <div class="ws-report-header">
+            <div class="ws-report-title">QC Report</div>
+            <button class="btn-tool secondary" id="btn-close-report" style="padding: 4px 10px; font-size: 0.75rem;">Close</button>
+          </div>
+          <div class="ws-report-stats">
+            <div class="ws-stat-box">
+              <div class="ws-stat-val" id="stat-issues">4</div>
+              <div class="ws-stat-label">Issues identified</div>
+            </div>
+            <div class="ws-stat-box">
+              <div class="ws-stat-val" id="stat-resolved" style="color: var(--ok);">0</div>
+              <div class="ws-stat-label">Resolved</div>
+            </div>
+            <div class="ws-stat-box">
+              <div class="ws-stat-val" id="stat-open" style="color: var(--bad);">4</div>
+              <div class="ws-stat-label">Open</div>
+            </div>
+          </div>
+          <div class="ws-report-list" id="report-list">
+            <!-- Report items injected via JS -->
           </div>
         </div>
 
-        <div class="qc-statusbar">
-          <span id="qc-status-message">4 issues · 0 fixed</span>
-          <span>Illustrative demo — not a real production standard</span>
+        <!-- STATUS BAR -->
+        <div class="ws-statusbar">
+          <span id="ws-status-left">EZTitles mock · v2.4</span>
+          <span id="ws-status-right">File: Episode_03.srt</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- What this case demonstrates -->
-  <section class="service-section">
+  <!-- ============ WORKFLOW ============ -->
+  <section class="section">
     <div class="wrap">
-      <h2>What the QC pass shows.</h2>
-      <p><strong>Timing against the picture.</strong> A cue that starts before or ends after a shot change is caught on the timeline, not just in the text.</p>
-      <p><strong>Reading speed inside the brief.</strong> The CPS limit is the one the delivery asks for — never a universal number.</p>
-      <p><strong>Terminology checked, not guessed.</strong> If a term cannot be confirmed against a brief or glossary, the reviewer marks it for follow-up rather than inventing a “fix”.</p>
-      <p><strong>On-screen text accounted for.</strong> Hard-coded text is either translated or represented as a forced narrative, depending on what the brief allows.</p>
+      <h2>The delivery pass.</h2>
+      <div class="steps" style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0;">
+        <div class="step" style="display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line);">
+          <div class="step-num" style="flex-shrink: 0; width: 32px; height: 32px; border: 2px solid var(--brand); border-radius: 2px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand);">01</div>
+          <div class="step-body">
+            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Run the technical checks</h3>
+            <p style="font-size: 0.94rem; margin: 0;">Timing, reading speed, spelling, on-screen text. The tool flags what the eye misses.</p>
+          </div>
+        </div>
+        <div class="step" style="display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line);">
+          <div class="step-num" style="flex-shrink: 0; width: 32px; height: 32px; border: 2px solid var(--brand); border-radius: 2px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand);">02</div>
+          <div class="step-body">
+            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Fix the root cause</h3>
+            <p style="font-size: 0.94rem; margin: 0;">A timing error isn't fixed by retyping the text. It's fixed by dragging the cue or splitting it.</p>
+          </div>
+        </div>
+        <div class="step" style="display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line);">
+          <div class="step-num" style="flex-shrink: 0; width: 32px; height: 32px; border: 2px solid var(--brand); border-radius: 2px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand);">03</div>
+          <div class="step-body">
+            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Generate the report</h3>
+            <p style="font-size: 0.94rem; margin: 0;">The client sees "4 issues, 4 resolved" and knows the file is ready. The report is the proof.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <nav class="case-nav">
-    <a href="service-review-mtpe.html">← Previous: Review &amp; MTPE</a>
-    <a href="index.html#cases">All case studies →</a>
+  <!-- ============ NAV ============ -->
+  <nav class="case-nav" style="display: flex; justify-content: space-between; gap: 16px; padding: 2.5rem 24px; max-width: 1100px; margin-inline: auto; border-top: 1px solid var(--line); flex-wrap: wrap;">
+    <a href="index.html#cases" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; color: var(--brand);">← All case studies</a>
+    <a href="index.html#cases" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; color: var(--brand);">Next case →</a>
   </nav>
 </main>
 
-<script src="case.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const $ = (id) => document.getElementById(id);
+
+  // -- Data --
+  const issuesData = {
+    timing: {
+      title: "Cue crosses shot change",
+      tc: "00:01:12.400",
+      desc: "The cue starts 400ms before the shot change. It should start on or after the cut.",
+      text: "I thought you were leaving.",
+      resolved: false
+    },
+    speed: {
+      title: "CPS exceeds limit",
+      tc: "00:01:12.400",
+      desc: "Current CPS is 21. The brief limit is 17. Shorten the text or split the cue.",
+      text: "I thought you were leaving.",
+      resolved: false
+    },
+    spelling: {
+      title: "Spelling error",
+      tc: "00:01:12.400",
+      desc: "Typo in 'leaving'. Should be 'leaving'.",
+      text: "I thought you were leaving.",
+      resolved: false
+    },
+    text: {
+      title: "On-screen text conflict",
+      tc: "00:01:12.400",
+      desc: "There is a sign in the shot that says 'LEAVING'. The subtitle should avoid duplicating it.",
+      text: "I thought you were leaving.",
+      resolved: false
+    }
+  };
+
+  // -- State --
+  let currentTab = "timing";
+  let isRunning = false;
+  let hasRun = false;
+  let timingFixed = false; // Specific flag for the drag interaction
+
+  // -- DOM --
+  const el = {
+    btnRun: $("btn-run-qc"),
+    btnReport: $("btn-report"),
+    spinner: $("spinner"),
+    runStatus: $("run-status-text"),
+    tabs: document.querySelectorAll(".ws-tab"),
+    issuesList: $("ws-issues-list"),
+    emptyState: $("ws-empty-state"),
+    cue: $("ws-cue"),
+    timeline: $("ws-timeline"),
+    reportPanel: $("ws-report-panel"),
+    reportList: $("report-list"),
+    statIssues: $("stat-issues"),
+    statResolved: $("stat-resolved"),
+    statOpen: $("stat-open"),
+    closeReport: $("btn-close-report")
+  };
+
+  // -- Helpers --
+  function getResolvedCount() {
+    let count = 0;
+    for (let key in issuesData) {
+      if (issuesData[key].resolved) count++;
+    }
+    return count;
+  }
+
+  function renderTabs() {
+    el.tabs.forEach(tab => {
+      const key = tab.dataset.tab;
+      tab.classList.remove("active", "resolved");
+      if (key === currentTab) tab.classList.add("active");
+      if (issuesData[key].resolved) tab.classList.add("resolved");
+      
+      const statusDot = tab.querySelector(".ws-tab-status");
+      if (issuesData[key].resolved) {
+        statusDot.style.background = "var(--ok)";
+      } else if (hasRun) {
+        statusDot.style.background = "var(--bad)";
+      } else {
+        statusDot.style.background = "var(--n-300)";
+      }
+    });
+  }
+
+  function renderIssues() {
+    if (!hasRun) {
+      el.issuesList.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">No issues found yet.<br>Click "Run QC" to start.</div>`;
+      return;
+    }
+
+    const issue = issuesData[currentTab];
+    el.issuesList.innerHTML = "";
+
+    const card = document.createElement("div");
+    card.className = "ws-issue-card";
+    if (issue.resolved) card.classList.add("resolved");
+    else card.classList.add("active");
+
+    card.innerHTML = `
+      <div class="ws-issue-header">
+        <span class="ws-issue-title">${issue.title}</span>
+        <span class="ws-issue-tc">${issue.tc}</span>
+      </div>
+      <div class="ws-issue-desc">${issue.desc}</div>
+      <div class="ws-issue-text">${issue.text}</div>
+      <div class="ws-issue-actions">
+        <button class="btn-resolve" ${issue.resolved ? 'disabled' : ''}>
+          ${issue.resolved ? 'Resolved' : 'Mark as resolved'}
+        </button>
+      </div>
+    `;
+
+    // Bind resolve button
+    const btn = card.querySelector(".btn-resolve");
+    if (!issue.resolved) {
+      btn.addEventListener("click", () => {
+        issue.resolved = true;
+        if (currentTab === "timing") timingFixed = true;
+        renderTabs();
+        renderIssues();
+        updateReportButton();
+        updateCueVisuals();
+      });
+    }
+
+    el.issuesList.appendChild(card);
+  }
+
+  function updateCueVisuals() {
+    if (!hasRun) {
+      el.cue.classList.remove("error", "resolved");
+      return;
+    }
+
+    // The cue is always tied to the timing issue for the drag demo
+    if (issuesData.timing.resolved) {
+      el.cue.classList.remove("error");
+      el.cue.classList.add("resolved");
+      // Snap to the shot change (30%)
+      el.cue.style.left = "30%";
+    } else {
+      el.cue.classList.remove("resolved");
+      el.cue.classList.add("error");
+      // Force back to error position if not resolved
+      el.cue.style.left = "25%";
+    }
+  }
+
+  function updateReportButton() {
+    const resolved = getResolvedCount();
+    const total = Object.keys(issuesData).length;
+    
+    if (resolved === total && hasRun) {
+      el.btnReport.disabled = false;
+    } else {
+      el.btnReport.disabled = true;
+    }
+  }
+
+  function renderReport() {
+    const resolved = getResolvedCount();
+    const total = Object.keys(issuesData).length;
+    
+    el.statIssues.textContent = total;
+    el.statResolved.textContent = resolved;
+    el.statOpen.textContent = total - resolved;
+
+    el.reportList.innerHTML = "";
+    for (let key in issuesData) {
+      const issue = issuesData[key];
+      const item = document.createElement("div");
+      item.className = "ws-report-item " + (issue.resolved ? "resolved" : "open");
+      item.innerHTML = `<span>${issue.title}</span> <span>${issue.resolved ? "Resolved" : "Open"}</span>`;
+      el.reportList.appendChild(item);
+    }
+  }
+
+  // -- Interactions: Tabs --
+  el.tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      currentTab = tab.dataset.tab;
+      renderTabs();
+      renderIssues();
+    });
+  });
+
+  // -- Interactions: Run QC --
+  el.btnRun.addEventListener("click", () => {
+    if (isRunning) return;
+    
+    isRunning = true;
+    hasRun = false;
+    el.btnRun.disabled = true;
+    el.btnReport.disabled = true;
+    el.spinner.style.display = "block";
+    el.runStatus.textContent = "Scanning...";
+    
+    // Reset data
+    for (let key in issuesData) {
+      issuesData[key].resolved = false;
+    }
+    timingFixed = false;
+
+    // Clear visual state
+    el.issuesList.innerHTML = "";
+    el.cue.classList.remove("error", "resolved");
+    el.cue.style.left = "25%";
+    renderTabs();
+
+    // Simulate animation
+    setTimeout(() => {
+      isRunning = false;
+      hasRun = true;
+      el.btnRun.disabled = false;
+      el.spinner.style.display = "none";
+      el.runStatus.textContent = "4 issues found";
+      
+      renderTabs();
+      renderIssues();
+      updateCueVisuals();
+      updateReportButton();
+    }, 1500); // 1.5s scan animation
+  });
+
+  // -- Interactions: Drag Cue (Timing Fix) --
+  let isDragging = false;
+  let startX = 0;
+  let startLeft = 0;
+
+  el.cue.addEventListener("pointerdown", (e) => {
+    if (!hasRun || issuesData.timing.resolved) return;
+    isDragging = true;
+    el.cue.classList.add("dragging");
+    startX = e.clientX;
+    startLeft = el.cue.offsetLeft;
+    el.cue.setPointerCapture(e.pointerId);
+  });
+
+  el.cue.addEventListener("pointermove", (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    let newLeft = startLeft + dx;
+    
+    // Snap to 30% (shot change)
+    const rect = el.timeline.getBoundingClientRect();
+    const percent = (newLeft / rect.width) * 100;
+    
+    if (Math.abs(percent - 30) < 5) {
+      el.cue.style.left = "30%";
+    } else {
+      el.cue.style.left = newLeft + "px"; // Temporary pixel move
+    }
+  });
+
+  el.cue.addEventListener("pointerup", (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    el.cue.classList.remove("dragging");
+    el.cue.releasePointerCapture(e.pointerId);
+
+    const rect = el.timeline.getBoundingClientRect();
+    const currentLeft = el.cue.offsetLeft;
+    const percent = (currentLeft / rect.width) * 100;
+
+    // If dropped near 30%, consider it fixed
+    if (Math.abs(percent - 30) < 5) {
+      issuesData.timing.resolved = true;
+      timingFixed = true;
+      renderTabs();
+      renderIssues();
+      updateCueVisuals();
+      updateReportButton();
+    } else {
+      // Snap back
+      el.cue.style.left = "25%";
+    }
+  });
+
+  // -- Interactions: Report --
+  el.btnReport.addEventListener("click", () => {
+    renderReport();
+    el.reportPanel.classList.add("visible");
+  });
+
+  el.closeReport.addEventListener("click", () => {
+    el.reportPanel.classList.remove("visible");
+  });
+
+  // -- Init --
+  renderTabs();
+  renderIssues();
+
+})();
+</script>
 </body>
 </html>
