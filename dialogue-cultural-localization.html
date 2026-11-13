@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Case 04 · Dialogue & Cultural Localization · Ariane Lesnyak</title>
+  <meta name="description" content="Fictional screenplay-based case study: English-to-Brazilian Portuguese dialogue localization, cultural adaptation, and timed subtitle production.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --red-500: #C21212; --red-600: #9D0303; --red-700: #7A0202;
+  --n-100: #F1EDEB; --n-200: #E4DEDB; --n-300: #CCC4C0; --n-400: #A69C97; --n-500: #7B716C;
+  --bg: #FFFFFF; --surface: #FFFFFF; --surface-2: #F6F6F7;
+  --ink: #18140F; --ink-soft: #403A34; --muted: #6E6862;
+  --line: #EAE7E4; --line-strong: #D8D4D0;
+  --brand: #9D0303; --brand-ink: #7A0202; --brand-tint: #FBEBEB;
+  --signal: #C21212; --on-dark: #D81919;
+  --dark: #0c0c0e; --dark-2: #0b0b0d; --on-dark-text: #FF6B66;
+  --ok: #1f7a4a; --ok-bg: #f0fdf4;
+  --bad: #C21212; --bad-bg: #fef2f2;
+
+  --pair-1: #1d4ed8; --pair-2: #1f7a4a; --pair-3: #b45309; --pair-4: #6d28d9;
+  --pair-5: #0e7490; --pair-6: #9d174d; --pair-7: #4d7c0f; --pair-8: #9a3412;
+
+  --display: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --script: "Courier New", Courier, monospace;
+  --logo: "Bebas Neue", "Montserrat", sans-serif;
+
+  --maxw: 1120px;
+  --shadow-md: 0 6px 18px rgba(61,0,0,.08);
+  --shadow-lg: 0 18px 44px rgba(61,0,0,.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body { background: var(--bg); color: var(--ink-soft); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body.modal-open { overflow: hidden; }
+h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; line-height: 1.05; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 24px; }
+
+/* HEADER & HERO */
+.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: transparent; border-bottom: 1px solid transparent; transition: background .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.site-header.scrolled { background: rgba(255,255,255,0.92); border-bottom-color: var(--line); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) { .site-header.scrolled { background: rgba(255,255,255,0.82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); } }
+.site-header .nav-row { display: flex; align-items: center; justify-content: space-between; height: 66px; gap: 24px; max-width: var(--maxw); margin-inline: auto; padding-inline: 24px; }
+.brand { font-family: var(--logo); font-size: 1.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,0.45); transition: color .25s ease, text-shadow .25s ease; }
+.site-header.scrolled .brand { color: #9d1402; text-shadow: none; }
+.nav-links { display: flex; align-items: center; gap: 24px; font-size: 0.85rem; font-weight: 500; margin-left: auto; margin-right: 32px; }
+.nav-links a { color: rgba(255,255,255,0.88); text-shadow: 0 1px 8px rgba(0,0,0,0.4); padding: 6px 4px; position: relative; transition: color .15s ease; }
+.nav-links a::after { content: ''; position: absolute; left: 4px; right: 4px; bottom: 0; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+.nav-links a:hover::after { transform: scaleX(1); }
+.site-header.scrolled .nav-links a { color: var(--muted); text-shadow: none; }
+.site-header.scrolled .nav-links a:hover { color: var(--ink); }
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+.btn-nav { display: inline-flex; align-items: center; padding: 6px 13px; border-radius: 2px; background: var(--brand); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.78rem; transition: background .15s ease; }
+.btn-nav:hover { background: var(--signal); }
+
+.hero-dark { position: relative; overflow: hidden; background: var(--dark-2); color: #fff; padding-block: 8rem 5rem; }
+.hero-dark::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 20% 0%, rgba(216,25,25,0.18), transparent 60%), radial-gradient(ellipse 50% 40% at 80% 100%, rgba(157,3,3,0.12), transparent 60%); pointer-events: none; }
+.hero-dark::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent 80%); -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent 80%); pointer-events: none; }
+.hero-dark .wrap { position: relative; z-index: 2; }
+.hero-eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-dark-text); margin-bottom: 1.25rem; font-weight: 500; }
+.hero-dark h1 { color: #fff; font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -0.03em; line-height: 1.05; max-width: 22ch; }
+.hero-dark h1 .accent { color: var(--on-dark-text); }
+.hero-dark .sub { margin-top: 1.5rem; font-size: 1.12rem; color: rgba(255,255,255,0.78); max-width: 58ch; line-height: 1.65; }
+.hero-quote { margin-top: 2rem; padding-left: 16px; border-left: 3px solid var(--on-dark-text); font-style: italic; color: rgba(255,255,255,0.85); max-width: 52ch; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2rem; }
+.hero-meta span { padding: 6px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; font-size: 0.78rem; font-weight: 500; color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
+.hero-actions { display: flex; gap: 12px; margin-top: 2.5rem; flex-wrap: wrap; }
+.btn-hero { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 2px; background: var(--signal); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.9rem; transition: background .2s ease; }
+.btn-hero:hover { background: var(--on-dark); }
+.btn-hero-ghost { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.24); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.9rem; transition: border-color .2s ease, background .2s ease; }
+.btn-hero-ghost:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
+
+.section { padding-block: 4.5rem; }
+.section.alt { background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.section h2 { font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+.section p { color: var(--ink-soft); max-width: 68ch; margin-bottom: 1rem; line-height: 1.65; }
+.section .lead { font-size: 1.05rem; color: var(--ink-soft); max-width: 70ch; }
+
+/* SCREENPLAY */
+.screenplay-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+.screenplay-meta .meta-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.screenplay-meta .click-hint { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bad); font-weight: 500; }
+.screenplay-meta .click-hint svg { width: 12px; height: 12px; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+
+.screenplay-paper {
+  background: #f3f3f4;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.05);
+  padding: 48px 56px;
+  font-family: var(--script);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #1a1712;
+  max-width: 760px;
+  margin-inline: auto;
+  margin-top: 1.5rem;
+}
+.screenplay-paper .scene-heading { text-transform: uppercase; font-weight: 700; margin-bottom: 16px; letter-spacing: 0.03em; }
+.screenplay-paper .action { margin-bottom: 14px; color: #2b2620; }
+.screenplay-paper .character { text-align: center; font-weight: 700; text-transform: uppercase; margin-top: 18px; margin-bottom: 4px; letter-spacing: 0.02em; }
+.screenplay-paper .parenthetical { text-align: center; font-style: italic; color: #4a4034; margin-bottom: 4px; }
+.screenplay-paper .dialogue { margin-left: 22%; margin-right: 22%; margin-bottom: 6px; }
+.screenplay-paper .transition { text-align: right; text-transform: uppercase; font-weight: 700; margin-top: 16px; }
+
+.dialogue-block { cursor: pointer; transition: background .15s ease, box-shadow .15s ease; border-radius: 2px; padding: 2px 4px; margin-left: -4px; margin-right: -4px; position: relative; display: block; text-align: left; width: 100%; font: inherit; color: inherit; }
+.dialogue-block:hover { background: rgba(157,3,3,0.06); }
+.dialogue-block:focus-visible { background: rgba(157,3,3,0.10); box-shadow: 0 0 0 2px var(--brand); outline: none; }
+.dialogue-block .pair-num { position: absolute; right: 4px; top: 2px; font-family: var(--mono); font-size: 0.6rem; color: var(--muted); opacity: 0; transition: opacity .15s ease; }
+.dialogue-block:hover .pair-num, .dialogue-block:focus-visible .pair-num { opacity: 1; }
+
+/* PLAYBACK */
+.playback-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-top: 1.5rem; }
+.playback-screen { background: #0d0d10; border-radius: 6px; overflow: hidden; position: relative; aspect-ratio: 16/9; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; }
+.playback-scene { position: absolute; inset: 0; background: linear-gradient(180deg, #16161c 0%, #0b0b10 60%, #050508 100%); }
+.playback-scene::before { content: ''; position: absolute; top: 18%; left: 12%; width: 76%; height: 46%; background: radial-gradient(ellipse at 50% 80%, rgba(255,220,150,0.10), transparent 60%); border-radius: 4px; }
+.playback-scene .silhouette { position: absolute; bottom: 22%; width: 12%; height: 40%; background: #060608; border-radius: 8px 8px 4px 4px; }
+.playback-scene .silhouette.left { left: 20%; }
+.playback-scene .silhouette.right { right: 22%; height: 44%; }
+.playback-scene .lamp { position: absolute; top: 30%; left: 50%; width: 30%; height: 30%; background: radial-gradient(circle, rgba(255,200,100,0.18), transparent 70%); transform: translateX(-50%); }
+.playback-label { position: relative; z-index: 2; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,.5); background: rgba(0,0,0,.4); padding: 2px 6px; border-radius: 2px; align-self: flex-start; }
+.playback-subtitle { position: relative; z-index: 2; background: rgba(0,0,0,.7); color: #fff; font-family: var(--body); font-size: 1rem; text-align: center; padding: 8px 12px; border-radius: 3px; align-self: center; max-width: 90%; margin-bottom: 4px; white-space: pre-wrap; }
+.playback-subtitle.empty { opacity: 0; }
+
+.playback-controls { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.playback-btn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--brand); color: #fff; transition: background .15s ease; }
+.playback-btn:hover { background: var(--brand-ink); }
+.playback-btn.secondary { background: var(--n-200); color: var(--ink); }
+.playback-btn.secondary:hover { background: var(--n-300); }
+.playback-progress { flex: 1; height: 6px; background: var(--n-200); border-radius: 3px; position: relative; cursor: pointer; }
+.playback-progress .bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--brand); border-radius: 3px; width: 0%; }
+.playback-time { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); min-width: 88px; text-align: right; }
+
+.cue-list { display: flex; flex-direction: column; gap: 6px; max-height: 420px; overflow-y: auto; padding-right: 4px; }
+.cue-list-header { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.cue-btn { display: flex; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 3px; background: #fff; text-align: left; font: inherit; color: inherit; transition: all .15s ease; font-size: 0.8rem; }
+.cue-btn:hover { border-color: var(--brand); color: var(--brand); }
+.cue-btn.active { background: var(--brand-tint); border-color: var(--brand); color: var(--brand); }
+.cue-btn .cue-tc { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); flex-shrink: 0; }
+
+/* ON-SCREEN */
+.phone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 1.5rem; }
+.phone-col-label { text-align: center; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.phone-mock { width: 100%; max-width: 280px; margin: 0 auto; background: #1a1a20; border-radius: 24px; padding: 12px; box-shadow: 0 12px 30px rgba(0,0,0,.25); }
+.phone-screen { background: linear-gradient(180deg, #2a3a52, #15202e); border-radius: 16px; padding: 20px 14px; min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
+.phone-time { text-align: center; font-family: var(--display); font-weight: 700; color: #fff; font-size: 2rem; margin-bottom: auto; margin-top: 20px; }
+.phone-notif { background: rgba(255,255,255,.95); border-radius: 12px; padding: 10px 12px; font-family: var(--body); font-size: 0.8rem; color: #1a1a1a; box-shadow: 0 4px 10px rgba(0,0,0,.15); }
+.phone-notif .app { font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: #6e6862; margin-bottom: 2px; }
+.phone-notif .who { font-weight: 600; font-size: 0.75rem; color: #1a1a1a; }
+.phone-notif .msg { font-size: 0.8rem; color: #2b2620; }
+.onscreen-note { font-size: 0.85rem; color: var(--muted); margin-top: 16px; text-align: center; max-width: 60ch; margin-inline: auto; }
+
+/* WORKFLOW */
+.steps { margin-top: 2rem; display: flex; flex-direction: column; gap: 0; }
+.step { display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line); }
+.step:first-child { border-top: 0; }
+.step-num { flex-shrink: 0; width: 32px; height: 32px; border: 2px solid var(--brand); border-radius: 2px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand); }
+.step-body h3 { margin-top: 0; margin-bottom: 6px; font-size: 1.05rem; }
+.step-body p { margin: 0; font-size: 0.94rem; }
+
+/* MODAL — fixed height, no scroll */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(8,8,10,0.6); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+.modal-backdrop.open { display: flex; }
+.modal { background: #fff; border-radius: 8px; max-width: 680px; width: 100%; height: 520px; max-height: 90vh; box-shadow: 0 24px 60px rgba(0,0,0,.35); position: relative; display: flex; flex-direction: column; overflow: hidden; }
+.modal-header { background: #fff; border-bottom: 1px solid var(--line); padding: 16px 20px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-shrink: 0; }
+.modal-title { font-family: var(--display); font-weight: 800; font-size: 1rem; color: var(--ink); line-height: 1.25; }
+.modal-title .pair-tag { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); margin-right: 6px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; }
+.modal-close { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--n-100); color: var(--ink-soft); transition: background .15s ease; flex-shrink: 0; }
+.modal-close:hover { background: var(--n-200); }
+.modal-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0; }
+.modal-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex-shrink: 0; }
+.modal-pair-col { background: var(--surface-2); border-radius: 4px; padding: 10px 12px; border-left: 3px solid; }
+.modal-pair-col.en { border-left-color: var(--bad); }
+.modal-pair-col.pt { border-left-color: var(--ok); }
+.modal-pair-col .lbl { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.modal-pair-col.en .lbl { color: var(--bad); }
+.modal-pair-col.pt .lbl { color: var(--ok); }
+.modal-pair-col .txt { font-size: 0.9rem; color: var(--ink); line-height: 1.4; }
+.modal-comparison { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.modal-comparison-tabs { display: flex; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.modal-tab { flex: 1; padding: 8px 10px; text-align: center; font-family: var(--display); font-weight: 700; font-size: 0.72rem; color: var(--muted); border-bottom: 2px solid transparent; transition: all .15s ease; }
+.modal-tab:hover { color: var(--ink); background: #faf9fa; }
+.modal-tab.active { color: var(--brand); border-bottom-color: var(--brand); background: var(--brand-tint); }
+.modal-comparison-body { padding: 14px 16px; flex: 1; overflow-y: auto; }
+.modal-comparison-label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.modal-comparison-text { font-size: 0.88rem; color: var(--ink); line-height: 1.55; }
+.modal-comparison-text.literal { color: var(--muted); font-style: italic; }
+.modal-comparison-text.rationale { font-size: 0.84rem; color: var(--ink-soft); }
+.modal-comparison-text.rationale strong { color: var(--ink); font-weight: 600; }
+.modal-nav { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding: 12px 20px; gap: 8px; flex-shrink: 0; }
+.modal-nav-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--line-strong); border-radius: 3px; font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); background: #fff; transition: all .15s ease; }
+.modal-nav-btn:hover { border-color: var(--brand); color: var(--brand); }
+.modal-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.modal-nav-count { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+
+/* CASE NAV */
+.case-nav { display: flex; justify-content: space-between; gap: 16px; padding: 2.5rem 24px; max-width: 1100px; margin-inline: auto; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.case-nav a { display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; color: var(--brand); transition: color .2s ease; }
+.case-nav a:hover { color: var(--brand-ink); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .brand { font-size: 1.3rem; }
+  .screenplay-paper { padding: 32px 24px; font-size: 0.88rem; }
+  .screenplay-paper .dialogue { margin-left: 8%; margin-right: 8%; }
+  .playback-grid { grid-template-columns: 1fr; }
+  .phone-grid { grid-template-columns: 1fr; }
+  .modal-pair { grid-template-columns: 1fr; }
+  .modal { height: auto; max-height: 92vh; }
+}
+@media (max-width: 640px) {
+  .hero-dark h1 { font-size: 2rem; }
+  .screenplay-paper { padding: 24px 16px; }
+  .screenplay-paper .dialogue { margin-left: 4%; margin-right: 4%; }
+  .step { flex-direction: column; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-row">
+    <a href="index.html" class="brand">ARIANE LESNYAK</a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="index.html#about">About</a>
+      <a href="index.html#collaborations">Collaborations</a>
+      <a href="index.html#promise">Promise</a>
+      <a href="index.html#numbers">Numbers</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#cases">Case studies</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="mailto:ariane.etimo@gmail.com" class="btn-nav">Get in touch</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero-dark">
+    <div class="wrap">
+      <div class="hero-eyebrow">Case study 04 · Dialogue &amp; Cultural Localization</div>
+      <h1>Beyond Literal Translation <span class="accent">— making dialogue work.</span></h1>
+      <p class="sub">A fictional screenplay-based case study exploring how dialogue moves from English into natural Brazilian Portuguese — without losing character voice, humor, cultural meaning, or narrative intent.</p>
+      <p class="hero-quote">"Good localization preserves what a line does, not just what it says."</p>
+      <div class="hero-meta">
+        <span>EN → PT-BR</span>
+        <span>Audiovisual Translation</span>
+        <span>Dialogue Localization</span>
+        <span>Subtitle Adaptation</span>
+        <span>Fictional Case Study</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#screenplay" class="btn-hero">
+          Read the scene
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="index.html#cases" class="btn-hero-ghost">All case studies</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENPLAY -->
+  <section class="section" id="screenplay">
+    <div class="wrap">
+      <h2>The screenplay.</h2>
+      <p class="lead">An original fictional excerpt created for this portfolio. A late-night conversation between Maya and Leo, two people who know each other too well.</p>
+      <div class="screenplay-meta">
+        <span class="meta-label">Fictional material · illustrative for this portfolio ·</span>
+        <span class="click-hint">
+          Click a dialogue line
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+        </span>
+      </div>
+
+      <div class="screenplay-paper" id="screenplay-paper"></div>
+    </div>
+  </section>
+
+  <!-- PLAYBACK -->
+  <section class="section alt" id="playback">
+    <div class="wrap">
+      <h2>Subtitle playback.</h2>
+      <p class="lead">The full dialogue, timed as a subtitle file. Click a cue to jump to it and open its localization note.</p>
+
+      <div class="playback-grid">
+        <div>
+          <div class="playback-screen" id="playback-screen">
+            <div class="playback-scene">
+              <div class="lamp"></div>
+              <div class="silhouette left"></div>
+              <div class="silhouette right"></div>
+            </div>
+            <div class="playback-label">Maya &amp; Leo · apartment · night</div>
+            <div class="playback-subtitle empty" id="playback-subtitle">—</div>
+          </div>
+          <div class="playback-controls">
+            <button class="playback-btn" id="btn-play" aria-label="Play">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button class="playback-btn secondary" id="btn-restart" aria-label="Restart">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+            </button>
+            <div class="playback-progress" id="playback-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" id="playback-bar"></div></div>
+            <div class="playback-time" id="playback-time">0.0 / 0.0s</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="cue-list-header">Cues</div>
+          <div class="cue-list" id="cue-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ON-SCREEN -->
+  <section class="section" id="onscreen">
+    <div class="wrap">
+      <h2>On-screen text.</h2>
+      <p class="lead">Audiovisual localization is not only spoken dialogue.<br> Chat slang has to be localized by function, not by literal equivalence.</p>
+
+      <div class="phone-grid">
+        <div>
+          <div class="phone-col-label">Original · EN</div>
+          <div class="phone-mock">
+            <div class="phone-screen">
+              <div class="phone-time">23:47</div>
+              <div class="phone-notif"><div class="app">Messages</div><div class="who">Leo</div><div class="msg">"you still up?"</div></div>
+              <div class="phone-notif"><div class="app">Messages</div><div class="who">Maya</div><div class="msg">"lol yeah"</div></div>
+              <div class="phone-notif"><div class="app">Messages</div><div class="who">Leo</div><div class="msg">"brb"</div></div>
+              <div class="phone-notif"><div class="app">Messages</div><div class="who">Maya</div><div class="msg">"idk what to say"</div></div>
+              <div class="phone-notif"><div class="app">Messages</div><div class="who">Leo</div><div class="msg">"omg don't"</div></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="phone-col-label">Localized · PT-BR</div>
+          <div class="phone-mock">
+            <div class="phone-screen">
+              <div class="phone-time">23:47</div>
+              <div class="phone-notif"><div class="app">Mensagens</div><div class="who">Leo</div><div class="msg">"tá acordada?"</div></div>
+              <div class="phone-notif"><div class="app">Mensagens</div><div class="who">Maya</div><div class="msg">"kkk tô"</div></div>
+              <div class="phone-notif"><div class="app">Mensagens</div><div class="who">Leo</div><div class="msg">"já venho"</div></div>
+              <div class="phone-notif"><div class="app">Mensagens</div><div class="who">Maya</div><div class="msg">"sei lá o que dizer"</div></div>
+              <div class="phone-notif"><div class="app">Mensagens</div><div class="who">Leo</div><div class="msg">"nossa, não"</div></div>
+            </div>
+          </div>
+        </div>
+      </div><br>
+      <p class="onscreen-note">"lol" → "kkk", "brb" → "já venho", "idk" → "sei lá", "omg" → "nossa". <br>The translation preserves social function and screen economy, not literal words.</p>
+    </div>
+  </section>
+
+  <!-- WORKFLOW -->
+  <section class="section alt">
+    <div class="wrap">
+      <h2>The workflow.</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">01</div><div class="step-body"><h3>Contextual Analysis</h3><p>Read the scene, identify character relationships, narrative intent, register, cultural references, and audiovisual context.</p></div></div>
+        <div class="step"><div class="step-num">02</div><div class="step-body"><h3>Dialogue Localization</h3><p>Adapt dialogue into natural Brazilian Portuguese, preserving meaning, tone, character voice, humor, and idiomatic intent.</p></div></div>
+        <div class="step"><div class="step-num">03</div><div class="step-body"><h3>Subtitle Adaptation</h3><p>Fit localized dialogue to timing, reading speed, segmentation, line length, and visual context.</p></div></div>
+        <div class="step"><div class="step-num">04</div><div class="step-body"><h3>Final Review</h3><p>Check consistency, spelling, punctuation, readability, timing, and on-screen text against the audiovisual material.</p></div></div>
+      </div>
+      <p style="margin-top:1.5rem;">Linguistic quality and technical subtitle quality are inseparable. A line that works on the page but not on the screen is not done.</p>
+    </div>
+  </section>
+
+  <nav class="case-nav" aria-label="Case navigation">
+    <a href="https://alc-etimo.github.io/faslocalization/index.html#services">← All case studies</a>    
+  </nav>
+</main>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">—</div>
+      <button class="modal-close" id="modal-close" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-pair">
+        <div class="modal-pair-col en">
+          <div class="lbl">Original — EN</div>
+          <div class="txt" id="modal-en"></div>
+        </div>
+        <div class="modal-pair-col pt">
+          <div class="lbl">Localized — PT-BR</div>
+          <div class="txt" id="modal-pt"></div>
+        </div>
+      </div>
+      <div class="modal-comparison">
+        <div class="modal-comparison-tabs" role="tablist" id="modal-tabs">
+          <button class="modal-tab active" data-view="literal" role="tab" aria-selected="true">Literal</button>
+          <button class="modal-tab" data-view="localized" role="tab" aria-selected="false">Localized</button>
+          <button class="modal-tab" data-view="rationale" role="tab" aria-selected="false">Rationale</button>
+        </div>
+        <div class="modal-comparison-body">
+          <div class="modal-comparison-label" id="modal-comparison-label">LITERAL REFERENCE — not the proposed subtitle</div>
+          <div class="modal-comparison-text" id="modal-comparison-text">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-nav">
+      <button class="modal-nav-btn" id="modal-prev">← Previous</button>
+      <span class="modal-nav-count" id="modal-count">—</span>
+      <button class="modal-nav-btn" id="modal-next">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+
+  /* ---------- DATA ---------- */
+  const dialogues = [
+    {
+      id: "dialogue-01", character: "MAYA",
+      source: "Took you long enough.",
+      target: "Demorou, hein?",
+      literalReference: "Levou você tempo suficiente.",
+      rationale: {
+        meaning: "The line is a complaint disguised as an observation. The localization keeps the mild reproach.",
+        voice: "'Demorou, hein?' is what a Brazilian friend actually says. The 'hein?' carries the same dry irritation.",
+        constraints: "Short enough to fit a 1.6s cue without forcing a line break."
+      },
+      subtitle: { in: 0.0, out: 1.6, lines: ["Demorou, hein?"] }
+    },
+    {
+      id: "dialogue-02", character: "LEO",
+      source: "Traffic was a nightmare.",
+      target: "O trânsito tava um caos.",
+      literalReference: "O tráfego era um pesadelo.",
+      rationale: {
+        meaning: "The line is a complaint disguised as an observation. The localization keeps the mild reproach.",
+voice: "'Tava' and 'caos' are the register Leo would actually use. 'Pesadelo' sounds unnatural.",
+        constraints: "Fits in 1.8s with a comfortable CPS."
+      },
+      subtitle: { in: 1.8, out: 3.6, lines: ["O trânsito tava um caos."] }
+    },
+    {
+      id: "dialogue-03", character: "MAYA",
+      source: "Sure it was.",
+      target: "Sei.",
+      literalReference: "Claro que era.",
+      rationale: {
+        meaning: "Two words of disbelief. The literal version sounds like agreement; the localized one sounds like doubt.",
+        voice: "'Sei' is the shortest, most Brazilian way to say 'I don't believe you'.",
+        constraints: "Very short — leaves breathing room before the next cue."
+      },
+      subtitle: { in: 3.8, out: 4.6, lines: ["Sei."] }
+    },
+    {
+      id: "dialogue-04", character: "LEO",
+      source: "You're never gonna let that go, are you?",
+      target: "Você nunca vai superar isso, né?",
+      literalReference: "Você nunca vai deixar isso ir, vai?",
+      rationale: {
+        meaning: "The line accuses Maya of holding a grudge. The meaning has to survive the compression.",
+        voice: "'Superar' keeps the informal accusation. 'Né?' is the natural tag.",
+        constraints: "The full line needs a 2.6s cue; the 'né?' tag is essential and cannot be dropped."
+      },
+      subtitle: { in: 4.8, out: 7.4, lines: ["Você nunca vai superar", "isso, né?"] }
+    },
+    {
+      id: "dialogue-05", character: "MAYA",
+      source: "Takes one to know one.",
+      target: "Olha quem fala.",
+      literalReference: "É preciso um para conhecer outro.",
+      rationale: {
+        meaning: "A sarcastic retort, not a proverb. The localized version keeps the mirror accusation.",
+        voice: "'Olha quem fala' is what people actually say in this situation. The English proverb structure would sound literary.",
+        culture: "Direct proverb transfer fails here; the Brazilian equivalent works by tone, not by image.",
+        constraints: "Short — fits a 1.6s cue easily."
+      },
+      subtitle: { in: 7.6, out: 9.2, lines: ["Olha quem fala."] }
+    },
+    {
+      id: "dialogue-06", character: "LEO",
+      source: "I brought you something.",
+      target: "Trouxe uma coisa pra você.",
+      rationale: {
+        meaning: "A small peace offering. The localized version keeps the soft, almost apologetic tone.",
+        voice: "'Uma coisa' is intentionally vague; 'um presente' would have been too formal.",
+        constraints: "Needs a 2.0s cue; no line break required."
+      },
+      subtitle: { in: 9.4, out: 11.4, lines: ["Trouxe uma coisa pra você."] }
+    },
+    {
+      id: "dialogue-07", character: "MAYA",
+      source: "Let me guess — the dollar store?",
+      target: "Deixa eu adivinhar — comprou na 25 de março?",
+      literalReference: "Deixe-me adivinhar — na loja de dólar?",
+      rationale: {
+        meaning: "She's teasing him before he even shows the gift. '25 de março' is a São Paulo street known for cheap goods of dubious quality.",
+        voice: "'Deixa eu adivinhar' keeps the teasing rhythm. The specific street name is the joke.",
+        culture: "The reference is local and instantly understood by Brazilian viewers: cheap, last-minute, slightly tacky. It carries the sarcasm without spelling it out.",
+        constraints: "The line needs a 2.6s cue; the dash is kept for the pause."
+      },
+      subtitle: { in: 11.6, out: 14.2, lines: ["Deixa eu adivinhar —", "comprou na 25 de março?"] }
+    },
+    {
+      id: "dialogue-08", character: "LEO",
+      source: "You can't have your cake and eat it too.",
+      target: "Não dá pra ter tudo ao mesmo tempo.",
+      literalReference: "Você não pode ter seu bolo e comê-lo também.",
+      rationale: {
+        meaning: "The idiom is about incompatible advantages. The localized version keeps that exact idea.",
+        culture: "The cake image doesn't travel. The Brazilian version keeps the impossibility, not the image.",
+        constraints: "Fits in 2.4s; the sentence is short enough without a break."
+      },
+      subtitle: { in: 14.4, out: 16.8, lines: ["Não dá pra ter tudo", "ao mesmo tempo."] }
+    },
+    {
+      id: "dialogue-09", character: "MAYA",
+      source: "You're impossible.",
+      target: "Você é impossível.",
+      rationale: {
+        meaning: "Affection disguised as exasperation. The localized version is a direct, natural equivalent.",
+        voice: "The register matches; the line is short by design.",
+        constraints: "Fits a 1.4s cue."
+      },
+      subtitle: { in: 17.0, out: 18.4, lines: ["Você é impossível."] }
+    },
+    {
+      id: "dialogue-10", character: "LEO",
+      source: "And yet, here you are.",
+      target: "E ainda assim, você tá aqui.",
+      literalReference: "E ainda assim, aqui está você.",
+      rationale: {
+        meaning: "A quiet counter-accusation. The localized version keeps the emotional weight.",
+        voice: "'Tá aqui' is what a person would say; 'aqui está você' sounds like a narrator.",
+        constraints: "Fits in 2.0s; the pause before the line is part of the timing."
+      },
+      subtitle: { in: 18.6, out: 20.6, lines: ["E ainda assim,", "você tá aqui."] }
+    },
+    {
+      id: "dialogue-11", character: "MAYA",
+      source: "Don't read too much into it.",
+      target: "Não viaja.",
+      literalReference: "Não leia muito nisso.",
+      rationale: {
+        meaning: "A deflection. The localized version keeps the emotional retreat.",
+        voice: "'Não viaja' is the natural Brazilian way to say 'don't overthink this'.",
+        constraints: "Very short — fits a 1.2s cue."
+      },
+      subtitle: { in: 20.8, out: 22.0, lines: ["Não viaja."] }
+    },
+    {
+      id: "dialogue-12", character: "LEO",
+      source: "Too late.",
+      target: "Tarde demais.",
+      rationale: {
+        meaning: "The line lands as a confession. The localized version keeps the finality.",
+        voice: "Short, quiet, and direct. The register matches Leo.",
+        constraints: "Fits a 1.4s cue; no break needed."
+      },
+      subtitle: { in: 22.2, out: 23.6, lines: ["Tarde demais."] }
+    },
+    {
+      id: "dialogue-13", character: "MAYA",
+      source: "You know what I read the other day? \"Love is a creature old / that bites and then will hide; / the more you give it gold, / the more it bites inside.\"",
+      target: "Sabe o que eu li outro dia? \"O amor é um bicho antigo / que morde e depois se esconde; / quanto mais você é amigo, / mais ele te morde e responde.\"",
+      literalReference: "Você sabe o que eu li outro dia? \"O amor é uma criatura velha que morde e então se esconde; quanto mais você dá ouro, mais ele morde por dentro.\"",
+      rationale: {
+        meaning: "Maya quotes a poem to disarm Leo. The localization keeps the images and the rhymes.",
+        voice: "The English rhyme (old / hide / gold / inside) maps to PT-BR (antigo / esconde / amigo / responde). The register stays slightly literary—four lines, ABAB rhyme—as a quoted poem should.",
+        culture: "The poem is original and fictional. It is presented as something Maya wrote.",
+        constraints: "The poem needs two cues to fit; line breaks respect the verse."
+      },
+      subtitle: { in: 23.8, out: 27.0, lines: ["\"O amor é um bicho antigo", "que morde e depois se esconde.\""] }
+    },
+    {
+      id: "dialogue-14", character: "LEO",
+      source: "Who's the poet?",
+      target: "Que poeta é esse?",
+      rationale: {
+        meaning: "Leo reacts to the quote. The localized version is the natural Brazilian question.",
+        voice: "Short, curious, slightly amused.",
+        constraints: "Fits a 1.4s cue."
+      },
+      subtitle: { in: 27.2, out: 28.6, lines: ["Que poeta é esse?"] }
+    },
+    {
+      id: "dialogue-15", character: "MAYA",
+      source: "Me. Last year.",
+      target: "Eu. Ano passado.",
+      rationale: {
+        meaning: "The punchline: the poem was hers. The localized version keeps the deadpan timing.",
+        voice: "Two short sentences. The period after 'Eu' is the beat.",
+        constraints: "Fits a 1.4s cue; the pause between the two sentences is part of the joke."
+      },
+      subtitle: { in: 28.8, out: 30.2, lines: ["Eu. Ano passado."] }
+    }
+  ];
+
+  /* ---------- STATE ---------- */
+  const state = {
+    modalId: null,
+    modalView: "literal",
+    playing: false,
+    playhead: 0,
+    raf: null
+  };
+
+  const PLAY_DURATION = dialogues[dialogues.length - 1].subtitle.out + 0.5;
+
+  /* ---------- HELPERS ---------- */
+  function fmt(t) {
+    const m = Math.floor(t / 60);
+    const s = Math.floor(t % 60);
+    const ms = Math.round((t - Math.floor(t)) * 1000);
+    return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0") + "." + String(ms).padStart(3, "0");
+  }
+  function dialogueById(id) { return dialogues.find(d => d.id === id) || null; }
+  function indexOfId(id) { return dialogues.findIndex(d => d.id === id); }
+
+  /* ---------- SCREENPLAY ---------- */
+  function renderScreenplay() {
+    const paper = $("screenplay-paper");
+    const blocks = dialogues.map((d, i) => {
+      const num = String(i + 1).padStart(2, "0");
+      return `
+        <div class="character">${d.character}</div>
+        <button class="dialogue-block" data-id="${d.id}" aria-label="Dialogue ${num} by ${d.character}: ${d.source}">
+          <span class="pair-num">#${num}</span>
+          ${d.source}
+        </button>
+      `;
+    }).join("");
+
+    paper.innerHTML = `
+      <div class="scene-heading">INT. APARTMENT — NIGHT</div>
+      <div class="action">A small living room. A lamp, two glasses, the city humming outside. MAYA is on the couch, half-reading. LEO comes in from the kitchen, a paper bag in his hand.</div>
+      ${blocks}
+      <div class="action">Maya doesn't look up. Leo sets the bag on the table. The city hums. Neither of them moves.</div>
+      <div class="transition">CUT TO BLACK.</div>
+    `;
+
+    paper.querySelectorAll(".dialogue-block").forEach(btn => {
+      btn.addEventListener("click", () => openModal(btn.dataset.id));
+      btn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openModal(btn.dataset.id);
+        }
+      });
+    });
+  }
+
+  /* ---------- MODAL ---------- */
+  function openModal(id) {
+    const d = dialogueById(id);
+    if (!d) return;
+    state.modalId = id;
+    state.modalView = "literal";
+    renderModal();
+    $("modal-backdrop").classList.add("open");
+    document.body.classList.add("modal-open");
+    $("modal-close").focus();
+  }
+
+  function closeModal() {
+    $("modal-backdrop").classList.remove("open");
+    document.body.classList.remove("modal-open");
+    state.modalId = null;
+  }
+
+  function renderModal() {
+    const d = dialogueById(state.modalId);
+    if (!d) return;
+    const idx = indexOfId(d.id);
+    const num = String(idx + 1).padStart(2, "0");
+
+    $("modal-title").innerHTML = `<span class="pair-tag">Pair #${num} · ${d.character}</span>${d.source}`;
+    $("modal-en").textContent = d.source;
+    $("modal-pt").textContent = d.target;
+
+    renderComparison();
+
+    $("modal-count").textContent = `${num} / ${String(dialogues.length).padStart(2, "0")}`;
+    $("modal-prev").disabled = idx === 0;
+    $("modal-next").disabled = idx === dialogues.length - 1;
+  }
+
+  function renderComparison() {
+    const d = dialogueById(state.modalId);
+    if (!d) return;
+    const view = state.modalView;
+    document.querySelectorAll("#modal-tabs .modal-tab").forEach(t => {
+      t.classList.toggle("active", t.dataset.view === view);
+      t.setAttribute("aria-selected", t.dataset.view === view);
+    });
+
+    const label = $("modal-comparison-label");
+    const text = $("modal-comparison-text");
+
+    if (view === "literal") {
+      label.textContent = "LITERAL REFERENCE — not the proposed subtitle";
+      text.className = "modal-comparison-text literal";
+      text.textContent = d.literalReference || "(no literal reference provided)";
+    } else if (view === "localized") {
+      label.textContent = "LOCALIZED PT-BR — proposed subtitle";
+      text.className = "modal-comparison-text";
+      text.textContent = d.target;
+    } else {
+      label.textContent = "RATIONALE";
+      text.className = "modal-comparison-text rationale";
+      const parts = [];
+      if (d.rationale.meaning) parts.push("<strong>Meaning:</strong> " + d.rationale.meaning);
+      if (d.rationale.voice) parts.push("<strong>Voice:</strong> " + d.rationale.voice);
+      if (d.rationale.culture) parts.push("<strong>Culture:</strong> " + d.rationale.culture);
+      if (d.rationale.constraints) parts.push("<strong>Constraints:</strong> " + d.rationale.constraints);
+      text.innerHTML = parts.join("<br>");
+    }
+  }
+
+  function modalPrev() {
+    const idx = indexOfId(state.modalId);
+    if (idx > 0) { state.modalId = dialogues[idx - 1].id; renderModal(); }
+  }
+  function modalNext() {
+    const idx = indexOfId(state.modalId);
+    if (idx < dialogues.length - 1) { state.modalId = dialogues[idx + 1].id; renderModal(); }
+  }
+
+  /* ---------- PLAYBACK ---------- */
+  function cueAt(t) { return dialogues.find(d => t >= d.subtitle.in && t <= d.subtitle.out) || null; }
+
+  function renderPlayback() {
+    const t = state.playhead;
+    const cue = cueAt(t);
+    const sub = $("playback-subtitle");
+    if (cue) {
+      sub.classList.remove("empty");
+      sub.textContent = cue.subtitle.lines.join("\n");
+    } else {
+      sub.classList.add("empty");
+      sub.textContent = "—";
+    }
+
+    const pct = Math.min(100, (t / PLAY_DURATION) * 100);
+    $("playback-bar").style.width = pct + "%";
+    $("playback-progress").setAttribute("aria-valuenow", Math.round(pct));
+    $("playback-time").textContent = t.toFixed(1) + " / " + PLAY_DURATION.toFixed(1) + "s";
+
+    document.querySelectorAll(".cue-btn").forEach(btn => {
+      btn.classList.toggle("active", cue && btn.dataset.id === cue.id);
+    });
+  }
+
+  function tick() {
+    if (!state.playing) return;
+    state.playhead += 1 / 60;
+    if (state.playhead >= PLAY_DURATION) {
+      state.playhead = PLAY_DURATION;
+      stopPlay();
+      renderPlayback();
+      return;
+    }
+    renderPlayback();
+    state.raf = requestAnimationFrame(tick);
+  }
+
+  function startPlay() {
+    if (state.playing) return;
+    if (state.playhead >= PLAY_DURATION) state.playhead = 0;
+    state.playing = true;
+    state.raf = requestAnimationFrame(tick);
+  }
+  function stopPlay() {
+    state.playing = false;
+    if (state.raf) { cancelAnimationFrame(state.raf); state.raf = null; }
+  }
+
+  function renderCueList() {
+    const list = $("cue-list");
+    list.innerHTML = "";
+    dialogues.forEach(d => {
+      const btn = document.createElement("button");
+      btn.className = "cue-btn";
+      btn.dataset.id = d.id;
+      btn.innerHTML = `<span class="cue-tc">${fmt(d.subtitle.in)}</span><span>${d.target}</span>`;
+      btn.addEventListener("click", () => {
+        state.playhead = d.subtitle.in;
+        renderPlayback();
+        openModal(d.id);
+      });
+      list.appendChild(btn);
+    });
+  }
+
+  /* ---------- INIT ---------- */
+  function init() {
+    renderScreenplay();
+    renderCueList();
+    renderPlayback();
+
+    $("modal-close").addEventListener("click", closeModal);
+    $("modal-backdrop").addEventListener("click", (e) => {
+      if (e.target === $("modal-backdrop")) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && $("modal-backdrop").classList.contains("open")) closeModal();
+      if (e.key === "ArrowLeft" && $("modal-backdrop").classList.contains("open")) modalPrev();
+      if (e.key === "ArrowRight" && $("modal-backdrop").classList.contains("open")) modalNext();
+    });
+    document.querySelectorAll("#modal-tabs .modal-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        state.modalView = tab.dataset.view;
+        renderComparison();
+      });
+    });
+    $("modal-prev").addEventListener("click", modalPrev);
+    $("modal-next").addEventListener("click", modalNext);
+
+    $("btn-play").addEventListener("click", () => {
+      if (state.playing) {
+        stopPlay();
+        $("btn-play").innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+        $("btn-play").setAttribute("aria-label", "Play");
+      } else {
+        startPlay();
+        $("btn-play").innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+        $("btn-play").setAttribute("aria-label", "Pause");
+      }
+    });
+    $("btn-restart").addEventListener("click", () => {
+      stopPlay();
+      state.playhead = 0;
+      renderPlayback();
+    });
+    $("playback-progress").addEventListener("click", (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      state.playhead = Math.max(0, Math.min(PLAY_DURATION, pct * PLAY_DURATION));
+      renderPlayback();
+    });
+
+    const header = document.querySelector(".site-header");
+    window.addEventListener("scroll", () => {
+      header.classList.toggle("scrolled", window.scrollY > 8);
+    }, { passive: true });
+  }
+
+  if (document.readyState !== "loading") init();
+  else document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>
