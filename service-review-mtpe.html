@@ -3,47 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Case 03 · Review & MTPE · Ariane Lesnyak</title>
-  <meta name="description" content="Interactive MTPE review: toggle between raw machine translation and post-edited text, inspect edits with severity and category, and log fixes.">
+  <title>Case 03 · Review, MTPE & QC · Ariane Lesnyak</title>
+  <meta name="description" content="Interactive LQA workflow: review raw MT, post-edit with classification, run technical QC, and generate a delivery report.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
-/* ============================================================
-   TOKENS (FAS /mtpe style)
-   ============================================================ */
 :root {
-  --red-500: #C21212;
-  --red-600: #9D0303;
-  --red-700: #7A0202;
-  --n-100: #F1EDEB;
-  --n-200: #E4DEDB;
-  --n-300: #CCC4C0;
-  --n-400: #A69C97;
-  --n-500: #7B716C;
-  --bg: #FFFFFF;
-  --surface: #FFFFFF;
-  --surface-2: #F6F6F7;
-  --ink: #18140F;
-  --ink-soft: #403A34;
-  --muted: #6E6862;
-  --line: #EAE7E4;
-  --line-strong: #D8D4D0;
-  --brand: #9D0303;
-  --brand-ink: #7A0202;
-  --brand-tint: #FBEBEB;
-  --signal: #C21212;
-  --on-dark: #D81919;
-  --dark: #0c0c0e;
-  --dark-2: #0b0b0d;
-  --on-dark-text: #FF6B66;
-  --ok: #1f7a4a;
-  --ok-bg: #f0fdf4;
-  --bad: #C21212;
-  --bad-bg: #fef2f2;
-  --warn: #b45309;
-  --warn-bg: #fffbeb;
+  --red-500: #C21212; --red-600: #9D0303; --red-700: #7A0202;
+  --n-100: #F1EDEB; --n-200: #E4DEDB; --n-300: #CCC4C0; --n-400: #A69C97; --n-500: #7B716C;
+  --bg: #FFFFFF; --surface: #FFFFFF; --surface-2: #F6F6F7;
+  --ink: #18140F; --ink-soft: #403A34; --muted: #6E6862;
+  --line: #EAE7E4; --line-strong: #D8D4D0;
+  --brand: #9D0303; --brand-ink: #7A0202; --brand-tint: #FBEBEB;
+  --signal: #C21212; --on-dark: #D81919;
+  --dark: #0c0c0e; --dark-2: #0b0b0d; --on-dark-text: #FF6B66;
+  --ok: #1f7a4a; --ok-bg: #f0fdf4;
+  --bad: #C21212; --bad-bg: #fef2f2;
+  --warn: #b45309; --warn-bg: #fffbeb;
 
   --display: "Montserrat", "Segoe UI", system-ui, sans-serif;
   --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
@@ -51,18 +29,12 @@
   --logo: "Bebas Neue", "Montserrat", sans-serif;
 
   --maxw: 1120px;
-  --ease: cubic-bezier(.4,0,.2,1);
-  --shadow-md: 0 6px 18px rgba(61,0,0,.08);
   --shadow-lg: 0 18px 44px rgba(61,0,0,.13);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: 84px; }
-body {
-  background: var(--bg); color: var(--ink-soft);
-  font-family: var(--body); font-size: 16px; line-height: 1.6;
-  -webkit-font-smoothing: antialiased; overflow-x: hidden;
-}
+body { background: var(--bg); color: var(--ink-soft); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; line-height: 1.05; }
 a { color: inherit; text-decoration: none; }
 img, svg { display: block; max-width: 100%; }
@@ -71,29 +43,12 @@ ul, ol { list-style: none; }
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 24px; }
 
-/* ============================================================
-   HEADER & HERO
-   ============================================================ */
-.site-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: transparent; border-bottom: 1px solid transparent;
-  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
-}
-.site-header.scrolled {
-  background: rgba(255,255,255,0.92); border-bottom-color: var(--line);
-  box-shadow: 0 2px 10px rgba(0,0,0,.06);
-}
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .site-header.scrolled { background: rgba(255,255,255,0.82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
-}
-.site-header .nav-row {
-  display: flex; align-items: center; justify-content: space-between;
-  height: 66px; gap: 24px; max-width: var(--maxw); margin-inline: auto; padding-inline: 24px;
-}
-.brand {
-  font-family: var(--logo); font-size: 1.6rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,0.45); transition: color .25s ease, text-shadow .25s ease;
-}
+/* HEADER & HERO */
+.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: transparent; border-bottom: 1px solid transparent; transition: background .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.site-header.scrolled { background: rgba(255,255,255,0.92); border-bottom-color: var(--line); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) { .site-header.scrolled { background: rgba(255,255,255,0.82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); } }
+.site-header .nav-row { display: flex; align-items: center; justify-content: space-between; height: 66px; gap: 24px; max-width: var(--maxw); margin-inline: auto; padding-inline: 24px; }
+.brand { font-family: var(--logo); font-size: 1.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,0.45); transition: color .25s ease, text-shadow .25s ease; }
 .site-header.scrolled .brand { color: #9d1402; text-shadow: none; }
 .nav-links { display: flex; align-items: center; gap: 24px; font-size: 0.85rem; font-weight: 500; margin-left: auto; margin-right: 32px; }
 .nav-links a { color: rgba(255,255,255,0.88); text-shadow: 0 1px 8px rgba(0,0,0,0.4); padding: 6px 4px; position: relative; transition: color .15s ease; }
@@ -121,19 +76,14 @@ ul, ol { list-style: none; }
 .btn-hero-ghost { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.24); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.9rem; transition: border-color .2s ease, background .2s ease; }
 .btn-hero-ghost:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
 
-/* ============================================================
-   SEÇÕES
-   ============================================================ */
 .section { padding-block: 4.5rem; }
 .section.alt { background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .section h2 { font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -0.02em; margin-bottom: 1.25rem; }
 .section p { color: var(--ink-soft); max-width: 68ch; margin-bottom: 1rem; line-height: 1.65; }
 
-/* ============================================================
-   WORKSPACE (CASE 3 SPECIFIC)
-   ============================================================ */
-.workspace { margin-top: 2.5rem; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-lg); }
-.ws-titlebar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #1b1b1f; color: rgba(255,255,255,.75); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.05em; }
+/* WORKSPACE */
+.workspace { margin-top: 2.5rem; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; min-height: 640px; position: relative; }
+.ws-titlebar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #1b1b1f; color: rgba(255,255,255,.75); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.05em; flex-shrink: 0; }
 .ws-dots { display: flex; gap: 6px; }
 .ws-dots span { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,.22); }
 .ws-dots span:nth-child(1) { background: #ff5f57; }
@@ -142,37 +92,73 @@ ul, ol { list-style: none; }
 .ws-filename { color: #fff; font-weight: 600; margin-left: 4px; }
 .ws-badge { margin-left: auto; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 9px; border: 1px dashed rgba(255,255,255,.35); border-radius: 2px; color: #f0c078; }
 
-/* Toolbar with Toggle */
-.ws-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: #faf9fa; }
-.ws-toggle-group { display: flex; background: #e4dedb; border-radius: 4px; padding: 3px; }
-.ws-toggle-btn { padding: 6px 16px; border-radius: 3px; font-family: var(--display); font-weight: 700; font-size: 0.82rem; color: var(--ink-soft); transition: all .2s ease; }
-.ws-toggle-btn.active { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-.ws-toggle-btn.active.raw { color: var(--bad); }
-.ws-toggle-btn.active.pe { color: var(--ok); }
-.ws-counter { margin-left: auto; font-family: var(--mono); font-size: 0.75rem; font-weight: 500; color: var(--muted); background: #fff; padding: 4px 10px; border: 1px solid var(--line-strong); border-radius: 999px; }
+.ws-flow { display: flex; border-bottom: 1px solid var(--line); background: #fff; flex-shrink: 0; }
+.ws-flow-step { flex: 1; padding: 12px 16px; text-align: center; font-family: var(--display); font-weight: 700; font-size: 0.78rem; color: var(--muted); border-bottom: 3px solid transparent; transition: all .2s ease; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
+.ws-flow-step .num { display: inline-flex; justify-content: center; align-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--n-200); color: var(--muted); font-size: 0.65rem; }
+.ws-flow-step:hover { color: var(--ink); background: #faf9fa; }
+.ws-flow-step.active { color: var(--brand); border-bottom-color: var(--brand); background: var(--brand-tint); }
+.ws-flow-step.active .num { background: var(--brand); color: #fff; }
+.ws-flow-step.done .num { background: var(--ok); color: #fff; }
+.ws-flow-step.done { color: var(--ok); }
 
-/* Main Content Area */
-.ws-content { padding: 24px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; }
-@media (max-width: 900px) { .ws-content { grid-template-columns: 1fr; } }
+.ws-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: #faf9fa; flex-shrink: 0; }
+.btn-tool { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 3px; font-size: 0.82rem; font-weight: 700; color: #fff; background: var(--brand); border: 1px solid var(--brand); transition: all .15s ease; }
+.btn-tool:hover { background: var(--brand-ink); }
+.btn-tool.secondary { background: #fff; color: var(--ink); border-color: var(--line-strong); }
+.btn-tool.secondary:hover { border-color: var(--brand); color: var(--brand); }
+.btn-tool:disabled { opacity: 0.5; cursor: not-allowed; }
+.ws-run-status { margin-left: auto; font-family: var(--mono); font-size: 0.75rem; font-weight: 500; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.spinner { width: 12px; height: 12px; border: 2px solid var(--line-strong); border-top-color: var(--brand); border-radius: 50%; animation: spin 1s linear infinite; display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* Left: Text Display */
-.ws-text-panel { display: flex; flex-direction: column; gap: 16px; }
-.ws-panel-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.ws-text-display { padding: 24px; background: #fdfbfb; border: 1px solid var(--line); border-radius: 6px; font-size: 1.15rem; line-height: 1.8; color: var(--ink); min-height: 160px; }
+.ws-main { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+.ws-panel { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.ws-panel-left { padding: 16px; background: #fff; border-right: 1px solid var(--line); }
+.ws-panel-right { background: #faf9fa; }
+.ws-panel-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.ws-text-display { padding: 16px; background: #fdfbfb; border: 1px solid var(--line); border-radius: 4px; font-size: 1.05rem; line-height: 1.8; color: var(--ink); flex: 1; overflow-y: auto; }
 .ws-text-display p { margin-bottom: 1em; }
 .ws-text-display p:last-child { margin-bottom: 0; }
 
-/* Highlights */
-.hl-err { background: rgba(194,18,18,0.1); border-bottom: 2px solid var(--bad); text-decoration: line-through; color: var(--muted); transition: all .3s ease; }
-.hl-fix { background: rgba(31,122,74,0.1); border-bottom: 2px solid var(--ok); color: var(--ok); font-weight: 500; transition: all .3s ease; }
-.hl-active { background: rgba(31,122,74,0.2); box-shadow: 0 0 0 2px var(--ok); border-radius: 2px; }
+/* Preview with subtitles at bottom */
+.ws-preview-box { position: relative; background: #0d0d10; border-radius: 4px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; flex: 1; }
+.ws-preview-label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,.5); background: rgba(0,0,0,.4); padding: 2px 6px; border-radius: 2px; align-self: flex-start; }
+.ws-preview-subtitle { background: rgba(0,0,0,.7); color: #fff; font-family: var(--body); font-size: 1rem; text-align: center; padding: 6px 12px; border-radius: 3px; align-self: center; max-width: 90%; margin-bottom: 4px; }
+.ws-preview-subtitle.error { color: #fca5a5; }
+.ws-preview-subtitle.ok { color: #86efac; }
 
-/* Right: Log Panel */
-.ws-log-panel { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
-.ws-log-header { padding: 12px 16px; background: #faf9fa; border-bottom: 1px solid var(--line); font-family: var(--display); font-weight: 700; font-size: 0.9rem; color: var(--ink); display: flex; justify-content: space-between; align-items: center; }
-.ws-log-list { display: flex; flex-direction: column; flex: 1; overflow-y: auto; max-height: 400px; }
+.hl-err { background: rgba(194,18,18,0.08); border-bottom: 2px solid var(--bad); text-decoration: line-through; color: var(--muted); transition: all .3s ease; }
+.hl-fix { background: rgba(31,122,74,0.08); border-bottom: 2px solid var(--ok); color: var(--ok); font-weight: 500; transition: all .3s ease; }
+.hl-active { background: rgba(31,122,74,0.15); box-shadow: 0 0 0 2px var(--ok); border-radius: 2px; }
+
+/* Source/Target fields side by side */
+.ws-st-fields { display: flex; gap: 10px; margin-bottom: 12px; }
+.ws-st-field { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.ws-st-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.ws-st-input { width: 100%; padding: 8px 10px; border: 1px solid var(--line-strong); border-radius: 3px; font-family: var(--body); font-size: 0.85rem; color: var(--ink); background: #fff; }
+.ws-st-input[readonly] { background: #fbf9f8; color: var(--ink-soft); }
+
+.ws-edit-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
+.ws-edit-input { width: 100%; padding: 8px 10px; border: 1px solid var(--line-strong); border-radius: 3px; font-family: var(--body); font-size: 0.85rem; color: var(--ink); line-height: 1.4; }
+.ws-edit-input:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+.ws-edit-input.textarea { resize: vertical; min-height: 56px; }
+.ws-edit-row { margin-bottom: 10px; }
+.ws-suggestions { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+.ws-suggestion { text-align: left; padding: 6px 10px; border: 1px dashed var(--line-strong); border-radius: 3px; font-size: 0.78rem; color: var(--ink-soft); background: #fff; transition: all .15s ease; display: flex; justify-content: space-between; align-items: center; }
+.ws-suggestion:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-tint); }
+.ws-suggestion.good { border-color: var(--ok); color: var(--ok); background: var(--ok-bg); }
+.ws-suggestion.selected { border-color: var(--brand); background: var(--brand-tint); }
+.ws-suggestion .opt-label { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); margin-right: 6px; flex-shrink: 0; }
+.ws-suggestion .opt-cps { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-left: 8px; }
+.ws-suggestion .opt-cps.bad { color: var(--bad); font-weight: 600; }
+.ws-suggestion .opt-cps.ok { color: var(--ok); font-weight: 600; }
+.ws-hint { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-top: 4px; }
+.ws-hint code { font-family: var(--mono); font-size: 0.75rem; background: var(--n-200); padding: 1px 4px; border-radius: 2px; color: var(--ink); }
+
+.ws-log-header { padding: 12px 16px; border-bottom: 1px solid var(--line); font-family: var(--display); font-weight: 700; font-size: 0.9rem; color: var(--ink); display: flex; justify-content: space-between; align-items: center; background: #fff; flex-shrink: 0; }
+.ws-log-list { flex: 1; overflow-y: auto; }
 .ws-log-item { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); transition: background .2s ease; cursor: pointer; position: relative; }
-.ws-log-item:hover { background: #faf9fa; }
+.ws-log-item:hover { background: #fff; }
 .ws-log-item.logged { background: var(--ok-bg); border-left: 3px solid var(--ok); }
 .ws-log-item.logged .ws-log-action-btn { display: none; }
 .ws-log-meta { display: flex; flex-direction: column; gap: 4px; }
@@ -185,22 +171,57 @@ ul, ol { list-style: none; }
 .ws-tag.sev-critical { background: var(--bad-bg); color: var(--bad); border: 1px solid rgba(194,18,18,0.3); }
 .ws-tag.sev-major { background: var(--warn-bg); color: var(--warn); border: 1px solid rgba(180,83,9,0.3); }
 .ws-tag.sev-minor { background: var(--brand-tint); color: var(--brand); border: 1px solid rgba(157,3,3,0.2); }
-
 .ws-log-action-btn { padding: 4px 10px; font-size: 0.7rem; font-weight: 600; color: var(--brand); border: 1px solid var(--brand); border-radius: 3px; background: #fff; transition: all .15s ease; height: fit-content; align-self: center; }
 .ws-log-action-btn:hover { background: var(--brand); color: #fff; }
-.ws-log-action-btn:disabled { opacity: 0.5; cursor: default; background: var(--n-200); border-color: var(--n-300); color: var(--muted); }
 
-/* Status Bar */
-.ws-statusbar { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 8px 16px; border-top: 1px solid var(--line); background: #faf9fa; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.04em; color: var(--muted); }
-.ws-progress { font-weight: 600; color: var(--ink); }
+.ws-qc-tabs { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: #fff; flex-shrink: 0; }
+.ws-qc-tab { padding: 6px 12px; border-radius: 3px; font-size: 0.75rem; font-weight: 600; border: 1px solid transparent; color: var(--muted); background: transparent; }
+.ws-qc-tab:hover { background: #faf9fa; }
+.ws-qc-tab.active { background: var(--bad-bg); color: var(--bad); border-color: var(--bad); }
+.ws-qc-tab.resolved { background: var(--ok-bg); color: var(--ok); border-color: var(--ok); }
+.ws-qc-editor { padding: 16px; flex: 1; overflow-y: auto; }
 
-/* ============================================================
-   RESPONSIVO
-   ============================================================ */
+.ws-timeline-wrap { padding: 12px 16px; border-top: 1px solid var(--line); background: #1b1b1f; flex-shrink: 0; display: none; }
+.ws-timeline-wrap.visible { display: block; }
+.ws-timeline-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-family: var(--mono); font-size: 0.65rem; color: #888; }
+.ws-timeline { position: relative; height: 88px; background: #0d0d10; border-radius: 4px; overflow: hidden; user-select: none; touch-action: none; }
+.ws-waveform { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ws-shot { position: absolute; top: 0; bottom: 0; border-right: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.2); }
+.ws-cue { position: absolute; top: 26px; height: 36px; background: rgba(157,3,3,0.8); border: 1px solid rgba(255,107,102,0.5); border-radius: 3px; cursor: grab; display: flex; align-items: center; padding: 0 8px; z-index: 4; transition: background .15s ease, left .2s ease, width .2s ease; }
+.ws-cue:active { cursor: grabbing; }
+.ws-cue.dragging { background: rgba(255,107,102,0.9); }
+.ws-cue.error { background: rgba(194,18,18,0.9); border-color: #fca5a5; animation: pulse 2s infinite; }
+.ws-cue.resolved { background: rgba(31,122,74,0.9); border-color: #86efac; }
+.ws-cue.solution-good { background: rgba(31,122,74,0.9); border-color: #86efac; animation: none; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(194,18,18,0.7); } 70% { box-shadow: 0 0 0 6px rgba(194,18,18,0); } 100% { box-shadow: 0 0 0 0 rgba(194,18,18,0); } }
+.ws-cue-text { font-family: var(--mono); font-size: 0.65rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--signal); box-shadow: 0 0 8px rgba(216,25,25,.6); pointer-events: none; transform: translateX(-1px); z-index: 5; }
+
+.ws-report-panel { position: absolute; inset: 0; background: #fff; z-index: 20; display: none; flex-direction: column; overflow-y: auto; padding: 24px; }
+.ws-report-panel.visible { display: flex; }
+.ws-report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.ws-report-title { font-family: var(--display); font-weight: 800; font-size: 1.2rem; color: var(--ink); }
+.ws-report-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.ws-stat-box { background: var(--surface-2); padding: 16px; border-radius: 4px; border: 1px solid var(--line); text-align: center; }
+.ws-stat-val { font-family: var(--display); font-size: 2rem; font-weight: 800; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+.ws-stat-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; }
+.ws-report-list { display: flex; flex-direction: column; gap: 8px; }
+.ws-report-item { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px 12px; background: var(--surface-2); border-radius: 3px; border-left: 3px solid var(--n-300); }
+.ws-report-item.resolved { border-left-color: var(--ok); color: var(--ok); }
+.ws-report-item.open { border-left-color: var(--bad); color: var(--bad); }
+
+.ws-statusbar { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 8px 16px; border-top: 1px solid var(--line); background: #faf9fa; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.04em; color: var(--muted); flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .ws-main { flex-direction: column; }
+  .ws-panel { border-right: 0; border-bottom: 1px solid var(--line); }
+  .ws-flow { flex-wrap: wrap; }
+  .ws-flow-step { flex: 1 1 50%; border-bottom: 1px solid var(--line); }
+  .ws-report-stats { grid-template-columns: 1fr; }
+}
 @media (max-width: 640px) {
   .hero-dark h1 { font-size: 2rem; }
-  .ws-log-item { grid-template-columns: 1fr; }
-  .ws-log-action-btn { justify-self: start; margin-top: 8px; }
+  .ws-flow-step { flex: 1 1 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -209,7 +230,6 @@ ul, ol { list-style: none; }
 </head>
 <body>
 
-<!-- ============ HEADER ============ -->
 <header class="site-header">
   <div class="nav-row">
     <a href="index.html" class="brand">ARIANE LESNYAK</a>
@@ -228,22 +248,21 @@ ul, ol { list-style: none; }
 </header>
 
 <main>
-  <!-- ============ HERO ============ -->
   <section class="hero-dark">
     <div class="wrap">
-      <div class="hero-eyebrow">Case study 03 · Review & MTPE</div>
-      <h1>Machine output is a draft. <span class="accent">Post-editing is the craft.</span></h1>
-      <p class="sub">A raw machine translation can miss the register, flatten an idiom, and ignore the timing. The review pass is where you identify the damage, classify its severity, and log the correction in a way a PM can read at a glance.</p>
+      <div class="hero-eyebrow">Case study 03 · Review, MTPE & QC</div>
+      <h1>From machine output <span class="accent">to delivery-ready.</span></h1>
+      <p class="sub">An LQA pass is not a single step. It's a sequence: review the raw MT, post-edit with classification, run the technical QC, and generate the report. Each stage catches what the previous one missed.</p>
       <div class="hero-meta">
         <span>EN → PT-BR</span>
         <span>MTPE</span>
         <span>Error classification</span>
-        <span>Edit log</span>
-        <span>Illustrative data</span>
+        <span>Technical QC</span>
+        <span>Delivery report</span>
       </div>
       <div class="hero-actions">
         <a href="#workspace" class="btn-hero">
-          Open the review
+          Open the workflow
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
         <a href="index.html#cases" class="btn-hero-ghost">All case studies</a>
@@ -251,101 +270,133 @@ ul, ol { list-style: none; }
     </div>
   </section>
 
-  <!-- ============ INTRO ============ -->
   <section class="section">
     <div class="wrap">
-      <h2>What a PM needs to see.</h2>
-      <p>When you deliver an MTPE pass, the client doesn't just want the corrected text — they want to know <em>what</em> you changed and <em>why</em>. A good edit log turns an opaque rewrite into a transparent list of decisions: category, severity, and the exact before/after.</p>
-      <p>Toggle between the raw MT and the post-edited version below. Hover over the log entries to see the corresponding text highlight. Click "Log" to simulate recording the fix in the system.</p>
+      <h2>Four steps, one file.</h2>
+      <p>The workflow below runs left to right. Start in <strong>Review</strong> to see the raw machine output. Move to <strong>Post-editing</strong> to classify and log each correction. Then <strong>QC</strong> to fix the technical issues that block delivery. Finally, <strong>Delivery</strong> to generate the report.</p>
     </div>
   </section>
 
-  <!-- ============ WORKSPACE INTERATIVO ============ -->
   <section class="section alt" id="workspace">
     <div class="wrap">
-      <h2>Try the review.</h2>
-      <p>Start in <strong>Raw MT</strong> to see the errors. Switch to <strong>Post-edited</strong> to see the corrected text. Use the log panel on the right to inspect each edit.</p>
+      <h2>Try the workflow.</h2>
+      <p>Click a step to switch. Each stage unlocks the next when its work is done.</p>
 
-      <div class="workspace">
-        <!-- TITLE BAR -->
+      <div class="workspace" id="ws-root">
         <div class="ws-titlebar">
           <div class="ws-dots"><span></span><span></span><span></span></div>
-          <span class="ws-filename">Doc_4A · Cue_008 · MTPE_Review.mxliff</span>
+          <span class="ws-filename">Doc_4A · MTPE_QC_Review.mxliff</span>
           <span class="ws-badge">Demo · interactive</span>
         </div>
 
-        <!-- TOOLBAR -->
-        <div class="ws-toolbar">
-          <div class="ws-toggle-group">
-            <button class="ws-toggle-btn active raw" id="btn-raw" aria-pressed="true">Raw MT</button>
-            <button class="ws-toggle-btn pe" id="btn-pe" aria-pressed="false">Post-edited</button>
-          </div>
-          <div class="ws-counter" id="ws-counter">0 of 4 edits logged</div>
+        <div class="ws-flow" id="ws-flow">
+          <div class="ws-flow-step active" data-step="review"><span class="num">1</span> Review</div>
+          <div class="ws-flow-step" data-step="post"><span class="num">2</span> Post-editing</div>
+          <div class="ws-flow-step" data-step="qc"><span class="num">3</span> QC</div>
+          <div class="ws-flow-step" data-step="delivery"><span class="num">4</span> Delivery</div>
         </div>
 
-        <!-- MAIN CONTENT -->
-        <div class="ws-content">
-          
-          <!-- TEXT DISPLAY -->
-          <div class="ws-text-panel">
-            <div class="ws-panel-title" id="ws-panel-title">Raw Machine Translation</div>
-            <div class="ws-text-display" id="ws-text-display">
-              <!-- Content injected via JS -->
-            </div>
-          </div>
-
-          <!-- EDIT LOG -->
-          <div class="ws-log-panel">
-            <div class="ws-log-header">
-              <span>Edit Log</span>
-              <span style="font-family: var(--mono); font-size: 0.65rem; color: var(--muted);" id="ws-log-count">4 entries</span>
-            </div>
-            <div class="ws-log-list" id="ws-log-list">
-              <!-- Log items injected via JS -->
-            </div>
+        <div class="ws-toolbar" id="ws-toolbar">
+          <button class="btn-tool secondary" id="btn-run-qc" style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Run QC
+          </button>
+          <button class="btn-tool" id="btn-next-step">
+            Next step
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+          <div class="ws-run-status">
+            <div class="spinner" id="spinner"></div>
+            <span id="run-status-text">Step 1 of 4: Review</span>
           </div>
         </div>
 
-        <!-- STATUS BAR -->
+        <div class="ws-main" id="ws-main">
+          <div class="ws-panel ws-panel-left" id="ws-panel-left"></div>
+          <div class="ws-panel ws-panel-right" id="ws-panel-right"></div>
+        </div>
+
+        <div class="ws-timeline-wrap" id="ws-timeline-wrap">
+          <div class="ws-timeline-header">
+            <span>Timeline</span>
+            <span>00:01:10.000 - 00:01:20.000</span>
+          </div>
+          <div class="ws-timeline" id="ws-timeline">
+            <svg class="ws-waveform" id="ws-waveform" preserveAspectRatio="none"></svg>
+            <div class="ws-shot" style="left: 0%; width: 30%;">Shot 2</div>
+            <div class="ws-shot" style="left: 30%; width: 40%;">Shot 3</div>
+            <div class="ws-shot" style="left: 70%; width: 30%;">Shot 4</div>
+            <div id="ws-cues-container"></div>
+            <div class="ws-playhead" style="left: 40%;"></div>
+          </div>
+        </div>
+
+        <div class="ws-report-panel" id="ws-report-panel">
+          <div class="ws-report-header">
+            <div class="ws-report-title">Final Delivery Report</div>
+            <button class="btn-tool secondary" id="btn-close-report" style="padding: 4px 10px; font-size: 0.75rem;">Close</button>
+          </div>
+          <div class="ws-report-stats">
+            <div class="ws-stat-box">
+              <div class="ws-stat-val" id="stat-issues">4</div>
+              <div class="ws-stat-label">Linguistic edits</div>
+            </div>
+            <div class="ws-stat-box">
+              <div class="ws-stat-val" id="stat-resolved" style="color: var(--ok);">0</div>
+              <div class="ws-stat-label">Resolved</div>
+            </div>
+            <div class="ws-stat-box">
+              <div class="ws-stat-val" id="stat-open" style="color: var(--bad);">0</div>
+              <div class="ws-stat-label">Open</div>
+            </div>
+          </div>
+          <div class="ws-report-list" id="report-list"></div>
+        </div>
+
         <div class="ws-statusbar">
-          <span id="ws-status-left">Reviewing cue 8 of 42</span>
-          <span id="ws-status-right">Progress: <span class="ws-progress" id="ws-progress-val">0%</span></span>
+          <span id="ws-status-left">Step 1 · Review</span>
+          <span id="ws-status-right">EN → PT-BR · illustrative</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ WORKFLOW ============ -->
   <section class="section">
     <div class="wrap">
-      <h2>The MTPE workflow.</h2>
+      <h2>The LQA workflow.</h2>
       <div class="steps" style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0;">
         <div class="step" style="display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line);">
           <div class="step-num" style="flex-shrink: 0; width: 32px; height: 32px; border: 2px solid var(--brand); border-radius: 2px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand);">01</div>
           <div class="step-body">
-            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Read for meaning, then for register</h3>
-            <p style="font-size: 0.94rem; margin: 0;">Machine translation often misses the tone. "Fosse embora" is grammatically correct, but "fosse embora" in a casual scene feels wrong. The edit is a register fix, not a grammar fix.</p>
+            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Review the raw output</h3>
+            <p style="font-size: 0.94rem; margin: 0;">Not every MT error is equal. A terminology error changes the story; a register error changes the character. Read before you edit.</p>
           </div>
         </div>
         <div class="step" style="display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line);">
           <div class="step-num" style="flex-shrink: 0; width: 32px; height: 32px; border: 2px solid var(--brand); border-radius: 2px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand);">02</div>
           <div class="step-body">
-            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Classify the error</h3>
-            <p style="font-size: 0.94rem; margin: 0;">A severity tag changes what the PM does next. Critical errors block delivery. Major errors need review. Minor errors are polish. The classification is the review.</p>
+            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Post-edit with classification</h3>
+            <p style="font-size: 0.94rem; margin: 0;">Each edit gets a category and a severity. The log is the audit trail the PM reads, not the diff.</p>
           </div>
         </div>
         <div class="step" style="display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line);">
           <div class="step-num" style="flex-shrink: 0; width: 32px; height: 32px; border: 2px solid var(--brand); border-radius: 2px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand);">03</div>
           <div class="step-body">
-            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Log the fix, not just the change</h3>
-            <p style="font-size: 0.94rem; margin: 0;">The log should say "from X to Y · Register · Major" so the PM doesn't have to diff the text. The button is the audit trail.</p>
+            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Run technical QC</h3>
+            <p style="font-size: 0.94rem; margin: 0;">Timing, CPS, spelling. The linguistic pass can be clean and the file still fail delivery.</p>
+          </div>
+        </div>
+        <div class="step" style="display: flex; gap: 20px; padding-block: 20px; border-top: 1px solid var(--line);">
+          <div class="step-num" style="flex-shrink: 0; width: 32px; height: 32px; border: 2px solid var(--brand); border-radius: 2px; display: grid; place-items: center; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--brand);">04</div>
+          <div class="step-body">
+            <h3 style="font-size: 1.05rem; margin-bottom: 6px;">Generate the delivery report</h3>
+            <p style="font-size: 0.94rem; margin: 0;">"All resolved" is the proof the client needs. The report closes the loop.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ NAV ============ -->
   <nav class="case-nav" style="display: flex; justify-content: space-between; gap: 16px; padding: 2.5rem 24px; max-width: 1100px; margin-inline: auto; border-top: 1px solid var(--line); flex-wrap: wrap;">
     <a href="index.html#cases" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; color: var(--brand);">← All case studies</a>
     <a href="index.html#cases" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; color: var(--brand);">Next case →</a>
@@ -355,266 +406,605 @@ ul, ol { list-style: none; }
 <script>
 (function () {
   "use strict";
-
   const $ = (id) => document.getElementById(id);
 
-  // -- Data State --
-  const editsData = [
-    {
-      id: 1,
-      from: "a peça",
-      to: "o cômodo",
-      category: "Terminology",
-      severity: "Critical",
-      reason: "Literal translation of 'the room'. 'A peça' is a literary term for a play, not a physical room.",
-      logged: false
-    },
-    {
-      id: 2,
-      from: "Fosse embora",
-      to: "Fosse embora",
-      category: "Grammar",
-      severity: "Minor",
-      reason: "The raw MT output was 'Fosse embora' (incorrect subjunctive). The correct is 'Fosse embora'.",
-      logged: false
-    },
-    {
-      id: 3,
-      from: "no meio",
-      to: "na metade",
-      category: "Idiom",
-      severity: "Major",
-      reason: "Literal 'in the middle'. The idiom 'na metade' is used for time, while 'no meio' is used for physical space.",
-      logged: false
-    },
-    {
-      id: 4,
-      from: "ela falou",
-      to: "ela disse",
-      category: "Register",
-      severity: "Minor",
-      reason: "Dialogue tag. 'Falou' is okay, but 'disse' is the standard convention for subtitles.",
-      logged: false
+  const state = {
+    currentStep: "review",
+    edits: [
+      { id: 1, from: "A peça", to: "O cômodo", category: "Terminology", severity: "Critical", logged: false },
+      { id: 2, from: "fosse embora", to: "foi embora", category: "Grammar", severity: "Minor", logged: false },
+      { id: 3, from: "no meio", to: "na metade", category: "Idiom", severity: "Major", logged: false },
+      { id: 4, from: "falou", to: "disse", category: "Register", severity: "Minor", logged: false }
+    ],
+    qc: {
+      activeTab: "timing",
+      hasRun: false,
+      timingResolved: false,
+      cpsResolved: false,
+      spellingResolved: false,
+      cpsOptions: [
+        { label: "Achei que fose sair.", cps: 16, good: true },
+        { label: "Pensei que você sairia.", cps: 19, good: false }
+      ],
+      cpsSelected: null,
+      cpsSplit: false,
+      cpsText: "Achei que fose sair.",
+      // spelling
+      spellingText: "Achei que fose sair.",
+      spellingChecked: false,
+      spellingError: false
     }
-  ];
-
-  // The text segments. We use HTML to insert the target text.
-  // For the raw MT, we apply the "from" strings.
-  // For the post-edited, we apply the "to" strings.
-  // We use a simple string replacement for the demo.
-  // Note: Edit 2 is tricky because from and to are the same.
-  // Let's adjust the data to make the visual difference clear.
-  // Let's rewrite the data to be more visually distinct.
-  
-  const displayData = [
-    {
-      id: 1,
-      raw: "A peça estava <span class='hl-err'>a peça</span> estava",
-      pe: "O <span class='hl-fix'>cômodo</span> estava",
-      category: "Terminology",
-      severity: "Critical",
-      reason: "Literal translation of 'the room'. 'A peça' is a term for a play, not a physical room."
-    },
-    {
-      id: 2,
-      raw: "ela <span class='hl-err'>fosse embora</span>",
-      pe: "ela <span class='hl-fix'>fosse embora</span>",
-      category: "Grammar",
-      severity: "Minor",
-      reason: "Incorrect subjunctive conjugation for third person."
-    },
-    {
-      id: 3,
-      raw: "no <span class='hl-err'>meio</span> da noite",
-      pe: "na <span class='hl-fix'>metade</span> da noite",
-      category: "Idiom",
-      severity: "Major",
-      reason: "Literal 'in the middle'. The idiom 'na metade' is used for time."
-    },
-    {
-      id: 4,
-      raw: "e ela <span class='hl-err'>falou</span>",
-      pe: "e ela <span class='hl-fix'>disse</span>",
-      category: "Register",
-      severity: "Minor",
-      reason: "Dialogue tag. 'Disse' is the standard convention for subtitles."
-    }
-  ];
-
-  // -- DOM Elements --
-  const el = {
-    btnRaw: $("btn-raw"),
-    btnPe: $("btn-pe"),
-    counter: $("ws-counter"),
-    textDisplay: $("ws-text-display"),
-    panelTitle: $("ws-panel-title"),
-    logList: $("ws-log-list"),
-    logCount: $("ws-log-count"),
-    progressVal: $("ws-progress-val")
   };
 
-  // -- State --
-  let isRaw = true;
+  const el = {
+    flowSteps: document.querySelectorAll(".ws-flow-step"),
+    btnRunQc: $("btn-run-qc"),
+    btnNext: $("btn-next-step"),
+    spinner: $("spinner"),
+    runStatus: $("run-status-text"),
+    panelLeft: $("ws-panel-left"),
+    panelRight: $("ws-panel-right"),
+    timelineWrap: $("ws-timeline-wrap"),
+    timeline: $("ws-timeline"),
+    waveform: $("ws-waveform"),
+    cuesContainer: $("ws-cues-container"),
+    reportPanel: $("ws-report-panel"),
+    reportList: $("report-list"),
+    statIssues: $("stat-issues"),
+    statResolved: $("stat-resolved"),
+    statOpen: $("stat-open"),
+    closeReport: $("btn-close-report"),
+    statusLeft: $("ws-status-left")
+  };
 
-  // -- Render Functions --
-  function renderText() {
-    let html = "";
-    
-    // We construct the paragraph with spans
-    // Since we have distinct phrases, we can just build the full sentence
-    // for the demo.
-    
-    if (isRaw) {
-      el.textDisplay.innerHTML = `
-        <p><span class='hl-err'>A peça</span> estava vazia.</p>
-        <p>Ele <span class='hl-err'>fosse embora</span> antes de eu chegar.</p>
-        <p>Acordei <span class='hl-err'>no meio</span> da noite.</p>
-        <p>E ela <span class='hl-err'>falou</span> que não voltaria.</p>
+  function getLoggedCount() { return state.edits.filter(e => e.logged).length; }
+  function getQcResolvedCount() {
+    let c = 0;
+    if (state.qc.timingResolved) c++;
+    if (state.qc.cpsResolved) c++;
+    if (state.qc.spellingResolved) c++;
+    return c;
+  }
+  function canAdvance() {
+    if (state.currentStep === "review") return true;
+    if (state.currentStep === "post") return getLoggedCount() === state.edits.length;
+    if (state.currentStep === "qc") return getQcResolvedCount() === 3;
+    return false;
+  }
+
+  function updateFlowSteps() {
+    el.flowSteps.forEach(step => {
+      step.classList.remove("active", "done");
+      const key = step.dataset.step;
+      if (key === state.currentStep) step.classList.add("active");
+      else if (key === "review" && state.currentStep !== "review") step.classList.add("done");
+      else if (key === "post" && (state.currentStep === "qc" || state.currentStep === "delivery")) step.classList.add("done");
+      else if (key === "qc" && state.currentStep === "delivery") step.classList.add("done");
+    });
+  }
+
+  function updateToolbar() {
+    el.btnRunQc.style.display = state.currentStep === "qc" ? "inline-flex" : "none";
+    el.btnNext.style.display = state.currentStep === "delivery" ? "none" : "inline-flex";
+    el.btnNext.disabled = !canAdvance();
+    const labels = { review: "Step 1 of 4: Review", post: "Step 2 of 4: Post-editing", qc: "Step 3 of 4: QC", delivery: "Step 4 of 4: Delivery" };
+    el.runStatus.textContent = labels[state.currentStep];
+    el.statusLeft.textContent = labels[state.currentStep];
+  }
+
+  // -- Left panel --
+  function renderLeftPanel() {
+    el.panelLeft.innerHTML = "";
+    const s = state.currentStep;
+
+    if (s === "review") {
+      el.panelLeft.innerHTML = `
+        <div class="ws-panel-title">Raw Machine Translation</div>
+        <div class="ws-text-display">
+          <p><span class='hl-err'>A peça</span> estava vazia.</p><br>
+          <p>Ele <span class='hl-err'>fosse embora</span> antes de eu chegar.</p><br>
+          <p>Acordei <span class='hl-err'>no meio</span> da noite.</p><br>
+          <p>E ela <span class='hl-err'>falou</span> que não voltaria.</p>
+        </div>
       `;
-      el.panelTitle.textContent = "Raw Machine Translation";
-    } else {
-      el.textDisplay.innerHTML = `
-        <p>O <span class='hl-fix'>cômodo</span> estava vazio.</p>
-        <p>Ele <span class='hl-fix'>foi embora</span> antes de eu chegar.</p>
-        <p>Acordei <span class='hl-fix'>na metade</span> da noite.</p>
-        <p>E ela <span class='hl-fix'>disse</span> que não voltaria.</p>
+    } else if (s === "post") {
+      el.panelLeft.innerHTML = `
+        <div class="ws-panel-title">Post-edited Text</div>
+        <div class="ws-text-display">
+          <p>O <span class='hl-fix'>cômodo</span> estava vazio.</p><br>
+          <p>Ele <span class='hl-fix'>foi embora</span> antes de eu chegar.</p><br>
+          <p>Acordei <span class='hl-fix'>na metade</span> da noite.</p><br>
+          <p>E ela <span class='hl-fix'>disse</span> que não voltaria.</p>
+        </div>
       `;
-      el.panelTitle.textContent = "Post-edited";
+    } else if (s === "qc") {
+      if (!state.qc.hasRun) {
+        el.panelLeft.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">Click "Run QC" to start.</div>`;
+        return;
+      }
+      // Preview + subtitle at bottom
+      let previewText = "";
+      let previewClass = "";
+      if (state.qc.activeTab === "timing") {
+        previewText = "I thought you were leaving.";
+      } else if (state.qc.activeTab === "cps") {
+        previewText = state.qc.cpsSelected || state.qc.cpsText;
+        previewClass = state.qc.cpsResolved ? "ok" : "error";
+      } else if (state.qc.activeTab === "spelling") {
+        previewText = state.qc.spellingText;
+        previewClass = state.qc.spellingResolved ? "ok" : "error";
+      }
+      el.panelLeft.innerHTML = `
+        <div class="ws-panel-title">Mock Preview</div>
+        <div class="ws-preview-box">
+          <div class="ws-preview-label">Preview</div>
+          <div class="ws-preview-subtitle ${previewClass}">${previewText}</div>
+        </div>
+      `;
+    } else if (s === "delivery") {
+      el.panelLeft.innerHTML = `
+        <div class="ws-panel-title">Delivery</div>
+        <div class="ws-text-display" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px;">
+          <div style="font-family: var(--display); font-weight: 800; font-size: 1.4rem; color: var(--ink);">All steps complete.</div>
+          <div style="font-size: 0.9rem; color: var(--muted);">Generate the report on the right.</div>
+        </div>
+      `;
     }
   }
 
-  function renderLog() {
-    el.logList.innerHTML = "";
-    let loggedCount = 0;
+  // -- Right panel --
+  function renderRightPanel() {
+    el.panelRight.innerHTML = "";
+    const s = state.currentStep;
 
-    displayData.forEach((edit, index) => {
-      const item = document.createElement("div");
-      item.className = "ws-log-item";
-      if (edit.logged) {
-        item.classList.add("logged");
-        loggedCount++;
+    if (s === "review" || s === "post") {
+      el.panelRight.innerHTML = `
+        <div class="ws-log-header">
+          <span>Edit Log</span>
+          <span style="font-family: var(--mono); font-size: 0.65rem; color: var(--muted);">${state.edits.length} entries</span>
+        </div>
+        <div class="ws-log-list" id="ws-log-list"></div>
+      `;
+      const list = $("ws-log-list");
+      state.edits.forEach((edit, index) => {
+        const item = document.createElement("div");
+        item.className = "ws-log-item";
+        if (edit.logged) item.classList.add("logged");
+        item.innerHTML = `
+          <div class="ws-log-meta">
+            <div class="ws-log-edit">
+              <span class="ws-log-from">${edit.from}</span> → <span class="ws-log-to">${edit.to}</span>
+            </div>
+            <div class="ws-log-tags">
+              <span class="ws-tag cat">${edit.category}</span>
+              <span class="ws-tag sev-${edit.severity.toLowerCase()}">${edit.severity}</span>
+            </div>
+          </div>
+        `;
+        if (s === "post" && !edit.logged) {
+          const btn = document.createElement("button");
+          btn.className = "ws-log-action-btn";
+          btn.textContent = "Log fix";
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            edit.logged = true;
+            renderRightPanel();
+            updateToolbar();
+            updateFlowSteps();
+          });
+          item.appendChild(btn);
+        }
+        item.addEventListener("mouseenter", () => {
+          const spans = el.panelLeft.querySelectorAll("p");
+          if (spans[index]) {
+            const span = spans[index].querySelector("span");
+            if (span) span.classList.add("hl-active");
+          }
+        });
+        item.addEventListener("mouseleave", () => {
+          const spans = el.panelLeft.querySelectorAll("p");
+          if (spans[index]) {
+            const span = spans[index].querySelector("span");
+            if (span) span.classList.remove("hl-active");
+          }
+        });
+        list.appendChild(item);
+      });
+
+    } else if (s === "qc") {
+      if (!state.qc.hasRun) {
+        el.panelRight.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">Click "Run QC" to see the issues.</div>`;
+        return;
       }
-      
-      item.dataset.id = edit.id;
-      
-      // Meta
-      const meta = document.createElement("div");
-      meta.className = "ws-log-meta";
-      
-      const editLine = document.createElement("div");
-      editLine.className = "ws-log-edit";
-      
-      // We need to show the actual "from" and "to" strings.
-      // But we simplified the data. Let's extract the raw words.
-      // For the demo, we'll hardcode the "from" and "to" display strings.
-      const fromStr = edit.raw.replace(/<[^>]+>/g, ''); // strip HTML
-      const toStr = edit.pe.replace(/<[^>]+>/g, ''); // strip HTML
-      
-      // Actually, let's just use the words we know.
-      // If we want it accurate, we need the from/to words.
-      // Let's just use the edit data.
-      
-      const fromWords = ["A peça", "fosse embora", "no meio", "falou"];
-      const toWords = ["O cômodo", "foi embora", "na metade", "disse"];
-      
-      editLine.innerHTML = `<span class="ws-log-from">${fromWords[index]}</span> → <span class="ws-log-to">${toWords[index]}</span>`;
-      
-      const tags = document.createElement("div");
-      tags.className = "ws-log-tags";
-      
-      const catTag = document.createElement("span");
-      catTag.className = "ws-tag cat";
-      catTag.textContent = edit.category;
-      
-      const sevTag = document.createElement("span");
-      sevTag.className = "ws-tag sev-" + edit.severity.toLowerCase();
-      sevTag.textContent = edit.severity;
-      
-      tags.appendChild(catTag);
-      tags.appendChild(sevTag);
-      
-      meta.appendChild(editLine);
-      meta.appendChild(tags);
-      
-      // Action button
-      const actionBtn = document.createElement("button");
-      actionBtn.className = "ws-log-action-btn";
-      actionBtn.textContent = edit.logged ? "Logged" : "Log fix";
-      actionBtn.disabled = edit.logged;
-      
-      actionBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        edit.logged = true;
-        renderLog();
-        updateProgress();
+
+      el.panelRight.innerHTML = `
+        <div class="ws-qc-tabs">
+          <button class="ws-qc-tab ${state.qc.activeTab === "timing" ? "active" : ""} ${state.qc.timingResolved ? "resolved" : ""}" data-qc="timing">Timing ${state.qc.timingResolved ? "✓" : ""}</button>
+          <button class="ws-qc-tab ${state.qc.activeTab === "cps" ? "active" : ""} ${state.qc.cpsResolved ? "resolved" : ""}" data-qc="cps">CPS ${state.qc.cpsResolved ? "✓" : ""}</button>
+          <button class="ws-qc-tab ${state.qc.activeTab === "spelling" ? "active" : ""} ${state.qc.spellingResolved ? "resolved" : ""}" data-qc="spelling">Spelling ${state.qc.spellingResolved ? "✓" : ""}</button>
+        </div>
+        <div class="ws-qc-editor" id="qc-editor"></div>
+      `;
+
+      el.panelRight.querySelectorAll(".ws-qc-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.qc.activeTab = btn.dataset.qc;
+          renderRightPanel();
+          renderLeftPanel();
+          renderTimeline();
+          el.timelineWrap.classList.toggle("visible", state.qc.activeTab === "timing" || state.qc.activeTab === "cps");
+        });
       });
-      
-      item.appendChild(meta);
-      item.appendChild(actionBtn);
-      
-      // Hover effect
-      item.addEventListener("mouseenter", () => {
-        // Highlight corresponding text
-        // We can't easily select by id here because we injected HTML without ids.
-        // So we just use the index to find the corresponding span.
-        const displaySpans = el.textDisplay.querySelectorAll("p");
-        if (displaySpans[index]) {
-          const span = displaySpans[index].querySelector("span");
-          if (span) {
-            span.classList.add("hl-active");
+
+      const editor = $("qc-editor");
+      if (state.qc.activeTab === "timing") {
+        el.timelineWrap.classList.add("visible");
+        editor.innerHTML = `
+          <div class="ws-issue-header">
+            <span class="ws-issue-title">Cue crosses shot change</span>
+            <span class="ws-issue-tc">00:01:12.400</span>
+          </div>
+          <div class="ws-issue-desc">Drag the cue to the cut.</div>
+          <div class="ws-st-fields">
+            <div class="ws-st-field">
+              <label class="ws-st-label">Source text</label>
+              <input class="ws-st-input" value="I thought you were leaving." readonly>
+            </div>
+            <div class="ws-st-field">
+              <label class="ws-st-label">Target text</label>
+              <input class="ws-st-input" value="Achei que fose sair." readonly>
+            </div>
+          </div>
+          ${state.qc.timingResolved ? `<div class="ws-hint" style="color:var(--ok);font-weight:600;margin-top:8px;">✓ Resolved.</div>` : ""}
+        `;
+      } else if (state.qc.activeTab === "cps") {
+        el.timelineWrap.classList.add("visible");
+        const optsHtml = state.qc.cpsOptions.map((opt, i) => {
+          const cls = opt.good ? "good" : "";
+          const sel = state.qc.cpsSelected === opt.label ? "selected" : "";
+          return `<button class="ws-suggestion ${cls} ${sel}" data-idx="${i}">
+            <span class="opt-label">OPTION ${i+1}</span>
+            <span style="flex:1;text-align:left;">${opt.label}</span>
+            <span class="opt-cps ${opt.good ? 'ok' : 'bad'}">${opt.cps} CPS</span>
+          </button>`;
+        }).join("");
+        editor.innerHTML = `
+          <div class="ws-issue-header">
+            <span class="ws-issue-title">CPS exceeds limit</span>
+            <span class="ws-issue-tc">00:01:12.400</span>
+          </div>
+          <div class="ws-issue-desc">Pick a shorter option or split the cue.</div>
+          <div class="ws-st-fields">
+            <div class="ws-st-field">
+              <label class="ws-st-label">Source text</label>
+              <input class="ws-st-input" value="I thought you were leaving." readonly>
+            </div>
+            <div class="ws-st-field">
+              <label class="ws-st-label">Target text</label>
+              <input class="ws-st-input" id="st-target-cps" value="${state.qc.cpsSelected || state.qc.cpsText}">
+            </div>
+          </div>
+          <div class="ws-suggestions">${optsHtml}</div>
+          <div class="ws-issue-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn-tool" id="btn-choose-cps" ${!state.qc.cpsSelected ? 'disabled' : ''} style="font-size:0.75rem;padding:6px 12px;">Choose this option</button>
+            <button class="btn-tool secondary" id="btn-split-cps" ${state.qc.cpsSplit ? 'disabled' : ''} style="font-size:0.75rem;padding:6px 12px;">Split the cue</button>
+          </div>
+          ${state.qc.cpsResolved ? `<div class="ws-hint" style="color:var(--ok);font-weight:600;margin-top:8px;">✓ Resolved${state.qc.cpsSplit ? ' (split into 2 cues)' : ''}.</div>` : ""}
+        `;
+
+        editor.querySelectorAll(".ws-suggestion").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            const opt = state.qc.cpsOptions[idx];
+            state.qc.cpsSelected = opt.label;
+            state.qc.cpsText = opt.label;
+            // If a split was applied, undo it when picking an option
+            state.qc.cpsSplit = false;
+            state.qc.cpsResolved = false;
+            renderRightPanel();
+            renderLeftPanel();
+            renderTimeline();
+          });
+        });
+
+        const ta = editor.querySelector("#st-target-cps");
+        ta.addEventListener("input", () => {
+          state.qc.cpsText = ta.value;
+          state.qc.cpsSelected = null;
+          renderLeftPanel();
+        });
+
+        const btnChoose = editor.querySelector("#btn-choose-cps");
+        if (btnChoose) {
+          btnChoose.addEventListener("click", () => {
+            if (state.qc.cpsSelected) {
+              const opt = state.qc.cpsOptions.find(o => o.label === state.qc.cpsSelected);
+              if (opt && opt.good) {
+                state.qc.cpsResolved = true;
+                state.qc.cpsSplit = false;
+                renderRightPanel();
+                renderLeftPanel();
+                renderTimeline();
+                updateToolbar();
+                updateFlowSteps();
+              }
+            }
+          });
+        }
+
+        const btnSplit = editor.querySelector("#btn-split-cps");
+        if (btnSplit) {
+          btnSplit.addEventListener("click", () => {
+            state.qc.cpsSplit = true;
+            state.qc.cpsResolved = true;
+            state.qc.cpsSelected = null;
+            renderRightPanel();
+            renderLeftPanel();
+            renderTimeline();
+            updateToolbar();
+            updateFlowSteps();
+          });
+        }
+
+      } else if (state.qc.activeTab === "spelling") {
+        el.timelineWrap.classList.add("visible");
+        editor.innerHTML = `
+          <div class="ws-issue-header">
+            <span class="ws-issue-title">Spelling error</span>
+            <span class="ws-issue-tc">00:01:12.400</span>
+          </div>
+          <div class="ws-issue-desc">Fix the typo in the target field.</div>
+          <div class="ws-st-fields">
+            <div class="ws-st-field">
+              <label class="ws-st-label">Source text</label>
+              <input class="ws-st-input" value="I thought you were leaving." readonly>
+            </div>
+            <div class="ws-st-field">
+              <label class="ws-st-label">Target text</label>
+              <input class="ws-st-input" id="st-target-spelling" value="${state.qc.spellingText}">
+            </div>
+          </div>
+          <div class="ws-issue-actions">
+            <button class="btn-tool" id="btn-check-spelling" style="font-size:0.75rem;padding:6px 12px;">Check spelling</button>
+          </div>
+          <div id="spelling-result" style="margin-top:10px;"></div>
+        `;
+
+        const input = editor.querySelector("#st-target-spelling");
+        input.addEventListener("input", () => {
+          state.qc.spellingText = input.value;
+          renderLeftPanel();
+        });
+
+        const resultBox = editor.querySelector("#spelling-result");
+        if (state.qc.spellingChecked) {
+          if (state.qc.spellingError) {
+            resultBox.innerHTML = `<div class="ws-hint" style="color:var(--bad);font-weight:600;">⚠ The checker expects "fosse" to be spelled correctly.</div>`;
+          } else {
+            resultBox.innerHTML = `<div class="ws-hint" style="color:var(--ok);font-weight:600;">✓ No spelling errors found!</div>`;
           }
         }
-      });
-      
-      item.addEventListener("mouseleave", () => {
-        const displaySpans = el.textDisplay.querySelectorAll("p");
-        if (displaySpans[index]) {
-          const span = displaySpans[index].querySelector("span");
-          if (span) {
-            span.classList.remove("hl-active");
+
+        const btn = editor.querySelector("#btn-check-spelling");
+        btn.addEventListener("click", () => {
+          state.qc.spellingChecked = true;
+          const val = state.qc.spellingText.trim().toLowerCase();
+          if (val === "achei que fosse sair.") {
+            state.qc.spellingError = false;
+            state.qc.spellingResolved = true;
+          } else {
+            state.qc.spellingError = true;
+            state.qc.spellingResolved = false;
           }
-        }
+          renderRightPanel();
+          renderLeftPanel();
+          renderTimeline();
+          updateToolbar();
+          updateFlowSteps();
+        });
+      }
+
+    } else if (s === "delivery") {
+      el.panelRight.innerHTML = `
+        <div class="ws-log-header">
+          <span>Delivery</span>
+        </div>
+        <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; height: 100%; text-align: center;">
+          <div style="font-size: 0.9rem; color: var(--muted);">Click "Generate" to produce the final report.</div>
+          <button class="btn-tool" id="btn-gen-report" style="font-size:0.8rem;">Generate report</button>
+        </div>
+      `;
+      const btnGen = $("btn-gen-report");
+      btnGen.addEventListener("click", () => {
+        renderReport();
+        el.reportPanel.classList.add("visible");
       });
-      
-      el.logList.appendChild(item);
-    });
-    
-    el.logCount.textContent = displayData.length + " entries";
+    }
   }
 
-  function updateProgress() {
-    const logged = displayData.filter(e => e.logged).length;
-    const total = displayData.length;
-    const pct = Math.round((logged / total) * 100);
-    
-    el.counter.textContent = logged + " of " + total + " edits logged";
-    el.progressVal.textContent = pct + "%";
+  // -- Timeline --
+  function renderTimeline() {
+    if (!state.qc.hasRun) return;
+    const tab = state.qc.activeTab;
+
+    if (tab === "timing") {
+      el.cuesContainer.innerHTML = `
+        <div class="ws-cue ${state.qc.timingResolved ? 'resolved' : 'error'}" style="left: ${state.qc.timingResolved ? '30%' : '25%'}; width: 30%;">
+          <span class="ws-cue-text">I thought you were leaving.</span>
+        </div>
+      `;
+      bindDrag();
+    } else if (tab === "cps") {
+      if (state.qc.cpsSplit) {
+        el.cuesContainer.innerHTML = `
+          <div class="ws-cue resolved" style="left: 25%; width: 14%;">
+            <span class="ws-cue-text">Achei que</span>
+          </div>
+          <div class="ws-cue resolved" style="left: 41%; width: 14%;">
+            <span class="ws-cue-text">fose sair.</span>
+          </div>
+        `;
+      } else {
+        el.cuesContainer.innerHTML = `
+          <div class="ws-cue ${state.qc.cpsResolved ? 'resolved' : 'error'}" style="left: 25%; width: 30%;">
+            <span class="ws-cue-text">${state.qc.cpsSelected || state.qc.cpsText}</span>
+          </div>
+        `;
+      }
+    } else if (tab === "spelling") {
+      el.cuesContainer.innerHTML = `
+        <div class="ws-cue ${state.qc.spellingResolved ? 'resolved' : 'error'}" style="left: 25%; width: 30%;">
+          <span class="ws-cue-text">${state.qc.spellingText}</span>
+        </div>
+      `;
+    }
   }
 
-  // -- Event Handlers --
-  el.btnRaw.addEventListener("click", () => {
-    isRaw = true;
-    el.btnRaw.classList.add("active");
-    el.btnPe.classList.remove("active");
-    el.btnRaw.setAttribute("aria-pressed", "true");
-    el.btnPe.setAttribute("aria-pressed", "false");
-    renderText();
+  function buildWaveform() {
+    const W = 1000, H = 100, N = 400;
+    let d = "";
+    for (let i = 0; i <= N; i++) {
+      const x = (i / N) * W;
+      const t = i / N;
+      const env = 0.4 + 0.4 * Math.abs(Math.sin(t * 9)) + 0.15 * Math.sin(t * 31);
+      const a = Math.min(0.9, env) * (H / 2 - 4);
+      const mid = H / 2;
+      d += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + (mid - a).toFixed(1) + " ";
+      d += "L" + x.toFixed(1) + " " + (mid + a).toFixed(1) + " ";
+    }
+    el.waveform.setAttribute("viewBox", "0 0 " + W + " " + H);
+    el.waveform.innerHTML = `<path d="${d}" fill="none" stroke="rgba(216,25,25,0.55)" stroke-width="0.8"/>`;
+  }
+
+  el.btnRunQc.addEventListener("click", () => {
+    if (state.currentStep !== "qc" || state.qc.hasRun) return;
+    state.qc.hasRun = true;
+    el.btnRunQc.disabled = true;
+    el.spinner.style.display = "block";
+    el.runStatus.textContent = "Scanning...";
+    setTimeout(() => {
+      el.spinner.style.display = "none";
+      el.runStatus.textContent = "QC complete";
+      el.btnRunQc.disabled = false;
+      renderLeftPanel();
+      renderRightPanel();
+      renderTimeline();
+      el.timelineWrap.classList.add("visible");
+      updateToolbar();
+      updateFlowSteps();
+    }, 1500);
   });
 
-  el.btnPe.addEventListener("click", () => {
-    isRaw = false;
-    el.btnPe.classList.add("active");
-    el.btnRaw.classList.remove("active");
-    el.btnPe.setAttribute("aria-pressed", "true");
-    el.btnRaw.setAttribute("aria-pressed", "false");
-    renderText();
+  el.btnNext.addEventListener("click", () => {
+    if (!canAdvance()) return;
+    const order = ["review", "post", "qc", "delivery"];
+    const idx = order.indexOf(state.currentStep);
+    if (idx < order.length - 1) {
+      state.currentStep = order[idx + 1];
+      renderLeftPanel();
+      renderRightPanel();
+      renderTimeline();
+      updateFlowSteps();
+      updateToolbar();
+      el.timelineWrap.classList.remove("visible");
+      if (state.currentStep === "qc") {
+        el.panelLeft.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">Click "Run QC" to start.</div>`;
+        el.panelRight.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">Click "Run QC" to see the issues.</div>`;
+      }
+    }
+  });
+
+  el.flowSteps.forEach(step => {
+    step.addEventListener("click", () => {
+      const key = step.dataset.step;
+      const order = ["review", "post", "qc", "delivery"];
+      if (order.indexOf(key) <= order.indexOf(state.currentStep) || (key === "post" && canAdvance() && state.currentStep === "review")) {
+        state.currentStep = key;
+        renderLeftPanel();
+        renderRightPanel();
+        renderTimeline();
+        updateFlowSteps();
+        updateToolbar();
+        el.timelineWrap.classList.remove("visible");
+        if (state.currentStep === "qc") {
+          el.panelLeft.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">Click "Run QC" to start.</div>`;
+          el.panelRight.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">Click "Run QC" to see the issues.</div>`;
+        }
+      }
+    });
+  });
+
+  // -- Drag timing cue --
+  let isDragging = false, startX = 0, startLeft = 0;
+  function bindDrag() {
+    const cue = el.cuesContainer.querySelector(".ws-cue");
+    if (!cue) return;
+    cue.addEventListener("pointerdown", (e) => {
+      if (state.currentStep !== "qc" || state.qc.timingResolved) return;
+      if (state.qc.activeTab !== "timing") return;
+      isDragging = true;
+      cue.classList.add("dragging");
+      startX = e.clientX;
+      startLeft = cue.offsetLeft;
+      cue.setPointerCapture(e.pointerId);
+    });
+    cue.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const newLeft = startLeft + dx;
+      const rect = el.timeline.getBoundingClientRect();
+      const pct = (newLeft / rect.width) * 100;
+      if (Math.abs(pct - 30) < 5) cue.style.left = "30%";
+      else cue.style.left = newLeft + "px";
+    });
+    cue.addEventListener("pointerup", (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      cue.classList.remove("dragging");
+      cue.releasePointerCapture(e.pointerId);
+      const rect = el.timeline.getBoundingClientRect();
+      const pct = (cue.offsetLeft / rect.width) * 100;
+      if (Math.abs(pct - 30) < 5) {
+        state.qc.timingResolved = true;
+        cue.style.left = "30%";
+        cue.classList.remove("error");
+        cue.classList.add("resolved");
+        renderRightPanel();
+        renderLeftPanel();
+        updateToolbar();
+        updateFlowSteps();
+      } else {
+        cue.style.left = "25%";
+      }
+    });
+  }
+
+  // -- Report --
+  function renderReport() {
+    const total = 4;
+    el.statIssues.textContent = total;
+    el.statResolved.textContent = total;
+    el.statOpen.textContent = 0;
+    el.reportList.innerHTML = "";
+    const labels = ["Terminology", "Grammar", "Idiom", "Register"];
+    labels.forEach(l => {
+      const item = document.createElement("div");
+      item.className = "ws-report-item resolved";
+      item.innerHTML = `<span>${l}</span><span>Resolved</span>`;
+      el.reportList.appendChild(item);
+    });
+  }
+
+  el.closeReport.addEventListener("click", () => {
+    el.reportPanel.classList.remove("visible");
   });
 
   // -- Init --
-  renderText();
-  renderLog();
-  updateProgress();
-
+  buildWaveform();
+  renderLeftPanel();
+  renderRightPanel();
+  updateFlowSteps();
+  updateToolbar();
 })();
 </script>
 </body>
